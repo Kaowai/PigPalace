@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .line-1 {
+      height: 1px;
+      background: black;
+    }
+
+    .line-2 {
+      border-top: 1px solid black;
+    }
+
+    .line-4 hr {
+      height: 1px;
+      border: 0;
+      background: black;
+    }
+
+    .line-5 {
+      height: 5px;
+      background: linear-gradient(to bottom,
+          transparent 2px,
+          black 2px,
+          black 3px,
+          transparent 3px);
+    }
+
+    .line-6 {
+      height: 1px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cline x1='0' y1='0' x2='100' y2='0' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'%3E%3C/line%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+    }
+
+    body {
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+
+    body>div {
+      margin: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="line-1"></div>
+
+  <div class="line-2"></div>
+
+  <div class="line-3">
+    <hr>
+  </div>
+
+  <div class="line-4">
+    <hr>
+  </div>
+
+  <div class="line-5"></div>
+
+  <div class="line-6"></div>
+</body>
+
+</html>
