@@ -8,6 +8,7 @@ body, html {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  color: #fff;
 }
 .title {
   font-family: "Rouge Script", cursive;
@@ -32,4 +33,21 @@ body, html {
 
 .zIndex {
   z-index: 1000;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 10px;
+}
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(28,17,41,0.88);
 }

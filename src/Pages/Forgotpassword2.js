@@ -1,10 +1,9 @@
-
 import React from 'react'
-import Layout from '../Layout/Layout'
-import { Input } from '../Components/Input'
+import Layout from '../Layout/LoginLayout/Layout'
+import { Input } from '../components/Input'
 import { Link } from 'react-router-dom'
 
-function Forgotpassword3() {
+function Forgotpassword2() {
     return (
         <Layout>
             <div className='container mx-auto my-20 pt-0 flex-col px-20'>
@@ -14,12 +13,9 @@ function Forgotpassword3() {
                 </div>
                 <form className='w-full gap-2 flex-colo  py-2  rounded-2xl'>
                     <div className="w-full">
-                        <Input label="Enter new password" type="password" placeholder="*********" />
+                        <Input label="Enter your PIN" type="text" placeholder="123456" />
                     </div>
-                    <div className="w-full">
-                        <Input label="Confirm password" type="password" placeholder="*********" />
-                    </div>
-                    <button className='w-full h-full p-3 rounded-lg mt-4 bg-other20 text-sm font-medium text-white align-middle hover:bg-primary30' type='submit'>Change password</button>
+                    <button className='w-full h-full p-3 rounded-lg mt-4 bg-other20 text-sm font-medium text-white align-middle hover:bg-primary30' type='submit'><Link className='nav-link' to='/forgotpassword3'>Confirm</Link></button>
                     <div className='flex-colo mt-2'>
                         <p className='text-sm font-semibold cursor-pointer text-other20  right-0 '>Back to <spam className='font-bold hover:italic hover:underline cursor-pointer'><Link className='nav-link' to='/login'>Log In</Link></spam></p>
                     </div>
@@ -30,4 +26,4 @@ function Forgotpassword3() {
     )
 }
 
-export default Forgotpassword3
+export default Forgotpassword2

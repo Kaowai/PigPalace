@@ -1,7 +1,7 @@
 
 import React from 'react'
-import Layout from '../Layout/Layout'
-import { Input } from '../Components/Input'
+import Layout from '../Layout/LoginLayout/Layout'
+import { Input } from '../components/Input'
 import { Link } from 'react-router-dom'
 
 function Forgotpassword() {

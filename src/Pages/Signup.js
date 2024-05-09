@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Input } from '../Components/Input'
+import { Input } from '../components/Input'
 import { FaFacebook, FaGoogle } from 'react-icons/fa6'
-import Layout from '../Layout/Layout'
+import Layout from '../Layout/LoginLayout/Layout'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerService } from '../APIs/UserService'
 
