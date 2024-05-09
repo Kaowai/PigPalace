@@ -1,7 +1,7 @@
 import React from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { publicRoutes } from './routes/index';
-import {DefaultLayout} from './Layout/index';
+import { DefaultLayout } from './Layout/index';
 function App() {
   return (
     // <>
@@ -14,20 +14,18 @@ function App() {
     //     <Route path='/forgotpassword3' element={<Forgotpassword3/>}/>
     //   </Routes>
     // </>
-    <BrowserRouter>
-      <Routes>
-        {publicRoutes.map((route, index) => {
-          const Layout = route.layout || DefaultLayout;
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={<Layout><route.component /></Layout>} />
-
-          )
-        })}
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {publicRoutes.map((route, index) => {
+        const Layout = route.layout || DefaultLayout;
+        const Page = route.component;
+        return (
+          <Route
+            key={index}
+            path={route.path}
+            element={<Layout><Page/></Layout>} />
+        )
+      })}
+    </Routes>
   )
 }
 

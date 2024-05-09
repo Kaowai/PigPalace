@@ -20,7 +20,7 @@ import AddSales from '../Pages/Invoice/Sales/AddSales'
 import SalesOverview from '../Pages/Invoice/Sales/SalesOverview'
 import Report from '../Pages/Reports/Reports'
 import User from '../Pages/User/User'   
-
+import Inventory from '../Pages/Inventory/Inventory'
 const publicRoutes = [
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
@@ -39,6 +39,9 @@ const publicRoutes = [
     { path: '/feedplan', component: FeedPlan },
     { path: '/addfeedplan', component: AddFeedPlan },
 
+    // INVENTORY
+    {path: '/inventory', component: Inventory},
+    
     // EVENTS
     // Dead Monitor
     { path: '/DeadMonitorOverview', component: DeadMonitorOverview },
@@ -59,10 +62,10 @@ const publicRoutes = [
     { path: '/SalesOverview', component: SalesOverview },
 
     // REPORTS
-    { path: '/Report', component: Report },
+    { path: '/report', component: Report },
     
     // USER
-    { path: '/User', component: User },
+    { path: '/user', component: User },
 
     // Farm Setup
 

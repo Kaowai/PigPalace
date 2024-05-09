@@ -36,9 +36,10 @@ module.exports = {
         other20: '#2C7A51',
         other30: '#EBFAED',
         other40: '#FFFEF3',
+        textsecondary: '#637381'
       }
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 }
 
