@@ -58,6 +58,3 @@ body, html {
 .active {
   @apply bg-other30 text-other20;
 }
-.unactive {
-  @apply text-textsecondary;
-}

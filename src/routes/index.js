@@ -22,50 +22,50 @@ import Report from '../Pages/Reports/Reports'
 import User from '../Pages/User/User'   
 import Inventory from '../Pages/Inventory/Inventory'
 const publicRoutes = [
-    { path: '/login', component: Login },
-    { path: '/signup', component: Signup },
-    { path: '/forgotpassword', component: Forgotpassword },
-    { path: '/forgotpassword2', component: Forgotpassword2 },
-    { path: '/forgotpassword3', component: Forgotpassword3 },
+    { path: '/Login', component: Login },
+    { path: '/Signup', component: Signup },
+    { path: '/ForgotPassword', component: Forgotpassword },
+    { path: '/ForgotPassword2', component: Forgotpassword2 },
+    { path: '/ForgotPassword3', component: Forgotpassword3 },
 
     // DASHBOARD
-    { path: '/dashboard', component: Dashboard },
+    { path: '/Dashboard', component: Dashboard },
 
     // PIG MANAGER
-    { path: '/pigmanager', component: PigManager },
+    { path: '/Pigmanager', component: PigManager },
 
     // FEED MANAGER
-    { path: '/todayfeed', component: TodayFeed },
-    { path: '/feedplan', component: FeedPlan },
-    { path: '/addfeedplan', component: AddFeedPlan },
+    { path: '/FeedManager/TodayFeed', component: TodayFeed },
+    { path: '/FeedManager/FeedPlan', component: FeedPlan },
+    { path: '/FeedManager/AddFeedPlan', component: AddFeedPlan },
 
     // INVENTORY
-    {path: '/inventory', component: Inventory},
+    {path: '/Inventory', component: Inventory},
     
     // EVENTS
     // Dead Monitor
-    { path: '/DeadMonitorOverview', component: DeadMonitorOverview },
-    { path: '/DeadMonitorAdd', component: DeadMonitorAdd },
+    { path: '/Events/DeadMonitor/DeadMonitorOverview', component: DeadMonitorOverview },
+    { path: '/Events/DeadMonitor/DeadMonitorAdd', component: DeadMonitorAdd },
     // Vaccine Monitor
-    { path: '/VaccineMonitorOverview', component: VaccineMonitorOverview },
-    { path: '/VaccineMonitorAdd', component: VaccineMonitorAdd },
+    { path: '/Events/VaccineMonitor/VaccineMonitorOverview', component: VaccineMonitorOverview },
+    { path: '/Events/VaccineMonitor/VaccineMonitorAdd', component: VaccineMonitorAdd },
     // Pregnancy
-    { path: '/PregnancyOverview', component: PregnancyOverview },
-    { path: '/PregnancyAdd', component: PregnancyAdd },
+    { path: '/Events/PregnancyMonitor/PregnancyOverview', component: PregnancyOverview },
+    { path: '/Events/PregnancyMonitor/PregnancyAdd', component: PregnancyAdd },
 
     // INVOICE 
     // Expeneses
-    { path: '/ExpensesAdd', component: ExpensesAdd },
-    { path: '/ExpensesOverview', component: ExpensesOverview },
+    { path: '/Invoice/Expenses/ExpensesAdd', component: ExpensesAdd },
+    { path: '/Invoice/Expenses/ExpensesOverview', component: ExpensesOverview },
     //Sales
-    { path: '/AddSales', component: AddSales },
-    { path: '/SalesOverview', component: SalesOverview },
+    { path: '/Invoice/Sales/AddSales', component: AddSales },
+    { path: '/Invoice/Sales/SalesOverview', component: SalesOverview },
 
     // REPORTS
-    { path: '/report', component: Report },
+    { path: '/Report', component: Report },
     
     // USER
-    { path: '/user', component: User },
+    { path: '/User', component: User },
 
     // Farm Setup
 
