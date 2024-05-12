@@ -19,6 +19,26 @@ body, html {
   @apply flex flex-col justify-center items-center;
 }
 
+.tab {
+  position: relative;
+}
+
+.tab::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 4px;
+  border-radius: 4px;
+  background: #ffc107;
+  transition: width 0.4s;
+}
+
+.tab.selected::after {
+  width: 50%;
+}
+
 .flex-rows {
   @apply flex flex-row justify-center items-center;
 }

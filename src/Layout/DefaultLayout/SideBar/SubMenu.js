@@ -3,13 +3,19 @@ import { motion } from "framer-motion";
 import { IoIosArrowDown } from "react-icons/io";
 import { NavLink, useLocation } from "react-router-dom";
 
-const SubMenu = ({  name, icon, menus }) => {
+const SubMenu = ({ name, icon, menus }) => {
   const { pathname } = useLocation();
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   const Icon = icon;
   useEffect(() => {
     console.log(name.replace(' ', '') + " + " + pathname);
     console.log(pathname.includes(name.replace(' ', '')));
+
+    if (!pathname.includes(name.replace(' ', ''))) {
+      if (subMenuOpen) {
+        setSubMenuOpen(!subMenuOpen);
+      }
+    }
   }, [pathname]);
   return (
     <>
@@ -29,12 +35,12 @@ const SubMenu = ({  name, icon, menus }) => {
         animate={
           subMenuOpen
             ? {
-              height: "auto", 
-              transition: {  duration: 0.3, ease: "easeInOut" }
+              height: "auto",
+              transition: { duration: 0.3, ease: "easeInOut" }
             }
             : {
               height: "0rem",
-              transition: {  duration: 0.3, ease: "easeInOut" }
+              transition: { duration: 0.3, ease: "easeInOut" }
             }
         }
 

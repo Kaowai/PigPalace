@@ -1,3 +1,5 @@
+const { warning } = require('framer-motion');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./index.html",
@@ -7,6 +9,17 @@ module.exports = {
     extend: {
       backgroundPosition: {
         'left-bottom': 'left bottom -12rem',
+      },
+      opacity: {
+        '10': '0.1',
+        '20': '0.2',
+        '30': '0.3',
+        '40': '0.4',
+        '50': '0.5',
+        '60': '0.6',
+        '70': '0.7',
+        '80': '0.8',
+        '90': '0.9',
       },
       screens: {
         xs: '475px',
@@ -36,7 +49,28 @@ module.exports = {
         other20: '#2C7A51',
         other30: '#EBFAED',
         other40: '#FFFEF3',
-        textsecondary: '#637381'
+
+        // text
+        textsecondary: '#637381',
+        textdisable: '#919EAB',
+        textprimary: '#212B36',
+
+        // background 
+        disablebg: '#3919EAB',
+        viewbg: '#00B8D9',
+        viewbg_hover: '#006C9C',
+        success_bg: '#22C55E',
+        success_bg_hover: '#118D57',
+
+        // warning
+        warningdark: '#B76E00',
+        warningbackground: '#FFAB0029',
+
+        // success
+        successlight: '#22C55E',
+        successbackground: '#22C55E29',
+        warningmain: '#FFAB00',
+  
       }
     },
   },

@@ -39,51 +39,51 @@ const SideBar = () => {
 
   const Nav_animation = isTabletMid
     ? {
-        open: {
-          x: 0,
-          width: "16rem",
-          transition: {
-            duration: 0.4,
-            ease: "easeInOut",
-          },
+      open: {
+        x: 0,
+        width: "16rem",
+        transition: {
+          duration: 0.4,
+          ease: "easeInOut",
         },
-        closed: {
-          x: -250,
-          width: 0,
-          transition: {
-            duration: 0.4,
-            ease: "easeInOut",
-          },
+      },
+      closed: {
+        x: -250,
+        width: 0,
+        transition: {
+          duration: 0.4,
+          ease: "easeInOut",
         },
-      }
+      },
+    }
     : {
-        open: {
-          width: "16rem",
-          transition: {
-            duration: 0.4,
-            ease: "easeInOut",
-          },
+      open: {
+        width: "16rem",
+        transition: {
+          duration: 0.4,
+          ease: "easeInOut",
         },
-        closed: {
-          width: "4rem",
-          transition: {
-            duration: 0.4,
-            ease: "easeInOut",
-          },
+      },
+      closed: {
+        width: "4rem",
+        transition: {
+          duration: 0.4,
+          ease: "easeInOut",
         },
-      };
+      },
+    };
 
   const MenuList = [
     // Overview
     {
       name: "Dashboard",
       path: "/Dashboard",
-      icon: <AiOutlineAppstore size={23} className="min-w-max"/>,
+      icon: <AiOutlineAppstore size={23} className="min-w-max" />,
     },
     {
       name: "Pig Manager",
       path: "/Pigmanager",
-      icon: <TbPig size={23} className="min-w-max"/>,
+      icon: <TbPig size={23} className="min-w-max" />,
     },
     {
       name: "Feed Manager",
@@ -102,7 +102,7 @@ const SideBar = () => {
     {
       name: "Inventory",
       path: "/Inventory",
-      icon: <HiOutlineDatabase size={23} className="min-w-max"/>,
+      icon: <HiOutlineDatabase size={23} className="min-w-max" />,
     },
     {
       name: "Events",
@@ -115,7 +115,7 @@ const SideBar = () => {
         {
           name: "Vaccine Monitor",
           path: "/Events/VaccineMonitor/VaccineMonitorOverview"
-        }, 
+        },
         {
           name: "Dead Monitor",
           path: "/Events/DeadMonitor/DeadMonitorOverview"
@@ -144,25 +144,25 @@ const SideBar = () => {
     {
       name: "Reports",
       path: "/Report",
-      icon: <TbReportAnalytics size={23} className="min-w-max"/>,
+      icon: <TbReportAnalytics size={23} className="min-w-max" />,
     },
     {
       name: "Users",
       path: "/User",
-      icon: <FiUser size={23} className="min-w-max"/>,
+      icon: <FiUser size={23} className="min-w-max" />,
     },
-    
-    
-    
   ]
+  const [openSubMenu, setOpenSubMenu] = useState("");
+  const handleClick = (name) => {
+    setOpenSubMenu(openSubMenu === name ? "" : name);
+  }
 
   return (
     <div>
       <div
         onClick={() => setOpen(false)}
-        className={`md:hidden fixed inset-0 max-h-screen z-[997] bg-black/50 ${
-          open ? "block" : "hidden"
-        } `}
+        className={`md:hidden fixed inset-0 max-h-screen z-[997] bg-black/50 ${open ? "block" : "hidden"
+          } `}
       ></div>
       <motion.div
         ref={sidebarRef}
@@ -172,7 +172,7 @@ const SideBar = () => {
         className=" bg-white text-gray shadow-xl z-[998] max-w-[16rem]  w-[16rem] 
             overflow-hidden md:relative fixed h-screen "
       >
-        <div className="flex items-center gap-3.5 font-medium border-b py-3 border-slate-300  mx-3">
+        <div className="flex items-center gap-3.5 font-medium  py-3 border-slate-300  mx-3">
           <img
             src="https://img.icons8.com/color/512/firebase.png"
             width={45}
@@ -182,31 +182,31 @@ const SideBar = () => {
         </div>
 
         <div className="flex flex-col h-full">
-          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100  md:h-[76%] h-[70%]">
-              <small className={`pl-3 text-slate-500 inline-block mb-2 ${open || isTabletMid ? "visible" : "hidden"}`}>
-                Overview
-              </small>
-              {MenuList.map((menu) => menu.path ?
-                (
-                    <MenuItem 
-                    key={menu.name}
-                    {...menu}
-                    onClick={() => {!open && setOpen(!open)}} />
-                ) : 
-                menu.icon ? (
-                  <div key={menu.name} className="flex flex-col gap-1">
-                  <SubMenu {...menu} />
+          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100  md:h-[68%] h-[70%]">
+            <small className={`pl-3 text-slate-500 inline-block mb-2 ${open || isTabletMid ? "visible" : "hidden"}`}>
+              Overview
+            </small>
+            {MenuList.map((menu) => menu.path ?
+              (
+                <MenuItem
+                  key={menu.name}
+                  {...menu}
+                  onClick={() => { !open && setOpen(!open) }} />
+              ) :
+              menu.icon ? (
+                <div key={menu.name} className="flex flex-col gap-1">
+                  <SubMenu {...menu} onClick={() => handleClick(menu.name)} />
                 </div>
-                ) : (
-                  <div className=" pt-5 border-t border-slate-300">
-              <small className={`pl-3 text-slate-500 inline-block mb-2 ${open || isTabletMid ? "visible" : "hidden"}`}>
-                Analytics
-              </small>
-              </div>
-                )
-              )}
-      
-            
+              ) : (
+                <div className=" pt-5 border-t border-slate-300">
+                  <small className={`pl-3 text-slate-500 inline-block mb-2 ${open || isTabletMid ? "visible" : "hidden"}`}>
+                    Analytics
+                  </small>
+                </div>
+              )
+            )}
+
+
           </ul>
           {open && (
             <div className="flex flex-row text-sm z-50 max-h-60 my-auto  whitespace-pre  w-full  font-medium  ">
@@ -223,7 +223,8 @@ const SideBar = () => {
           )}
         </div>
 
-        <motion.div
+        {/* button collapse and expand */}
+        {/* <motion.div
           onClick={() => {
             setOpen(!open);
           }}
@@ -239,10 +240,10 @@ const SideBar = () => {
                 }
           }
           transition={{ duration: 0 }}
-          className="absolute w-fit h-fit md:block hidden -right-3 top-5 p-1 border border-teal-500 cursor-pointer"
+          className="absolute w-fit h-fit md:block hidden right-2 bottom-20 p-1  cursor-pointer"
         >
           <IoIosArrowBack size={25} />
-        </motion.div>
+        </motion.div> */}
       </motion.div>
 
       <div className="m-3 md:hidden " onClick={() => setOpen(true)}>
@@ -255,11 +256,11 @@ const SideBar = () => {
 export default SideBar;
 
 
-export const MenuItem = ({ icon, name, path, onClick }) => { 
+export const MenuItem = ({ icon, name, path, onClick }) => {
   return (
     <li
-    className=" hover:text-other20 cursor-pointer" 
-    onClick={onClick}>
+      className=" hover:text-other20 cursor-pointer"
+      onClick={onClick}>
       <NavLink to={path} className="link">
         {icon}
         <span>{name}</span>

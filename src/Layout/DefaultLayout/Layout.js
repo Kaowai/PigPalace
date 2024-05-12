@@ -6,8 +6,14 @@ export default function Layout({ children }) {
     return (
         <div className='flex gap-5'>
             <SideBar />
-            <main className='max-w-5xl flex-1 mx-auto py-4'>{children}</main>
-        </div>
+            <div className='flex flex-col w-full'>
+                <Header />
+                <main className=' justify-center items-center w-full flex-1 mx-auto py-4'>
+                    {children}
+                </main>
+            </div>
+
+        </div >
 
     )
 }
