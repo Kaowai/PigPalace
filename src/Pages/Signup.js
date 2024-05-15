@@ -50,7 +50,7 @@ function Signup() {
                         <Input label="Password" type="password" placeholder="*********" onChange={(e) => setPassword(e.target.value)}/>
                     </div>
 
-                    <button className='w-full h-full p-3 rounded-lg mt-8 bg-other20 text-sm font-medium text-white align-middle hover:bg-primary30' type='submit' onClick={handleSignUp}>Sign In</button>
+                    <button className='w-full h-full p-3 rounded-lg mt-8 bg-other20 text-sm font-medium text-white align-middle hover:bg-primary30' type='submit' onClick={handleSignUp}>Sign Up</button>
                     <div className='flex-colo mt-2'>
                         <p className='text-sm font-semibold cursor-pointer text-other20  right-0 '>Already have an account? <spam className='font-bold'><Link className='nav-link' to='/login'>Log In</Link></spam></p>
                     </div>

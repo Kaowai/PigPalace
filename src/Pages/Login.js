@@ -18,6 +18,7 @@ function Login() {
     // handle login normal
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log(email, password);
         if (!email) {
             toast.error("Email is required");
             return;
@@ -78,7 +79,7 @@ function Login() {
         <Layout>
 
             <form
-                //onSubmit={handleSubmit}
+                onSubmit={handleSubmit}
                 className='container mx-auto my-20 pt-0 flex-col px-20'
             >
                 <div className='flex-colo gap-3 mb-4'>

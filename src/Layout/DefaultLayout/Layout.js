@@ -4,16 +4,14 @@ import SideBar from './SideBar/SideBar'
 
 export default function Layout({ children }) {
     return (
-        <div className='flex gap-5'>
-            <SideBar />
-            <div className='flex flex-col w-full'>
-                <Header />
-                <main className=' justify-center items-center w-full flex-1 mx-auto py-4'>
-                    {children}
-                </main>
+        <div className='h-full w-full' style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gridTemplateRows: 'auto 1fr' }}>
+            <SideBar style={{ gridColumn: '1'} }/>
+            <div className='w-full px-64 ml-2' style={{ gridColumn: '2', gridRow: '1' }}>
+                <Header  />
             </div>
-
-        </div >
-
+            <main className='h-full px-4 py-4 mt-16 ml-[16rem]  justify-center items-center' style={{ gridColumn: '2', gridRow: '2' }}>
+                {children}
+            </main>
+        </div>
     )
 }

@@ -35,6 +35,7 @@ body, html {
   transition: width 0.4s;
 }
 
+
 .tab.selected::after {
   width: 50%;
 }

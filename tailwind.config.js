@@ -31,6 +31,9 @@ module.exports = {
         header: '560px',
         rate: '400px',
       },
+      spacing: {
+        '64': '16rem',
+      },
       colors: {
         primary10: '#4EB577',
         primary20: '#558B6B',
@@ -61,6 +64,8 @@ module.exports = {
         viewbg_hover: '#006C9C',
         success_bg: '#22C55E',
         success_bg_hover: '#118D57',
+        info_bg: '#00B8D9',
+        primary_main: '#00A76F',
 
         // warning
         warningdark: '#B76E00',

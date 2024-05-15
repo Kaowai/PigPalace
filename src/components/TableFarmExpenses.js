@@ -1,13 +1,11 @@
 import { Select } from 'antd'
-import React, { useState } from 'react'
+import React from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { CiCirclePlus } from 'react-icons/ci'
 import { GoSearch } from 'react-icons/go'
 import { IoCheckmark } from 'react-icons/io5'
 import { TiDelete } from 'react-icons/ti'
 import { useNavigate } from 'react-router-dom'
-import PigAddModal from './Modal/PigAddModal'
-import PigExpenseModal from './Modal/PigExpenseModal'
 
 
 const Header = 'text-xs font-bold text-textprimary pl-2 pr-10 mx-1 py-2 items-start'
@@ -16,25 +14,20 @@ const Row = 'text-xs  font-normal text-textprimary pl-2 pr-10 mx-1 py-3 items-st
 const Progress = 'text-xs font-bold text-warningdark bg-warningbackground rounded-md px-2 py-1'
 const Paid = 'text-xs font-bold text-successlight bg-successbackground rounded-md px-2 py-1'
 
-export default function Table() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isConfirm, setIsConfirm] = useState(false);
+export default function TableFarmExpenses() {
+
     const navigate = useNavigate();
 
-    const handleViewClick = () => {
-        setIsModalOpen(true);
-        setIsConfirm(false);
-    }
-    const handleConfirmClick = () => {
-        setIsModalOpen(true);
-        setIsConfirm(true);
-    }
     const data = [
-        { id: 'INV04052024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04052024', type: 'Feed', name: 'Rice bran', quantity: '1,000 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
+        { id: 'INV04032024', type: 'Feed', name: 'Rice bran', quantity: '1,500 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04032024', type: 'Feed', name: 'Rice bran', quantity: '1,200 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04032024', type: 'Vaccine', name: 'Porcine Parvovirus', quantity: '200 (Shots)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04032024', type: 'Vaccine', name: 'Porcine Parvovirus', quantity: '200 (Shots)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04032024', type: 'Feed', name: 'Rice bran', quantity: '800 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04032024', type: 'Feed', name: 'Rice bran', quantity: '1,000 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04032024', type: 'Feed', name: 'Rice bran', quantity: '1,000 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV04032024', type: 'Vaccine', name: 'Porcine Parvovirus', quantity: '200 (Shots)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
     ];
 
     return (
@@ -46,7 +39,7 @@ export default function Table() {
                     entries
                 </div>
                 <button className='flex flex-row px-3 py-2 text-xs text-white bg-other20 rounded gap-2'
-                    onClick={() => { navigate('/Invoice/Expenses/ExpensesOverview/ExpensesAdd') }}
+                    onClick={() => { navigate('/Invoice/Expenses/ExpensesOverview/ExpensesAddFarm') }}
                 >
                     <CiCirclePlus className='text-white' size={16} />
                     Add New
@@ -58,8 +51,8 @@ export default function Table() {
                     <div className='flex flex-row gap-0 items-center'>
                         <select className='bg-viewbg_hover py-2 text-white text-sm rounded-l-sm'>
                             <option value="all">All</option>
-                            <option value="imported">Imported</option>
-                            <option value='exported'>Exported</option>
+                            <option value="imported">Feed</option>
+                            <option value='exported'>Vaccine</option>
                         </select>
                         <select className='bg-viewbg text-white p-2 text-sm'>
                             <option value="all">All</option>
@@ -85,7 +78,8 @@ export default function Table() {
                         <tr className=' bg-textdisable/20 border-textdisable border-b'>
                             <th scope='col' className={`${Header}`}>ID Invoice</th>
                             <th scope='col' className={`${Header}`}>Type</th>
-                            <th scope='col' className={`${Header}`}>Amount</th>
+                            <th scope='col' className={`${Header}`}>Name</th>
+                            <th scope='col' className={`${Header}`}>Quantity</th>
                             <th scope='col' className={`${Header}`}>Cost</th>
                             <th scope='col' className={`${Header}`}>Invoice Date</th>
                             <th scope='col' className={`${Header}`}>Purchase Date</th>
@@ -98,7 +92,8 @@ export default function Table() {
                             <tr className=' border-textdisable border-b hover:bg-slate-100' key={row.id}>
                                 <td className={`${Row}`}>{row.id}</td>
                                 <td className={`${Row}`}>{row.type}</td>
-                                <td className={`${Row}`}>{row.amount}</td>
+                                <td className={`${Row}`}>{row.name}</td>
+                                <td className={`${Row}`}>{row.quantity}</td>
                                 <td className={`${Row}`}>{row.cost}</td>
                                 <td className={`${Row}`}>{row.invoiceDate}</td>
                                 <td className={`${Row}`}>{row.purchaseDate}</td>
@@ -109,13 +104,12 @@ export default function Table() {
 
                                     {
                                         row.status === 'Paid' ? (
-                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200'
-                                                onClick={handleViewClick}>
+                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200'>
                                                 <GoSearch className='text-white' size={16} />
                                                 View
                                             </button>
                                         ) : (
-                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200' onClick={handleConfirmClick}>
+                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200'>
                                                 <IoCheckmark size={16} />
                                                 Confirm
                                             </button>
@@ -150,7 +144,6 @@ export default function Table() {
                     <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={20} />
                 </div>
             </div>
-            <PigExpenseModal name={isConfirm ? "Expenses Confirm" : "Expenses Pig"} isvisible={isModalOpen} isConfirm={isConfirm} onClose={() => {setIsModalOpen(false)}}/>
         </div>
     )
 }

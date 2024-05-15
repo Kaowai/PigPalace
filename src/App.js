@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { publicRoutes } from './routes/index';
 import { DefaultLayout } from './Layout/index';
+import Layout from './Layout/LoginLayout/Layout';
 function App() {
   return (
     // <>
@@ -16,13 +17,13 @@ function App() {
     // </>
     <Routes>
       {publicRoutes.map((route, index) => {
-        const Layout = route.layout || DefaultLayout;
+        const Layout2 = route.layout ? Layout : DefaultLayout;
         const Page = route.component;
         return (
           <Route
             key={index}
             path={route.path}
-            element={<Layout><Page/></Layout>} />
+            element={<Layout2><Page/></Layout2>} />
         )
       })}
     </Routes>

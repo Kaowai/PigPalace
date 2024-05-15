@@ -21,12 +21,14 @@ import SalesOverview from '../Pages/Invoice/Sales/SalesOverview'
 import Report from '../Pages/Reports/Reports'
 import User from '../Pages/User/User'   
 import Inventory from '../Pages/Inventory/Inventory'
+import ExpensesAddFarm from '../Pages/Invoice/Expenses/ExpensesAddFarm'
+import Layout from '../Layout/LoginLayout/Layout'
 const publicRoutes = [
-    { path: '/Login', component: Login },
-    { path: '/Signup', component: Signup },
-    { path: '/ForgotPassword', component: Forgotpassword },
-    { path: '/ForgotPassword2', component: Forgotpassword2 },
-    { path: '/ForgotPassword3', component: Forgotpassword3 },
+    { path: '/Login', component: Login, layout: Layout },
+    { path: '/Signup', component: Signup, layout: Layout },
+    { path: '/ForgotPassword', component: Forgotpassword, layout: Layout },
+    { path: '/ForgotPassword2', component: Forgotpassword2, layout: Layout },
+    { path: '/ForgotPassword3', component: Forgotpassword3, layout: Layout },
 
     // DASHBOARD
     { path: '/Dashboard', component: Dashboard },
@@ -55,7 +57,8 @@ const publicRoutes = [
 
     // INVOICE 
     // Expeneses
-    { path: '/Invoice/Expenses/ExpensesAdd', component: ExpensesAdd },
+    { path: '/Invoice/Expenses/ExpensesOverview/ExpensesAddFarm', component: ExpensesAddFarm },
+    { path: '/Invoice/Expenses/ExpensesOverview/ExpensesAdd', component: ExpensesAdd },
     { path: '/Invoice/Expenses/ExpensesOverview', component: ExpensesOverview },
     //Sales
     { path: '/Invoice/Sales/AddSales', component: AddSales },
