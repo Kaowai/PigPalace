@@ -1,21 +1,22 @@
 import React from 'react'
+import { Input, InputPassword } from '../../components/Input'
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
 
-function Layout({children}) {
+function Layout({ children }) {
     return (
-        <>
-            <div className='w-full p-4 h-full grid grid-cols-9 gap-2 bg-[url("../public/background.png")] bg-left-bottom bg-no-repeat bg-cover '>
-                <div className='col-span-5 h-screen flex relative'>
-                    <p className='mx-10 my-4 place-items-start font-bold italic text-other20 text-4xl cursor-pointer'>PigPalace</p>
-                    <div className='absolute flex-col bottom-0 h-1/4 w-4/6'>
-                        <p className='title text-white mx-10 mt-8 text-6xl'>Farmmy Canxi</p>
-                        <p className='text-white mx-10 my-2 text-sm'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione dicta facilis dignissimos optio! Vitae modi, veritatis quam deserunt aut repellat.</p>
-                    </div>
+        <div className='h-full w-full bg-login py-12 px-36'>
+            <div className='grid md:grid-cols-2 animate-slide-in-from-left  gap-5 h-full w-full rounded-[36px] bg-white animate-layout-in-from-horizontal'>
+                <div className='rounded-[56px] animate-background-in-from-left bg-primary_main px-6 py-12 from-inherit gap-9 mx-20 my-12 flex flex-col md:visible invisible'>
+                    <h1 className='text-white animate-slide-in-from-left font-semibold text-3xl justify-start text-wrap leading-10'>Simplify <br />management with<br />our dashboard.</h1>
+                    <p className='text-white animate-slide-in-from-left font-regular text-xs text-wrap tracking-wide leading-5'>Simplify your pig farm management with our user-friendly admin dashboard</p>
                 </div>
-                <div className='col-span-4 h-full w-full flex-col bg-other40 rounded-2xl'>
+
+                <div className='h-full w-full'>
                     {children}
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

@@ -12,7 +12,6 @@ export default function PigExpenseModal({ name, isvisible, isConfirm, onClose })
                         </button>
                     )
                 }
-
             </div>
         </MainModal>
     )

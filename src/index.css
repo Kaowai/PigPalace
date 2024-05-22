@@ -1,10 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Rouge+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 body, html {
-  font-family: "Public Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -18,9 +19,59 @@ body, html {
 .flex-colo {
   @apply flex flex-col justify-center items-center;
 }
+input[type="text"]:focus ~ .input-text,
+input[type="text"]:not(:placeholder-shown) ~ .input-text{
+  @apply text-textsecondary transform -translate-y-6 -translate-x-2 scale-90;
+}
+
+.placeholder-shown {
+  @apply text-textsecondary transform -translate-x-2 -translate-y-6 scale-90;
+}
+.hover-link {
+  @apply hover:text-primary_main transition-all duration-200 ease-in-out;
+}
+
+.button-hover {
+  @apply hover:bg-primary_dark transition-all duration-200 ease-in-out;
+}
+
+.button-social-hover {
+  @apply hover:bg-login1 transition-all duration-200 ease-in-out;
+}
 
 .tab {
   position: relative;
+}
+
+.animate-slide-in-from-left {
+  animation: slide-in-from-left 1.5s forwards;
+}
+
+.animate-slide-in-from-right {
+  animation: slide-in-from-right 1.5s forwards;
+}
+
+
+.animate-background-in-from-left {
+  animation: slide-in-from-left 1s forwards;
+}
+
+
+@keyframes slide-in-from-left {
+  0% {
+      transform: translateX(-100%);
+  }
+  100% {
+      transform: translateX(0);
+  }
+}
+@keyframes slide-in-from-right {
+  0% {
+      transform: translateX(100%);
+  }
+  100% {
+      transform: translateX(0%);
+  }
 }
 
 .tab::after {

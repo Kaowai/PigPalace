@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { Input } from '../components/Input'
+import { Input, InputPassword } from '../components/Input'
 import { FaFacebook, FaGoogle } from 'react-icons/fa6'
 import Layout from '../Layout/LoginLayout/Layout'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerService } from '../APIs/UserService'
+import { LoginSocialFacebook } from 'reactjs-social-login'
+import { FcGoogle } from 'react-icons/fc'
 
 function Signup() {
     const [name, setName] = useState('');
@@ -33,51 +35,77 @@ function Signup() {
         }
     }
     return (
-        <Layout>
-            <div className='container mx-auto my-20 pt-0 flex-col px-20'>
-                <div className='flex-colo gap-3 mb-4'>
-                    <h1 className='text-4xl text-other20 font-semibold'>Sign Up</h1>
-                    <p className='text-sm text-other20'>Let's get started with your pig farm </p>
+        <form
+            onSubmit={handleSignUp}
+            className='w-full h-full flex animate-slide-in-from-left flex-col gap-5 px-24 py-12 items-center'
+        >
+            <div className='flex flex-row items-center justify-center gap-3'>
+                <span className='text-xl text-white px-4 py-2 font-bold h-10 w-10 rounded-full  bg-primary_main'>P</span>
+                <span className='text-black font-semibold text-xl'>Pig Palace</span>
+            </div>
+            <div className='flex flex-colo gap-2 items-center'>
+                <span className='text-3xl text-black font-semibold tracking-wide'>Sign Up</span>
+                <span className='text-textdisable font-normal text-xs'> Please sign up to start manage your farm</span>
+            </div>
+            <div className='flex flex-col gap-3 w-full '>
+                <div className='w-full items-center' >
+                    <Input
+                        placeholder="User Name"
+                        type={'text'}
+                    />
                 </div>
-                <form className='w-full gap-2 flex-colo  py-2  rounded-2xl'>
-                    <div className="w-full">
-                        <Input label="Name" type="text" placeholder="Taylor Mark Son" onChange={(e) => setName(e.target.value)}/>
-                    </div>
-                    <div className='w-full'>
-                        <Input label="Email" type="email" placeholder="example@gmail.com" onChange={(e) => setEmail(e.target.value)}/>
-                    </div>
-                    <div className='w-full'>
-                        <Input label="Password" type="password" placeholder="*********" onChange={(e) => setPassword(e.target.value)}/>
-                    </div>
-
-                    <button className='w-full h-full p-3 rounded-lg mt-8 bg-other20 text-sm font-medium text-white align-middle hover:bg-primary30' type='submit' onClick={handleSignUp}>Sign Up</button>
-                    <div className='flex-colo mt-2'>
-                        <p className='text-sm font-semibold cursor-pointer text-other20  right-0 '>Already have an account? <spam className='font-bold'><Link className='nav-link' to='/login'>Log In</Link></spam></p>
-                    </div>
-                    <div className='grid grid-cols-7 mt-8 gap-1 w-full h-full justify-between items-center'>
-                        <div className='h-px col-span-3 bg-other20'></div>
-                        <p className='col-span-1 text-center text-sm text-other20'>or</p>
-                        <div className='h-px col-span-3 bg-other20'></div>
-                    </div>
-                </form>
-                <div className='w-full h-full border cursor-pointer border-other20 p-3 font-medium rounded-lg grid grid-cols-3 gap-2 mt-4 bg-other30 text-sm text-other20 hover:bg-other20 hover:text-white'>
-                    <div className='grid-col-span-3 flex justify-end items-center'>
-                        <FaFacebook className='h-4 w-4' />
-                    </div>
-                    <div>
-                        Sign up with Facebook
-                    </div>
+                <div className='w-full items-center' >
+                    <Input
+                        placeholder="Email"
+                        type={'email'}
+                    />
                 </div>
-                <div className='w-full h-full border cursor-pointer border-other20 p-3 font-medium rounded-lg grid grid-cols-3 gap-2 mt-2 bg-other30 text-sm text-other20 hover:bg-other20 hover:text-white'>
-                    <div className='grid-col-span-1 flex justify-end items-center'>
-                        <FaGoogle className='h-4 w-4' />
-                    </div>
-                    <div>
-                        Sign up with Google
-                    </div>
+                <div className='w-full' >
+                    <InputPassword
+                        placeholder="Password"
+                        type='password'
+                    />
+                </div>
+                <div className='w-full' >
+                    <InputPassword
+                        placeholder="Confirm Password"
+                        type='password'
+                    />
                 </div>
             </div>
-        </Layout>
+            <div className="w-[22rem] h-12 items-center">
+                <button
+                    className='bg-primary_main w-full h-full rounded-xl font-medium text-xs text-white button-hover'>
+                    Login
+                </button>
+            </div>
+            <div className='flex flex-row gap-2 px-4 items-center'>
+                <span className='w-16 outline-none border-t-[0.5px] border-textdisable'></span>
+                <span className='text-textdisable font-normal text-xs'>Or Signup With</span>
+                <span className='w-16 outline-none border-t-[0.5px] border-textdisable'></span>
+            </div>
+
+
+            <div className='flex flex-row gap-3 items-center'>
+                <LoginSocialFacebook
+                    appId="1621397548596001"
+                    // onResolve={handleLoginFacebook}
+                    onReject={(err) => console.log(err)}
+                >
+                    <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
+                        <FcGoogle size={20} />
+                        <span className='text-xs text-textprimary font-medium'>Google</span>
+                    </button>
+                </LoginSocialFacebook>
+                <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
+                    <FaFacebook size={20} className='text-facebook' />
+                    <span className='text-xs text-textprimary font-medium'>Facebook</span>
+                </button>
+            </div>
+            <div className='w-full flex items-center justify-center'>
+                <span className='text-textdisable items-end font-normal text-xs '>Already have an account? <span className='text-xs font-normal underline text-primary_main cursor-pointer'>Login</span></span>
+            </div>
+        </form>
     )
 }
 

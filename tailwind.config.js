@@ -6,6 +6,11 @@ module.exports = {
     "./src/**/*.{js,jsx}",
   ],
   theme: {
+    theme: {
+      borderWidth: {
+        
+      }
+    },
     extend: {
       backgroundPosition: {
         'left-bottom': 'left bottom -12rem',
@@ -66,16 +71,20 @@ module.exports = {
         success_bg_hover: '#118D57',
         info_bg: '#00B8D9',
         primary_main: '#00A76F',
-
+        login: '#F0F2F4',
+        login1: '#f5f7f9',
         // warning
         warningdark: '#B76E00',
         warningbackground: '#FFAB0029',
+        primary_dark: '#007867', 
+        bg_orange: '#ff8036',
 
         // success
         successlight: '#22C55E',
         successbackground: '#22C55E29',
         warningmain: '#FFAB00',
-  
+        success_dark: '#118D57',
+        facebook: '#4267B2'
       }
     },
   },
