@@ -43,28 +43,16 @@ input[type="text"]:not(:placeholder-shown) ~ .input-text{
   position: relative;
 }
 
-.animate-slide-in-from-left {
-  animation: slide-in-from-left 1.5s forwards;
-}
 
 .animate-slide-in-from-right {
   animation: slide-in-from-right 1.5s forwards;
 }
 
 
-.animate-background-in-from-left {
-  animation: slide-in-from-left 1s forwards;
+.animate-background-in-from-right {
+  animation: slide-in-from-right 1s forwards;
 }
 
-
-@keyframes slide-in-from-left {
-  0% {
-      transform: translateX(-100%);
-  }
-  100% {
-      transform: translateX(0);
-  }
-}
 @keyframes slide-in-from-right {
   0% {
       transform: translateX(100%);

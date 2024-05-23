@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Input, InputPassword } from '../components/Input'
 import { FaFacebook, FaGoogle } from 'react-icons/fa6'
-import Layout from '../Layout/LoginLayout/Layout'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerService } from '../APIs/UserService'
 import { LoginSocialFacebook } from 'reactjs-social-login'
@@ -37,7 +36,7 @@ function Signup() {
     return (
         <form
             onSubmit={handleSignUp}
-            className='w-full h-full flex animate-slide-in-from-left flex-col gap-5 px-24 py-12 items-center'
+            className='w-full h-full flex animate-slide-in-from-right flex-col gap-5 items-center'
         >
             <div className='flex flex-row items-center justify-center gap-3'>
                 <span className='text-xl text-white px-4 py-2 font-bold h-10 w-10 rounded-full  bg-primary_main'>P</span>
@@ -45,7 +44,7 @@ function Signup() {
             </div>
             <div className='flex flex-colo gap-2 items-center'>
                 <span className='text-3xl text-black font-semibold tracking-wide'>Sign Up</span>
-                <span className='text-textdisable font-normal text-xs'> Please sign up to start manage your farm</span>
+                <span className='text-textdisable font-normal text-xs text-center'> Please sign up to start manage your farm</span>
             </div>
             <div className='flex flex-col gap-3 w-full '>
                 <div className='w-full items-center' >
@@ -81,7 +80,7 @@ function Signup() {
             </div>
             <div className='flex flex-row gap-2 px-4 items-center'>
                 <span className='w-16 outline-none border-t-[0.5px] border-textdisable'></span>
-                <span className='text-textdisable font-normal text-xs'>Or Signup With</span>
+                <span className='text-textdisable font-normal text-xs text-center'>Or Signup With</span>
                 <span className='w-16 outline-none border-t-[0.5px] border-textdisable'></span>
             </div>
 
@@ -103,7 +102,8 @@ function Signup() {
                 </button>
             </div>
             <div className='w-full flex items-center justify-center'>
-                <span className='text-textdisable items-end font-normal text-xs '>Already have an account? <span className='text-xs font-normal underline text-primary_main cursor-pointer'>Login</span></span>
+                <span className='text-textdisable items-end font-normal text-xs '>Already have an account? <span className='text-xs font-normal underline text-primary_main cursor-pointer' onClick={() => navigate('/login')
+                }>Login</span></span>
             </div>
         </form>
     )

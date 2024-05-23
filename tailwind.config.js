@@ -6,14 +6,12 @@ module.exports = {
     "./src/**/*.{js,jsx}",
   ],
   theme: {
-    theme: {
-      borderWidth: {
-        
-      }
-    },
     extend: {
       backgroundPosition: {
         'left-bottom': 'left bottom -12rem',
+      },
+      backgroundImage: {
+        'loginImage': 'url("/public/background.png")',
       },
       opacity: {
         '10': '0.1',
