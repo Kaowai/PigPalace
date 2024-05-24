@@ -22,7 +22,7 @@ export const Input = (
 
 export const InputPIN = (
     {
-        arrayPIN, setArrayPIN
+        arrayPIN, setArrayPIN, code
     }
 ) => {
     const [isFilledArray, setIsFilledArray] = useState(Array(6).fill(false))
@@ -30,11 +30,9 @@ export const InputPIN = (
     const [showCheck, setShowCheck] = useState(false);
 
     useEffect(() => {
-        if (arrayPIN.join('').length === 6) {
-            setShowCheck(true);
-            setTimeout(() => setShowCheck(false), 2000);
-        }
-    }, [arrayPIN]);
+        setShowCheck(true);
+        setTimeout(() => setShowCheck(false), 2000);
+    }, [code]);
     const handleFilled = (e, index) => {
         const newArray = [...isFilledArray];
         newArray[index] = e.target.value.length !== 0;
@@ -43,8 +41,7 @@ export const InputPIN = (
         const newPIN = [...arrayPIN];
         newPIN[index] = e.target.value;
         setArrayPIN(newPIN);
-
-        console.log(arrayPIN.join('').length);
+        console.log(newPIN.join(''));
 
         if (e.target.value.length === 1 && index < arrayPIN.length - 1) {
             inputRefs.current[index + 1].focus();
@@ -70,12 +67,10 @@ export const InputPIN = (
                     })
                 }
             </div>
-            {showCheck && (
-                <div className="flex flex-row w-full gap-2 transition-all duration-200 ease-out">
-                    <CheckIcon size={16} className=" text-success_bg text-opacity-80" />
-                    <span className="text-xs text-success_bg">Have seen email.</span>
-                </div>
-            )}
+            <div className={`flex flex-row w-full gap-2 transition-all duration-200 ease-out ${showCheck ? "visible" : "invisible"}`}>
+                <CheckIcon size={16} className=" text-success_bg text-opacity-80" />
+                <span className="text-xs text-success_bg">Have seen email.</span>
+            </div>
         </div>
     )
 }

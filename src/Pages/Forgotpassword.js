@@ -11,7 +11,7 @@ function Forgotpassword() {
     }   
     return (
         <div
-            className='w-full h-full flex animate-slide-in-from-right flex-col gap-5 py-20 items-center'
+            className='w-full h-full flex animate-slide-in-from-right flex-col gap-5 py-[72px] justify-center items-center'
         >
             <div className='flex flex-row items-center justify-center gap-3'>
                 <span className='text-xl text-white px-4 py-2 font-bold h-10 w-10 rounded-full  bg-primary_main'>P</span>

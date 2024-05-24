@@ -9,7 +9,7 @@ function Layout({ children }) {
                     <p className='text-white animate-slide-in-from-right font-regular text-xs text-wrap tracking-wide leading-5'>Simplify your pig farm management with our user-friendly admin dashboard</p>
                 </div>
 
-                <div className='h-full w-full items-center md:px-[52px] md:py-12 px-28 py-12'>
+                <div className='h-full w-full md:px-[52px] md:py-12 px-28 py-12'>
                     {children}
                 </div>
             </div>
