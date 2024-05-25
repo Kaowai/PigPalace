@@ -20,9 +20,9 @@ function ExpensesAdd() {
       <div className='grid md:grid-cols-2 w-full pr-4 justify-between items-center gap-2'>
         <h1 className='text-2xl font-semibold text-textprimary'>Add Pig Expenses</h1>
         <div className='flex flex-row gap-3 text-xs items-center justify-end'>
-          <NavLink to='/dashboard' className='text-xs text-textdisable hover:text-textprimary hover:cursor-pointer hover:font-semibold transition-all duration-200 ease-in-out'>Dashboard</NavLink>
+          <NavLink to='/dashboard' className='text-xs text-textdisable hover:text-textprimary hover:cursor-pointer transition-all duration-200 ease-in-out'>Dashboard</NavLink>
           <FaAngleRight className='text-textdisable' size={20} />
-          <NavLink to='/Invoice/Expenses/ExpensesOverview' className='text-xs text-textdisable hover:text-textprimary hover:cursor-pointer transition-all duration-200 ease-in-out hover:font-semibold'>Expenses Overview</NavLink>
+          <NavLink to='/Invoice/Expenses/ExpensesOverview' className='text-xs text-textdisable hover:text-textprimary hover:cursor-pointer transition-all duration-200 ease-in-out'>Expenses Overview</NavLink>
           <FaAngleRight className='text-textdisable' size={20} />
           <span className='text-xs text-textprimary font-semibold'>Add Pig Expenses</span>
         </div>

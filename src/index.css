@@ -113,7 +113,7 @@ input[type="text"]:not(:placeholder-shown) ~ .input-text{
 }
 .link {
   @apply p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer
-    cursor-default duration-300 font-semibold;
+    cursor-default duration-300 font-medium text-sm;
 }
 .active {
   @apply bg-other30 text-other20;

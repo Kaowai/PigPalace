@@ -173,13 +173,11 @@ const SideBar = ({ children }) => {
           className=" bg-white text-gray shadow-xl z-[998] max-w-[16rem]  w-[16rem] 
             overflow-hidden md:relative fixed h-screen "
         >
-          <div className="flex items-center gap-3.5 font-medium  py-3 border-slate-300  mx-3">
-            <img
-              src="https://img.icons8.com/color/512/firebase.png"
-              width={45}
-              alt=""
-            />
-            <span className=" text-2xl whitespace-pre text-other20 font-bold">PigPalace</span>
+          <div className="flex items-center gap-3.5 font-medium  py-3 border-slate-300 mx-3">
+            <span
+             className="w-10 h-10 bg-primary_main rounded-full flex items-center justify-center text-white text-4xl font-bold" 
+            >P</span>
+            <span className={`text-2xl whitespace-pre text-other20 font-bold ${open || "hidden"}`}>PigPalace</span>
           </div>
 
           <div className="flex flex-col h-full">

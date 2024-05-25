@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import { DatePicker, Select, Space } from 'antd';
 import { Check, CheckIcon, EyeIcon, EyeOffIcon } from "lucide-react";
+import { PiFarmLight } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 export const Input = (
     {
@@ -17,6 +19,14 @@ export const Input = (
             </label>
             <span className="text-xs text-warning10 hidden">* Input invalid</span>
         </div>
+    )
+}
+export const SelectedFarm = ({ farmName, onClick }) => {
+    return (
+        <Link to={'/dashboard'} className="flex flex-col gap-5 justify-center items-center border-2 border-textdisable border-opacity-50 rounded-lg p-2 w-28 h-24 bg-white hover:bg-login cursor-pointer">
+            <PiFarmLight size={48} className="text-textdisable "/>
+            <span className="text-xs text-textdisable text-center">{farmName}</span>
+        </Link>
     )
 }
 

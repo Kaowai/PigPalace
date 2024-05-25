@@ -52,7 +52,6 @@ function Forgotpassword2() {
                 >Login</Link></span>
             </div>
         </div>
-
     )
 }
 

@@ -3,7 +3,7 @@ import { IoNotificationsOutline, IoSettingsOutline } from 'react-icons/io5'
 
 export default function Header() {
   return (
-    <div className='flex flex-row w-5/6 pr-10 z-10 fixed h-16 border-b px-1 justify-between items-center  bg-white'>
+    <div className='flex flex-row w-full z-10 fixed h-16 border-b px-1 justify-between items-center  bg-white'>
       {/* Profile */}
       <div className='flex flex-row gap-5'>
         <img src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww' alt='avatar' className='w-10 h-10 rounded-full' />

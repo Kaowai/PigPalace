@@ -6,8 +6,8 @@ import MainModal from './Modal/MainModal';
 import PigAddModal from './Modal/PigAddModal';
 
 
-const Header = 'text-sm font-bold text-textprimary pl-2 pr-10 mx-1 py-2 items-start'
-const Row = 'text-sm  font-normal text-textprimary pl-4 pr-10 mx-1 py-3 items-start'
+const Header = 'text-xs font-bold text-textprimary pl-2 pr-10 mx-1 py-2 items-start'
+const Row = 'text-xs  font-normal text-textprimary pl-4 pr-10 mx-1 py-3 items-start'
 
 export default function Table2() {
     const [isModalOpen, setIsModalOpen] = useState(false);

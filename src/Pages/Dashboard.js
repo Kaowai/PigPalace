@@ -4,12 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 function Dashboard() {
   const navigate = useNavigate();
 
-  useEffect(()=> {
-    const farmId = localStorage.getItem('userInfo');
-    if (!farmId) {
-      navigate('/Login')
-    } 
-  }, [])
+  // useEffect(()=> {
+  //   const farmId = localStorage.getItem('userInfo');
+  //   if (!farmId) {
+  //     navigate('/Login')
+  //   } 
+  // }, [])
   return (
     <>
       <div>Dashboard</div>

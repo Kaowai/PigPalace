@@ -23,12 +23,14 @@ import User from '../Pages/User/User'
 import Inventory from '../Pages/Inventory/Inventory'
 import ExpensesAddFarm from '../Pages/Invoice/Expenses/ExpensesAddFarm'
 import Layout from '../Layout/LoginLayout/Layout'
+import FarmSelected from '../Pages/FarmSelected'
 const publicRoutes = [
     { path: '/Login', component: Login, layout: Layout },
     { path: '/Signup', component: Signup, layout: Layout },
     { path: '/ForgotPassword', component: Forgotpassword, layout: Layout },
     { path: '/ForgotPassword2', component: Forgotpassword2, layout: Layout },
     { path: '/ForgotPassword3', component: Forgotpassword3, layout: Layout },
+    { path: '/SelectedFarm', component: FarmSelected, layout: Layout},
 
     // DASHBOARD
     { path: '/Dashboard', component: Dashboard },

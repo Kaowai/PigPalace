@@ -32,10 +32,14 @@ const loginFacebookService = async(facebookID) => {
     }
     return data;
 }
+const testService = async () => {
+    return "Hello";
+}
 
 export {
     loginService,
     registerService,
     loginGoogleService,
-    loginFacebookService
+    loginFacebookService,
+    testService
 }

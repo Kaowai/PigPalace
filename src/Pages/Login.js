@@ -4,21 +4,25 @@ import { FaFacebook, FaGoogle } from "react-icons/fa6";
 import Layout from '../Layout/LoginLayout/Layout';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'
-import { loginFacebookService, loginGoogleService, loginService } from '../APIs/UserService';
+import { loginFacebookService, loginGoogleService, loginService, testService } from '../APIs/UserService';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { LoginSocialFacebook } from 'reactjs-social-login'
 import { FcGoogle } from 'react-icons/fc';
-
+import { HashLoader } from 'react-spinners/HashLoader'
+import ClipLoader from "react-spinners/ClipLoader";
 
 function Login() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     // handle login normal
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        handleLoading();
+        console.log("Login");
+        
         // if (!email) {
         //     toast.error("Email is required");
         //     return;
@@ -34,6 +38,14 @@ function Login() {
         //     alert(err.response.data);
         // }
         toast.success("Login successfully");
+        event.preventDefault();
+    }
+    const handleLoading = () => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            navigate('/SelectedFarm');
+        }, 1500);
     }
 
     // handle login with gooogle 
@@ -107,12 +119,15 @@ function Login() {
                     </div>
                 </div>
             </div>
-            <div className="w-[22rem] h-12 items-center">
-                <button
-                    className='bg-primary_main w-full h-full rounded-xl font-medium text-xs text-white button-hover'
-                    onClick={handleSubmit}>
-                    Login
-                </button>
+            <div className="w-[22rem] h-12 items-center flex">
+                {
+                    loading ? <ClipLoader color='#3B82F6' loading={loading} size={25} className='m-auto items-center justify-center'/> : <button
+                        className='bg-primary_main w-full h-full rounded-xl font-medium text-xs text-white button-hover'
+                        onClick={handleSubmit}>
+                        Login
+                    </button>
+                }
+
             </div>
             <div className='flex flex-row gap-2 px-4 items-center'>
                 <span className='w-16 outline-none border-t-[0.5px] border-textdisable'></span>
