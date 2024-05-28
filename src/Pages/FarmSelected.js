@@ -44,6 +44,9 @@ export default function FarmSelected() {
                     ))
                 }
             </div>
+            <div className='flex justify-center items-center'>
+                <span className='text-center text-textprimary hover:text-primary_main text-sm cursor-pointer'>Logout</span>
+            </div>
         </div>
     )
 }

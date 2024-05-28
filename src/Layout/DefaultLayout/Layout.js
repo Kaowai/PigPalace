@@ -1,17 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from './Header/Header'
 import SideBar from './SideBar/SideBar'
+import { useMediaQuery } from 'react-responsive';
 
 export default function Layout({ children }) {
+    const [open, setOpen] = useState(false);
+
+    const handleOpenMenu = () => {
+        setOpen(!open);
+    }
+
     return (
-        <div className='h-full w-full' style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gridTemplateRows: 'auto 1fr' }}>
-            <SideBar style={{ gridColumn: '1'} }/>
-            <div className='w-full px-64 ml-2' style={{ gridColumn: '2', gridRow: '1' }}>
-                <Header  />
+        <div className='md:grid auto-rows-auto gap-2 relative'>
+            <div className='fixed top-0 w-full z-10'>
+                <Header onOpenMenu={handleOpenMenu}/>
             </div>
-            <main className='h-full px-4 py-4 mt-16 ml-[16rem]  justify-center items-center' style={{ gridColumn: '2', gridRow: '2' }}>
-                {children}
-            </main>
+            <div className='flex flex-row gap-1 w-full'>
+                <div className={`fixed top-12 z-10 ${!open && "hidden"}`}>
+                    <SideBar open={open} setOpen={setOpen}/>
+                </div>
+                <div className=' mt-12 px-12 py-6 w-full'>
+                    {children}
+                </div>
+            </div>
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { TiDelete } from 'react-icons/ti'
 import { useNavigate } from 'react-router-dom'
 import PigAddModal from './Modal/PigAddModal'
 import PigExpenseModal from './Modal/PigExpenseModal'
+import ModalDelete from './Modal/ModalDelete'
 
 
 const Header = 'text-xs font-bold text-textprimary pl-2 pr-10 mx-1 py-2 items-start'
@@ -26,8 +27,7 @@ export default function Table() {
         setIsConfirm(false);
     }
     const handleConfirmClick = () => {
-        setIsModalOpen(true);
-        setIsConfirm(true);
+        navigate('/Invoice/Expenses/ExpensesOverview/ExpensesEditPig');
     }
     const data = [
         { id: 'INV04052024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
@@ -36,9 +36,10 @@ export default function Table() {
         { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
         { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
     ];
-
+    
     return (
         <div className='flex flex-col w-fit h-fit items-start gap-5 px-12'>
+            
             <div className='flex flex-row justify-between w-full items-center' >
                 <div className='items-center gap-2 w-fit flex-row flex text-xs  font-normal text-textsecondary'>
                     Show
@@ -46,7 +47,7 @@ export default function Table() {
                     entries
                 </div>
                 <button className='flex flex-row px-3 py-2 text-xs text-white bg-other20 rounded gap-2'
-                    onClick={() => { navigate('/Invoice/Expenses/ExpensesOverview/ExpensesAdd') }}
+                    onClick={() => { navigate('/Invoice/Expenses/ExpensesOverview/ExpensesAddPig') }}
                 >
                     <CiCirclePlus className='text-white' size={16} />
                     Add New
@@ -121,7 +122,7 @@ export default function Table() {
                                             </button>
                                         )
                                     }
-                                    <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white'>
+                                    <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white' >
                                         <TiDelete size={16} />
                                         Delete
                                     </button>
@@ -150,7 +151,7 @@ export default function Table() {
                     <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={20} />
                 </div>
             </div>
-            <PigExpenseModal name={isConfirm ? "Expenses Confirm" : "Expenses Pig"} isvisible={isModalOpen} isConfirm={isConfirm} onClose={() => {setIsModalOpen(false)}}/>
+            <PigExpenseModal name={isConfirm ? "Expenses Confirm" : "Expenses Pig"} isvisible={isModalOpen} isConfirm={isConfirm} onClose={() => { setIsModalOpen(false) }} />
         </div>
     )
 }

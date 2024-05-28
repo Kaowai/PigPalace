@@ -42,15 +42,39 @@ input[type="text"]:not(:placeholder-shown) ~ .input-text{
 .tab {
   position: relative;
 }
+.animate-slide-in-from-top {
+  animation: slide-in-from-top 0.5s forwards;
 
+}
+
+@keyframes slide-in-from-top {
+  0% {
+      transform: translateY(-75%);
+  }
+  100% {
+      transform: translateY(0%);
+  }
+}
 
 .animate-slide-in-from-right {
   animation: slide-in-from-right 1.5s forwards;
+}
+.animate-slide-in-from-left {
+  animation: slide-in-from-left 0.75s forwards;
 }
 
 
 .animate-background-in-from-right {
   animation: slide-in-from-right 1s forwards;
+}
+
+@keyframes slide-in-from-left {
+  0% {
+      transform: translateX(-100%);
+  }
+  100% {
+      transform: translateX(0%);
+  }
 }
 
 @keyframes slide-in-from-right {
@@ -111,9 +135,13 @@ input[type="text"]:not(:placeholder-shown) ~ .input-text{
   border-radius: 50%;
   background: rgba(28,17,41,0.88);
 }
+.icon:hover + span {
+  display: block;
+}
+
 .link {
   @apply p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer
-    cursor-default duration-300 font-medium text-sm;
+    cursor-default duration-300 font-medium text-[12px];
 }
 .active {
   @apply bg-other30 text-other20;

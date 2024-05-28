@@ -21,7 +21,7 @@ export default function ExpensesOverview() {
           <span className='text-xs text-textprimary font-semibold'>Expenses Overview</span>
         </div>
       </div>
-      <div className='flex flex-row gap-3 md:px-14'>
+      <div className='flex flex-row gap-3 '>
         <div
           className={`flex flex-col cursor-pointer tab ${selectedTab === 'Pig Expenses' ? 'selected' : ''}`}
           onClick={() => setSelectedTab('Pig Expenses')}

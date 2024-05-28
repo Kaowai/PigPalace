@@ -1,28 +1,45 @@
 import React from 'react'
+import { IoMdMenu } from 'react-icons/io'
 import { IoNotificationsOutline, IoSettingsOutline } from 'react-icons/io5'
 
-export default function Header() {
+export default function Header({ onOpenMenu}) {
   return (
-    <div className='flex flex-row w-full z-10 fixed h-16 border-b px-1 justify-between items-center  bg-white'>
-      {/* Profile */}
-      <div className='flex flex-row gap-5'>
-        <img src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww' alt='avatar' className='w-10 h-10 rounded-full' />
-        <div className='flex flex-col items-start'>
-          <span className='text-xs text-textprimary font-bold '>Hello, David</span>
-          <span className='text-xs text-textprimary'>Manager</span>
+    <div className='flex flex-row w-full h-12 border-b px-1 justify-between items-center bg-white'>
+
+      {/* Menu */}
+      <div className='flex hover:bg-textdisable/50 transition-all duration-150 ease-in-out hover:rounded-full items-center p-2 mx-2' onClick={onOpenMenu}>
+        <IoMdMenu className='text-textprimary/80 icon relative cursor-pointer' size={21} />
+        <span className='absolute top-12 p-1 bg-textsecondary text-white font-medium text-[9px] rounded hidden '>Navigation menu</span>
+      </div>
+      {/* Logo */}
+      <div className='w-[16rem] px-3'>
+        <div className="flex items-center gap-3.5 font-medium  py-3 border-slate-300 mx-3">
+          <span
+            className="w-8 h-8 bg-primary_main rounded-full flex items-center justify-center cursor-pointer text-white text-2xl font-bold"
+          >P</span>
+          <span className={`text-xl whitespace-pre text-other20 font-semibold cursor-pointer`}>PigPalace</span>
         </div>
       </div>
-      <div className='flex flex-row gap-2 items-center pr-2'>
-        <div className='flex bg-other30 rounded-lg p-2'>
-          <IoNotificationsOutline className='text-other20' size={20} />
-        </div>
-        <div className='flex bg-other30 rounded-lg p-2'>
-          <IoSettingsOutline className='text-other20' size={20} />
-        </div>
+      {/* Pig Farm */}
+      <div className='w-full flex flex-row justify-between items-center '>
         <select className='bg-other20 rounded-lg p-2 w-36 text-sm text-white font-semibold'>
           <option className='py-2 bg-white text-textprimary h-12'>Piggy Farmmy 1</option>
           <option className='py-2 bg-white text-textprimary h-12'>Piggy Farmmy 2</option>
         </select>
+
+        <div className='flex flex-row items-center pr-2'>
+          <div className='flex hover:bg-textdisable/50 transition-all duration-150 ease-in-out hover:rounded-full p-2'>
+            <IoNotificationsOutline className='text-textprimary/80 relative icon' size={21} />
+            <span className='absolute top-12 right-20 p-1 bg-textsecondary text-white font-medium text-[9px] rounded hidden'>Notifications</span>
+          </div>
+          <div className='flex hover:bg-textdisable/50 transition-all duration-150 ease-in-out hover:rounded-full p-2'>
+            <IoSettingsOutline className='text-textprimary/80 relative icon' size={21} />
+            <span className='absolute top-12 right-14 p-1 bg-textsecondary text-white font-medium text-[9px] rounded hidden'>Settings</span>
+          </div>
+          <div className='flex flex-row gap-5 p-2'>
+            <img src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww' alt='avatar' className='w-9 h-9 rounded-full' />
+          </div>
+        </div>
       </div>
     </div>
   )
