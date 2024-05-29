@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import ModalPopup from './ModalPopup';
+import ModalPopup from './ModalMain/ModalPopup';
 
 
 export default function ModalDelete({ name, isvisible, onClose, onDelete }) {

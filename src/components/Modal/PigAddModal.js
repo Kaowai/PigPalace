@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import MainModal from './MainModal'
+import MainModal from './ModalMain/MainModal'
 import { DateTimeInput, Input2, InputMoney, MessageInput, MultiSelect, Select1 } from '../Input'
 import { Checkbox } from 'antd'
 

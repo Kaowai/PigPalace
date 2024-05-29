@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { TiDelete } from 'react-icons/ti'
 import { InputMoney } from './Input';
-import PigModal from './Modal/MainModal';
-import MainModal from './Modal/MainModal';
+import PigModal from './Modal/ModalMain/MainModal';
+import MainModal from './Modal/ModalMain/MainModal';
 import PigAddModal from './Modal/PigAddModal';
 import ModalDelete from './Modal/ModalDelete';
 import { data } from '../Data/PigDataSample'
@@ -16,6 +16,7 @@ export default function Table2() {
         { id: 'PIG002', name: 'Pig 2', breed: 'Yorkshire', age: '12 Months', gender: 'Female', cost: '$3000' },
         { id: 'PIG003', name: 'Pig 3', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
     ]);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [deleteID, setDeleteID] = useState('');
@@ -36,7 +37,7 @@ export default function Table2() {
 
 
     return (
-        <div className='w-full h-fit flex flex-col gap-5 items-start'>
+        <div className='w-full h-full flex flex-col gap-5 items-start'>
             <ModalDelete name={"Delete Pig"} isvisible={isModalDeleteOpen} onClose={() => setIsModalDeleteOpen(false)} onDelete={handleDelete} />
             <div className='w-full'>
                 <div className='w-full bg-info_bg/45 py-2'>
@@ -55,6 +56,7 @@ export default function Table2() {
                         </tr>
                     </thead>
                     <tbody>
+                        {data.length === 0 && <tr className='border-textdisable border-b hover:bg-slate-100'><td colSpan={7} className='text-center py-3'>No pig have added</td></tr> }
                         {data.map(row => (
                             <tr className=' border-textdisable border-b hover:bg-slate-100' key={row.id}>
                                 <td className={`${Row}`}>{row.id}</td>

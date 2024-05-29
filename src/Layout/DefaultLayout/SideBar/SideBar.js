@@ -5,41 +5,55 @@ import { motion } from "framer-motion";
 import React from "react";
 
 // * React icons
-import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { HiOutlineDatabase } from "react-icons/hi";
 import { TbCalendarPause, TbInvoice, TbPig, TbReportAnalytics } from "react-icons/tb";
-import { useMediaQuery } from "react-responsive";
-import { MdMenu } from "react-icons/md";
 import { NavLink, useLocation } from "react-router-dom";
 import { FiUser } from "react-icons/fi";
 import { CgCalendarToday } from "react-icons/cg";
-import e from "cors";
 
-
-const SidebarContext = createContext()
-
-const SideBar = ({ open, setOpen }) => {
-  const sidebarRef = useRef();
+const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+    if (isTabletMid) {
+      console.log("isTabletMid", isTabletMid);
+      setOpen(false);
+    } else {
+      console.log("isTabletMid", isTabletMid);
+      setOpen(true);
+    }
+  }, [isTabletMid]);
 
-  const Nav_animation = {
+  const Nav_animation = isTabletMid
+    ? {
       open: {
-        width: "14rem",
+        x: 0,
+        width: "16rem",
         transition: {
-          duration: 0.2,
-          ease: "easeInOut",
+          damping: 40,
         },
       },
       closed: {
-        width: "0",
+        x: -250,
+        width: 0,
         transition: {
-          duration: 0.2,
-          ease: "easeInOut",
+          damping: 40,
+          delay: 0.15,
+        },
+      },
+    }
+    : {
+      open: {
+        width: "16rem",
+        transition: {
+          damping: 40,
+        },
+      },
+      closed: {
+        width: "4rem",
+        transition: {
+          damping: 40,
         },
       },
     };
@@ -120,31 +134,29 @@ const SideBar = ({ open, setOpen }) => {
     {
       name: "Users",
       path: "/User",
-      icon: <FiUser size={20} className="" />,
+      icon: <FiUser size={20} className="min-w-max" />,
     },
   ]
   const [openSubMenu, setOpenSubMenu] = useState("");
   const handleClick = (name) => {
+    setOpen(true);
+    console.log("name", name);
     setOpenSubMenu(openSubMenu === name ? "" : name);
   }
 
   return (
     <div className="h-full flex flex-row gap-2 animate-slide-in-from-left">
-      <div
-        onClick={() => setOpen(false)}
-        className={`md:hidden max-h-screen h-screen bg-black/50 ${open ? "" : "hidden"
-          } `}
-      ></div>
       <motion.div
         ref={sidebarRef}
         variants={Nav_animation}
+        initial={{ x: isTabletMid ? -250 : 0 }}
         animate={open ? "open" : "closed"}
         className=" bg-white text-gray shadow-xl max-w-[16rem]  w-[16rem] 
-            overflow-hidden md:relative fixed h-screen "
+            overflow-hidden md:relative fixed h-screen z-[999]"
       >
         <div className="flex flex-col h-full">
           <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-none scrollbar-track-white scrollbar-thumb-slate-100  md:h-[68%] h-[70%]">
-            <small className={`pl-3 text-slate-500 inline-block mb-2 `}>
+            <small className={`pl-3 text-slate-500 inline-block mb-2 ${!open && "hidden"}`}>
               Overview
             </small>
             {MenuList.map((menu) => menu.path ?
@@ -152,24 +164,22 @@ const SideBar = ({ open, setOpen }) => {
                 <MenuItem
                   key={menu.name}
                   {...menu}
-                  onClick={() => { !open && setOpen(!open) }} />
+                  onClick={() => { setOpen() }} />
               ) :
               menu.icon ? (
                 <div key={menu.name} className="flex flex-col">
-                  <SubMenu {...menu} onClick={() => handleClick(menu.name)} />
+                  <SubMenu {...menu} onClick={() => handleClick(menu.name)} setOpen={setOpen} open={open} />
                 </div>
               ) : (
                 <div className=" pt-2 border-t border-slate-300">
-                  <small className={`pl-3 text-slate-500 inline-block mb-2`}>
+                  <small className={`pl-3 text-slate-500 inline-block mb-2 ${!open && "hidden"}`}>
                     Analytics
                   </small>
                 </div>
               )
             )}
-
-
           </ul>
-          <div className="flex flex-row text-sm max-h-60 my-auto  whitespace-pre  w-full  font-medium  ">
+          <div className={`flex flex-row text-sm max-h-60 my-auto  whitespace-pre  w-full  font-medium   ${!open && "hidden"}`}>
             <div className="flex w-full  border-y border-slate-300 p-4 items-center justify-between">
               <div>
                 <p>PigPalace</p>
@@ -180,30 +190,7 @@ const SideBar = ({ open, setOpen }) => {
               </p>
             </div>
           </div>
-
         </div>
-
-        {/* button collapse and expand */}
-        {/* <motion.div
-          onClick={() => {
-            setOpen(!open);
-          }}
-          animate={
-            open
-              ? {
-                x: 0,
-                rotate: 0,
-              }
-              : {
-                x: -10,
-                rotate: 180,
-              }
-          }
-          transition={{ duration: 0 }}
-          className="absolute w-fit h-fit md:block hidden right-2 bottom-20 p-1  cursor-pointer"
-        >
-          <IoIosArrowBack size={25} />
-        </motion.div> */}
       </motion.div>
     </div>
 
@@ -214,17 +201,18 @@ export default SideBar;
 
 
 export const MenuItem = ({ icon, name, path, onClick }) => {
+
   return (
-    <li
-      className=" hover:text-other20 cursor-pointer"
-      onClick={onClick}>
-      <NavLink to={path} className="link">
-        {icon}
-        <span>{name}</span>
-      </NavLink>
-    </li>
+    <>
+      <li
+        className=" hover:text-other20 cursor-pointer icon relative"
+        onClick={onClick}>
+        <NavLink to={path} className="link">
+          {icon}
+          <span>{name}</span>
+        </NavLink>
+      </li>
+    </>
   )
 };
-
-
 

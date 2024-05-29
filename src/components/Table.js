@@ -151,7 +151,7 @@ export default function Table() {
                     <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={20} />
                 </div>
             </div>
-            <PigExpenseModal name={isConfirm ? "Expenses Confirm" : "Expenses Pig"} isvisible={isModalOpen} isConfirm={isConfirm} onClose={() => { setIsModalOpen(false) }} />
+            <PigExpenseModal name={"Expenses Pig"} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} />
         </div>
     )
 }

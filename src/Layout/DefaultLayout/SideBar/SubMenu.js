@@ -3,26 +3,35 @@ import { motion } from "framer-motion";
 import { IoIosArrowDown } from "react-icons/io";
 import { NavLink, useLocation } from "react-router-dom";
 
-const SubMenu = ({ name, icon, menus }) => {
+const SubMenu = ({ name, icon, menus, setOpen, open }) => {
   const { pathname } = useLocation();
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   const Icon = icon;
   useEffect(() => {
-    console.log(name.replace(' ', '') + " + " + pathname);
-    console.log(pathname.includes(name.replace(' ', '')));
-
     if (!pathname.includes(name.replace(' ', ''))) {
       if (subMenuOpen) {
         setSubMenuOpen(!subMenuOpen);
       }
     }
-  }, [pathname]);
+    // if submenu has link in url and the sidebar is opened, the submenu will be opened
+    if (pathname.includes(name.replace(' ', ''))) {
+      if (open) {  
+        setSubMenuOpen(true);
+      }
+    }
+    console.log("hehe");
+    // if the sidebar is closed, the submenu will be closed
+    if (!open) { 
+      setSubMenuOpen(false);
+    }
+  }, [pathname, open]);
   return (
     <>
       <li
-        className={`link ${pathname.includes(name.replace(' ', '')) && "text-other20"} hover:text-other20 cursor-pointer`}
+        className={`link ${pathname.includes(name.replace(' ', '')) && "text-other20"} hover:text-other20 cursor-pointer icon`}
         onClick={() => {
           setSubMenuOpen(!subMenuOpen);
+          !open && setOpen(!open);
         }}
       >
         <Icon size={23} className="min-w-max" />
@@ -48,8 +57,10 @@ const SubMenu = ({ name, icon, menus }) => {
       >
         {menus?.map((menu) => (
           <li
-            className="hover:text-other20 cursor-pointer"
-            key={menu.name}>
+            className="hover:text-other20 cursor-pointer icon"
+            key={menu.name}
+            onClick={() => {setOpen()}}
+            >
             {/* className="hover:text-blue-600 hover:font-medium" */}
             <NavLink
               to={menu.path}

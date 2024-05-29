@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { DateTimeInput, Input2, InputMoney, MessageInput, Select1 } from '../../../components/Input'
-import Table2 from '../../../components/Table2'
+import Table2 from '../../../components/TableAddPig'
 import Input from 'antd/es/input/Input'
 
 function ExpensesAddFarm() {

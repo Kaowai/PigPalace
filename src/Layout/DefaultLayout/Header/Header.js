@@ -2,14 +2,20 @@ import React from 'react'
 import { IoMdMenu } from 'react-icons/io'
 import { IoNotificationsOutline, IoSettingsOutline } from 'react-icons/io5'
 
-export default function Header({ onOpenMenu}) {
+export default function Header({open, onOpenMenu}) {
+
+  // const handleClickOpen = () => {
+  //   if (open) {
+      
+  //   }
+  // }
   return (
     <div className='flex flex-row w-full h-12 border-b px-1 justify-between items-center bg-white'>
 
       {/* Menu */}
-      <div className='flex hover:bg-textdisable/50 transition-all duration-150 ease-in-out hover:rounded-full items-center p-2 mx-2' onClick={onOpenMenu}>
-        <IoMdMenu className='text-textprimary/80 icon relative cursor-pointer' size={21} />
-        <span className='absolute top-12 p-1 bg-textsecondary text-white font-medium text-[9px] rounded hidden '>Navigation menu</span>
+      <div className='flex hover:bg-textdisable/50 transition-all duration-150 ease-in-out hover:rounded-full items-center p-2 mx-2' onClick={() => {onOpenMenu(!open)}}>
+        <IoMdMenu className='text-textprimary/80 icon z-[999] relative cursor-pointer' size={21} />
+        <span className='absolute top-12 p-1 bg-textsecondary z-[999] text-white font-medium text-[9px] rounded hidden'>Navigation menu</span>
       </div>
       {/* Logo */}
       <div className='w-[16rem] px-3'>

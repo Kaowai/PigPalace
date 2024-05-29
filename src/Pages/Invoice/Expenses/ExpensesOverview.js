@@ -13,14 +13,17 @@ export default function ExpensesOverview() {
   return (
 
     <div className='h-full w-full flex flex-col gap-4'>
+      {/* Navigation */}
       <div className='flex flex-row w-full justify-between items-center'>
         <h1 className='text-2xl font-semibold text-textprimary'>Expenses Overview</h1>
-        <div className='flex flex-row gap-3 text-xs items-center pr-8'>
+        <div className='flex flex-row gap-3 text-xs items-center'>
           <NavLink to='/dashboard' className='text-xs text-textdisable hover:text-textprimary hover:cursor-pointer hover:font-semibold transition-all duration-200 ease-in-out'>Dashboard</NavLink>
           <FaAngleRight className='text-textdisable' size={20} />
           <span className='text-xs text-textprimary font-semibold'>Expenses Overview</span>
         </div>
       </div>
+
+      {/* Content */}
       <div className='flex flex-row gap-3 '>
         <div
           className={`flex flex-col cursor-pointer tab ${selectedTab === 'Pig Expenses' ? 'selected' : ''}`}
@@ -43,7 +46,7 @@ export default function ExpensesOverview() {
             </div>
 
           ) : (
-            <div className='w-full pl-2'>
+            <div>
               <TableFarmExpenses />
             </div>
           )

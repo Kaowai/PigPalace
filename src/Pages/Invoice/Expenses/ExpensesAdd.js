@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { NavLink, useLocation } from 'react-router-dom'
 import { DateTimeInput, Input2, MessageInput } from '../../../components/Input'
-import Table2 from '../../../components/Table2'
+import Table2 from '../../../components/TableAddPig'
 import ModalDelete from '../../../components/Modal/ModalDelete'
 
 function ExpensesAdd() {

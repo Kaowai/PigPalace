@@ -1,27 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Header from './Header/Header'
 import SideBar from './SideBar/SideBar'
 import { useMediaQuery } from 'react-responsive';
 
 export default function Layout({ children }) {
-    const [open, setOpen] = useState(false);
-
+    let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
+    const [open, setOpen] = useState(isTabletMid ? false : true);
+    const sidebarRef = useRef();
     const handleOpenMenu = () => {
         setOpen(!open);
+        console.log("open", open);
     }
 
+    useEffect(() => {
+        setOpen(false);
+    }, [])
     return (
-        <div className='md:grid auto-rows-auto gap-2 relative'>
-            <div className='fixed top-0 w-full z-10'>
-                <Header onOpenMenu={handleOpenMenu}/>
+        <div className='grid auto-rows-auto gap-2 relative'>
+            <div className='fixed top-0 w-full z-[999]'>
+                <Header onOpenMenu={handleOpenMenu} />
             </div>
-            <div className='flex flex-row gap-1 w-full'>
-                <div className={`fixed top-12 z-10 ${!open && "hidden"}`}>
-                    <SideBar open={open} setOpen={setOpen}/>
+            <div className='flex flex-row gap-1 w-full mt-12'>
+                <div className={`fixed top-12 z-[999]`}>
+                    <SideBar open={open} setOpen={handleOpenMenu} isTabletMid={isTabletMid} sidebarRef={sidebarRef}/>
                 </div>
-                <div className=' mt-12 px-12 py-6 w-full'>
-                    {children}
-                </div>
+                <main className={`h-full w-full flex-1 px-[5rem] py-6 ${open && "block"}`}>{children}</main>
             </div>
         </div>
     )

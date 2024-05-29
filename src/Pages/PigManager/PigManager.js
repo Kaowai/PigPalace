@@ -2,7 +2,7 @@ import React from 'react'
 
 function PigManager() {
   return (
-    <div>PigManager</div>
+    <div className='flex justify-center items-center'>PigManager</div>
   )
 }
 
