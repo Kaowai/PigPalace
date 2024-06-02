@@ -21,7 +21,7 @@ export default function Layout({ children }) {
                 <Header onOpenMenu={handleOpenMenu} />
             </div>
             <div className='flex flex-row gap-1 w-full mt-12'>
-                <div className={`fixed top-12 z-[999]`}>
+                <div className={`fixed top-12 z-[998]`}>
                     <SideBar open={open} setOpen={handleOpenMenu} isTabletMid={isTabletMid} sidebarRef={sidebarRef}/>
                 </div>
                 <main className={`h-full w-full flex-1 px-[5rem] py-6 ${open && "block"}`}>{children}</main>

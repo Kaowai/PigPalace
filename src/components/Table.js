@@ -19,15 +19,21 @@ const Paid = 'text-xs font-bold text-successlight bg-successbackground rounded-m
 
 export default function Table() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [row, setRow] = useState({});
     const [isConfirm, setIsConfirm] = useState(false);
     const navigate = useNavigate();
-
-    const handleViewClick = () => {
+    
+    const handleViewClick = (row) => {
         setIsModalOpen(true);
         setIsConfirm(false);
+        setRow(row);
+        console.log(row);
     }
-    const handleConfirmClick = () => {
-        navigate('/Invoice/Expenses/ExpensesOverview/ExpensesEditPig');
+    const handleConfirmClick = (row) => {
+        setIsModalOpen(true);
+        setIsConfirm(true);
+        setRow(row);
+        console.log(row);
     }
     const data = [
         { id: 'INV04052024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
@@ -111,12 +117,14 @@ export default function Table() {
                                     {
                                         row.status === 'Paid' ? (
                                             <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200'
-                                                onClick={handleViewClick}>
+                                                onClick={() => handleViewClick(row)}>
                                                 <GoSearch className='text-white' size={16} />
                                                 View
                                             </button>
                                         ) : (
-                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200' onClick={handleConfirmClick}>
+                                            <button 
+                                            className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200' 
+                                            onClick={() => handleConfirmClick(row)}>
                                                 <IoCheckmark size={16} />
                                                 Confirm
                                             </button>
@@ -151,7 +159,7 @@ export default function Table() {
                     <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={20} />
                 </div>
             </div>
-            <PigExpenseModal name={"Expenses Pig"} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} />
+            <PigExpenseModal name={"Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false)}} data={row} />
         </div>
     )
 }

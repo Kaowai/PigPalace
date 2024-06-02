@@ -44,7 +44,6 @@ export default function ExpensesOverview() {
             <div className=''>
               <Table />
             </div>
-
           ) : (
             <div>
               <TableFarmExpenses />

@@ -16,6 +16,10 @@ body, html {
   font-weight: 400;
   font-style: normal;
 }
+
+.button-edit {
+  @apply w-16 flex flex-row p-2 rounded-md items-center justify-center gap-2 border border-warningdark hover:bg-warningdark hover:text-white text-warningdark transition-all duration-200 ease-in-out text-xs font-medium;
+}
 .flex-colo {
   @apply flex flex-col justify-center items-center;
 }

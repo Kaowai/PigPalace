@@ -60,9 +60,9 @@ const publicRoutes = [
     // INVOICE 
     // Expeneses
     { path: '/Invoice/Expenses/ExpensesOverview/ExpensesAddFarm', component: ExpensesAddFarm },
-    { path: '/Invoice/Expenses/ExpensesOverview/ExpensesEditFarm', component: ExpensesAddFarm },
+    { path: '/Invoice/Expenses/ExpensesOverview/ExpensesEditFarm/:expensesId', component: ExpensesAddFarm },
     { path: '/Invoice/Expenses/ExpensesOverview/ExpensesAddPig', component: ExpensesAdd },
-    { path: '/Invoice/Expenses/ExpensesOverview/ExpensesEditPig', component: ExpensesAdd },
+    { path: '/Invoice/Expenses/ExpensesOverview/ExpensesEditPig/:expensesId', component: ExpensesAdd },
     { path: '/Invoice/Expenses/ExpensesOverview', component: ExpensesOverview },
     //Sales
     { path: '/Invoice/Sales/AddSales', component: AddSales },
