@@ -134,7 +134,7 @@ function ExpensesAddFarm() {
                     </div>
                 </div>
             </div>
-            <div className='w-full flex flex-row gap-2  md:px-32'>
+            <div className='w-full flex flex-row gap-2 md:px-32'>
                 <button className='text-xs text-white rounded bg-primary_main px-4 py-2 hover:bg-other20 transition-all duration-200 ease-in-out font-semibold tracking-wide'
                     onClick={handleClick}>
                     Submit

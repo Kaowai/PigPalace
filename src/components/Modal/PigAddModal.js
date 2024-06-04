@@ -96,10 +96,10 @@ export default function PigAddModal({ name, isvisible, onClose }) {
                             <MessageInput label="Note: *" />
                         </div>
                         <div className='flex flex-row gap-3'>
-                            <button className='text-sm text-white bg-info_bg hover:bg-viewbg_hover rounded font-semibold tracking-wide px-4 py-2 ' onClick={onClose}>
+                            <button className='button-submit-2' onClick={onClose}>
                                 Submit
                             </button>
-                            <button className='text-xs tracking-wide text-warning10 font-semibold px-4 py-2 rounded border border-warning10 hover:text-white hover:bg-warning10'>
+                            <button className='button-cancel' onClick={onClose}>
                                 Cancel
                             </button>
                         </div>

@@ -6,15 +6,26 @@ import MainModal from './Modal/ModalMain/MainModal';
 import PigAddModal from './Modal/PigAddModal';
 import ModalDelete from './Modal/ModalDelete';
 import { data } from '../Data/PigDataSample'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
-const Header = 'text-xs font-bold text-textprimary pl-2 pr-10 mx-1 py-2 items-start'
-const Row = 'text-xs  font-normal text-textprimary pl-4 pr-10 mx-1 py-3 items-start'
+export default function TableAddPig({ isView }) {
 
-export default function Table2() {
-    const [data, setData] = useState( [
+
+    const Header = 'text-xs font-bold text-textprimary px-2 py-2 text-start'
+    const Row = 'text-xs  font-normal text-textprimary px-2 pr-8 py-3 text-start'
+    const [data, setData] = useState([
         { id: 'PIG001', name: 'Pig 1', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
         { id: 'PIG002', name: 'Pig 2', breed: 'Yorkshire', age: '12 Months', gender: 'Female', cost: '$3000' },
         { id: 'PIG003', name: 'Pig 3', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+        { id: 'PIG004', name: 'Pig 1', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+        { id: 'PIG005', name: 'Pig 2', breed: 'Yorkshire', age: '12 Months', gender: 'Female', cost: '$3000' },
+        { id: 'PIG006', name: 'Pig 3', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+        { id: 'PIG007', name: 'Pig 1', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+        { id: 'PIG008', name: 'Pig 2', breed: 'Yorkshire', age: '12 Months', gender: 'Female', cost: '$3000' },
+        { id: 'PIG009', name: 'Pig 3', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+        { id: 'PIG010', name: 'Pig 1', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+        { id: 'PIG011', name: 'Pig 2', breed: 'Yorkshire', age: '12 Months', gender: 'Female', cost: '$3000' },
+        { id: 'PIG012', name: 'Pig 3', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,11 +63,11 @@ export default function Table2() {
                             <th scope='col' className={`${Header}`}>Age</th>
                             <th scope='col' className={`${Header}`}>Gender</th>
                             <th scope='col' className={`${Header}`}>Cost ($)</th>
-                            <th scope='col' className={`${Header}`}></th>
+                            {!isView && <th scope='col' className={`${Header}`}></th>}
                         </tr>
                     </thead>
                     <tbody>
-                        {data.length === 0 && <tr className='border-textdisable border-b hover:bg-slate-100'><td colSpan={7} className='text-center py-3'>No pig have added</td></tr> }
+                        {data.length === 0 && <tr className='border-textdisable border-b hover:bg-slate-100'><td colSpan={7} className='text-center py-3'>No pig have added</td></tr>}
                         {data.map(row => (
                             <tr className=' border-textdisable border-b hover:bg-slate-100' key={row.id}>
                                 <td className={`${Row}`}>{row.id}</td>
@@ -65,32 +76,60 @@ export default function Table2() {
                                 <td className={`${Row}`}>{row.age}</td>
                                 <td className={`${Row}`}>{row.gender}</td>
                                 <td className={`${Row}`}>{row.cost}</td>
-                                <td className={`flex flex-row items-start gap-2 py-3 px-2`}>
+                                {
+                                    !isView &&
+                                    <td className={`flex flex-row items-start gap-2 py-3 px-2`}>
 
-                                    <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white' onClick={() => { handleClickDelete(row.id) }}>
-                                        <TiDelete size={16} />
-                                        Delete
-                                    </button>
-                                </td>
+                                        <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white' onClick={() => { handleClickDelete(row.id) }}>
+                                            <TiDelete size={16} />
+                                            Delete
+                                        </button>
+                                    </td>
+                                }
+
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-
             <div className='flex flex-row justify-between items-center w-full'>
-                <button className='bg-textdisable text-xs text-white px-3 py-2 rounded hover:bg-secondary40' onClick={() => { setIsModalOpen(true) }}>
-                    Add Pig
-                </button>
-                <span className='text-xs font-bold text-other20'>
-                    Amount: <span className='text-xs font-bold text-other20'>{data.length}</span>
+                <span className='text-xs text-textprimary font-bold'>
+                    Show 1 to 2 of 2 entries
                 </span>
-            </div>
-            <div className='w-1/2'>
-                <div>
-                    <InputMoney label="Total cost" isDisable={true} />
+                <div className='flex flex-row justify-center items-center gap-5'>
+                    <AiOutlineLeft className='text-textdisable' size={16} />
+                    <span
+                        className='w-8 pt-2 h-8 text-center text-xs rounded-full bg-success_bg_hover text-white'>
+                        1
+                    </span>
+                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>2</span>
+                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>3</span>
+                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>4</span>
+                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>5</span>
+                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>...</span>
+                    <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={16} />
                 </div>
             </div>
+            {
+                !isView && (
+                    <div className='flex flex-col w-full gap-5'>
+                        <div className='flex flex-row justify-between items-center w-full'>
+                            <button className='button-close' onClick={() => { setIsModalOpen(true) }}>
+                                Add Pig
+                            </button>
+                            <span className='text-xs font-bold text-other20'>
+                                Total: <span className='text-xs font-bold text-other20'>{data.length}</span>
+                            </span>
+                        </div>
+                        <div className='w-1/2'>
+                            <div>
+                                <InputMoney label="Total cost" isDisable={true} />
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
             <PigAddModal name="Pig Information" isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} />
         </div>
     )

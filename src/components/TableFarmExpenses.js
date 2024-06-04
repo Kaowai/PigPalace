@@ -1,22 +1,42 @@
 import { Select } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { CiCirclePlus } from 'react-icons/ci'
 import { GoSearch } from 'react-icons/go'
 import { IoCheckmark } from 'react-icons/io5'
 import { TiDelete } from 'react-icons/ti'
 import { useNavigate } from 'react-router-dom'
+import ExpenseModalView from './Modal/PigExpenseModal'
 
 
-const Header = 'text-xs font-bold text-textprimary pl-2 pr-10 mx-1 py-2 items-start'
-const Row = 'text-xs  font-normal text-textprimary pl-2 pr-10 mx-1 py-3 items-start'
+const Header = 'text-xs font-bold text-textprimary px-4 py-2 text-start'
+const Row = 'text-xs  font-normal text-textprimary px-4 py-3 text-start'
 
 const Progress = 'text-xs font-bold text-warningdark bg-warningbackground rounded-md px-2 py-1'
 const Paid = 'text-xs font-bold text-successlight bg-successbackground rounded-md px-2 py-1'
 
 export default function TableFarmExpenses() {
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [row, setRow] = useState({});
+    const [isConfirm, setIsConfirm] = useState(false);
     const navigate = useNavigate();
+
+    const handleDelete = (row) => { 
+        
+    }
+
+    const handleViewClick = (row) => {
+        setIsModalOpen(true);
+        setIsConfirm(false);
+        setRow(row);
+        console.log(row);
+    }
+    const handleConfirmClick = (row) => {
+        setIsModalOpen(true);
+        setIsConfirm(true);
+        setRow(row);
+        console.log(row);
+    }
 
     const data = [
         { id: 'INV04052024', type: 'Feed', name: 'Rice bran', quantity: '1,000 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
@@ -104,18 +124,22 @@ export default function TableFarmExpenses() {
 
                                     {
                                         row.status === 'Paid' ? (
-                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200'>
+                                            <button className='button-view'
+                                                onClick={() => handleViewClick(row)}
+                                            >
                                                 <GoSearch className='text-white' size={16} />
                                                 View
                                             </button>
                                         ) : (
-                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200'>
+                                            <button className='button-confirm'
+                                                onClick={() => handleConfirmClick(row)}>
                                                 <IoCheckmark size={16} />
                                                 Confirm
                                             </button>
                                         )
                                     }
-                                    <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white'>
+                                    <button className='button-delete' 
+                                    onClick={() => {handleDelete(row)}}>
                                         <TiDelete size={16} />
                                         Delete
                                     </button>
@@ -144,6 +168,7 @@ export default function TableFarmExpenses() {
                     <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={20} />
                 </div>
             </div>
+            <ExpenseModalView name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={row} isFarm={true}/>
         </div>
     )
 }

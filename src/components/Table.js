@@ -7,12 +7,12 @@ import { IoCheckmark } from 'react-icons/io5'
 import { TiDelete } from 'react-icons/ti'
 import { useNavigate } from 'react-router-dom'
 import PigAddModal from './Modal/PigAddModal'
-import PigExpenseModal from './Modal/PigExpenseModal'
+import ExpenseModal from './Modal/PigExpenseModal'
 import ModalDelete from './Modal/ModalDelete'
 
 
-const Header = 'text-xs font-bold text-textprimary pl-2 pr-10 mx-1 py-2 items-start'
-const Row = 'text-xs  font-normal text-textprimary pl-2 pr-10 mx-1 py-3 items-start'
+const Header = 'text-xs font-bold text-textprimary px-2 py-2 text-start'
+const Row = 'text-xs  font-normal text-textprimary px-2 pr-10 mx-1 py-3 text-start'
 
 const Progress = 'text-xs font-bold text-warningdark bg-warningbackground rounded-md px-2 py-1'
 const Paid = 'text-xs font-bold text-successlight bg-successbackground rounded-md px-2 py-1'
@@ -22,7 +22,15 @@ export default function Table() {
     const [row, setRow] = useState({});
     const [isConfirm, setIsConfirm] = useState(false);
     const navigate = useNavigate();
-    
+    const [type, setType] = useState('all');
+    const [year, setYear] = useState('all');
+    const [status, setStatus] = useState('all');
+    const [search, setSearch] = useState('');
+
+    const handleDelete = (row) => {
+
+    }
+
     const handleViewClick = (row) => {
         setIsModalOpen(true);
         setIsConfirm(false);
@@ -36,16 +44,16 @@ export default function Table() {
         console.log(row);
     }
     const data = [
-        { id: 'INV04052024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV04032024', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV01001', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
+        { id: 'INV01002', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV01003', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV01004', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
+        { id: 'INV01005', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
     ];
-    
+
     return (
-        <div className='flex flex-col w-fit h-fit items-start gap-5 px-12'>
-            
+        <div className='flex flex-col  h-full items-start gap-5 '>
+
             <div className='flex flex-row justify-between w-full items-center' >
                 <div className='items-center gap-2 w-fit flex-row flex text-xs  font-normal text-textsecondary'>
                     Show
@@ -63,31 +71,37 @@ export default function Table() {
             <div className='flex flex-col justify-start gap-0'>
                 <div className='w-full flex flex-row justify-between items-center'>
                     <div className='flex flex-row gap-0 items-center'>
-                        <select className='bg-viewbg_hover py-2 text-white text-sm rounded-l-sm'>
+                        <select className='bg-viewbg_hover py-2 text-white text-sm rounded-l-sm'
+                            onChange={(e) => setType(e.target.value)}>
                             <option value="all">All</option>
                             <option value="imported">Imported</option>
                             <option value='exported'>Exported</option>
                         </select>
-                        <select className='bg-viewbg text-white p-2 text-sm'>
+                        <select className='bg-viewbg text-white p-2 text-sm'
+                            onChange={(e) => setYear(e.target.value)}>
                             <option value="all">All</option>
-                            <option value="imported">2024</option>
-                            <option value='exported'>2023</option>
+                            <option value="2024">2024</option>
+                            <option value='2023'>2023</option>
                         </select>
-                        <select className='bg-viewbg text-white p-2 text-sm rounded-r-sm'>
+                        <select className='bg-viewbg text-white p-2 text-sm rounded-r-sm'
+                            onChange={(e) => setStatus(e.target.value)}>
                             <option value="all">All</option>
-                            <option value="imported">Progress</option>
-                            <option value='exported'>Paid</option>
+                            <option value="progress">Progress</option>
+                            <option value='paid'>Paid</option>
                         </select>
                     </div>
 
                     <div className='flex flex-row gap-3 text-xs items-center '>
                         Search:
-                        <input type='text' className='text-textsecondary text-xs font-normal items-start text-wra h-6 w-48 border border-textdisable rounded pl-2' >
+                        <input
+                            type='text'
+                            className='text-textsecondary text-xs font-normal items-start text-wra h-6 w-48 border border-textdisable rounded pl-2'
+                            onChange={(e) => { setSearch(e.target.value); console.log(e.target.value) }}>
                         </input>
                     </div>
                 </div>
 
-                <table className='border border-textdisable rounded-lg'>
+                <table className='border border-textdisable rounded-lg '>
                     <thead>
                         <tr className=' bg-textdisable/20 border-textdisable border-b'>
                             <th scope='col' className={`${Header}`}>ID Invoice</th>
@@ -97,11 +111,41 @@ export default function Table() {
                             <th scope='col' className={`${Header}`}>Invoice Date</th>
                             <th scope='col' className={`${Header}`}>Purchase Date</th>
                             <th scope='col' className={`${Header}`}>Status</th>
-                            <th scope='col' className={`${Header}`}></th>
+                            <th scope='col' className={`${Header} w-24`}></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map(row => (
+                        {data.filter((row) => {
+                            // search
+                            var row = search.toLocaleLowerCase() === ''
+                                ? row
+                                : row.id.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+                            if (row === false) {
+                                return false
+                            }
+
+                            // type
+                            row = type.toLocaleLowerCase() === 'all' ? row : row.type.toLocaleLowerCase() === type.toLocaleLowerCase()
+
+                            if (row === false) {
+                                return false
+                            }
+
+                            // year 
+                            row = year.toLocaleLowerCase() === 'all' ? row : row.invoiceDate.toLocaleLowerCase().includes(year.toLocaleLowerCase());
+                            
+                            if (row === false) {
+                                return false
+                            }
+                            
+                            // status
+                            row = status.toLocaleLowerCase() === 'all' ? row : row.status.toLocaleLowerCase().includes(status.toLocaleLowerCase());
+                            
+                            if (row === false) {
+                                return false
+                            }
+                            return row
+                        }).map(row => (
                             <tr className=' border-textdisable border-b hover:bg-slate-100' key={row.id}>
                                 <td className={`${Row}`}>{row.id}</td>
                                 <td className={`${Row}`}>{row.type}</td>
@@ -122,15 +166,16 @@ export default function Table() {
                                                 View
                                             </button>
                                         ) : (
-                                            <button 
-                                            className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200' 
-                                            onClick={() => handleConfirmClick(row)}>
+                                            <button
+                                                className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200'
+                                                onClick={() => handleConfirmClick(row)}>
                                                 <IoCheckmark size={16} />
                                                 Confirm
                                             </button>
                                         )
                                     }
-                                    <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white' >
+                                    <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white'
+                                        onClick={() => { handleDelete(row) }}>
                                         <TiDelete size={16} />
                                         Delete
                                     </button>
@@ -159,7 +204,7 @@ export default function Table() {
                     <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={20} />
                 </div>
             </div>
-            <PigExpenseModal name={"Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false)}} data={row} />
+            <ExpenseModal name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={row} />
         </div>
     )
 }

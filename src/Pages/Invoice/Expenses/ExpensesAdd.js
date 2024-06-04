@@ -110,12 +110,12 @@ function ExpensesAdd() {
         <Table2 />
       </div>
       <div className='w-full flex flex-row gap-2  md:px-32'>
-        <button className='text-xs text-white rounded bg-primary_main px-4 py-2 hover:bg-other20 transition-all duration-200 ease-in-out font-semibold tracking-wide'>
+        <button className='button-submit'>
           {
             isAdd ? 'Submit' : 'Confirm'
           }
         </button>
-        <button className='text-xs text-warning10 font-semibold px-4 py-2 rounded border border-warning10 hover:text-white hover:bg-warning10'>
+        <button className='button-cancel'>
           Cancel
         </button>
       </div>

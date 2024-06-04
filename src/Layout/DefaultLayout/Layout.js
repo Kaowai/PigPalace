@@ -16,15 +16,19 @@ export default function Layout({ children }) {
         setOpen(false);
     }, [])
     return (
-        <div className='grid auto-rows-auto gap-2 relative'>
+        <div className='grid auto-rows-auto gap-2 relative h-full w-full'>
             <div className='fixed top-0 w-full z-[999]'>
                 <Header onOpenMenu={handleOpenMenu} />
             </div>
-            <div className='flex flex-row gap-1 w-full mt-12'>
+            <div className='flex flex-row gap-1 w-full h-fit '>
                 <div className={`fixed top-12 z-[998]`}>
-                    <SideBar open={open} setOpen={handleOpenMenu} isTabletMid={isTabletMid} sidebarRef={sidebarRef}/>
+                    <SideBar open={open} setOpen={handleOpenMenu} isTabletMid={isTabletMid} sidebarRef={sidebarRef} />
                 </div>
-                <main className={`h-full w-full flex-1 px-[5rem] py-6 ${open && "block"}`}>{children}</main>
+                <main className={`flex flex-col h-screen overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100 flex-1 px-[5rem] pt-14 pb-6 ${open && "block"} bottom-6`}>
+                    <div className='flex-1'>
+                        {children}
+                    </div>
+                </main>
             </div>
         </div>
     )
