@@ -1,55 +1,56 @@
 import React, { useEffect, useState } from 'react'
 import { Input, InputPassword } from '../components/Input'
-import { FaFacebook, FaGoogle } from "react-icons/fa6";
-import Layout from '../Layout/LoginLayout/Layout';
 import { Link, useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify'
-import { loginFacebookService, loginGoogleService, loginService, testService } from '../APIs/UserService';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import { LoginSocialFacebook } from 'reactjs-social-login'
+import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login'
 import { FcGoogle } from 'react-icons/fc';
-import { HashLoader } from 'react-spinners/HashLoader'
+import { FaFacebook } from 'react-icons/fa';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux'
 import ClipLoader from "react-spinners/ClipLoader";
+import { loginFacebookService, loginGoogleService } from '../Redux/APIs/UserService';
+import { LoginValidation } from '../Validation/UserValidation';
+import { useForm } from 'react-hook-form'
+import { googleLoginAction, loginAction } from '../Redux/Actions/UserActions';
+import { InlineError } from '../Notifications/Error';
+import toast from 'react-hot-toast';
+import { FaceBookLoginButton } from 'react-social-login-buttons';
 
 function Login() {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const { isLoading, isError, userInfo, isSuccess } = useSelector(state => state.userLogin);
 
-    // handle login normal
-    const handleSubmit = async (event) => {
-        handleLoading();
-        console.log("Login");
-        
-        // if (!email) {
-        //     toast.error("Email is required");
-        //     return;
-        // } else if (!password) {
-        //     toast.error("Password is required");
-        //     return;
-        // }
-        // try {
-        //     let res = await loginService(email, password);
-        //     alert("Login successfully");
-        //     navigate('/');
-        // } catch (err) {
-        //     alert(err.response.data);
-        // }
-        toast.success("Login successfully");
-        event.preventDefault();
+
+    // validate user
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(LoginValidation)
+    })
+
+
+    // onSubmit
+    const onSubmit = async (data) => {
+        console.log(data);
+        dispatch(loginAction(data.email, data.password));
     }
-    const handleLoading = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
+
+    useEffect(() => {
+        if (isError) {
+            toast.error('Login Failed! Please try again');
+            dispatch({ type: 'USER_LOGIN_RESET' });
+        }
+        if (isSuccess) {
+            toast.success("Login Successfully!");
             navigate('/SelectedFarm');
-        }, 1500);
-    }
+        }
+    }, [isError, isSuccess, userInfo, navigate, dispatch])
 
-    // handle login with gooogle 
-    const login = useGoogleLogin({
+    const handleLoginGoogle = useGoogleLogin({
         onSuccess: async (response) => {
             try {
                 // get information from user google
@@ -60,23 +61,27 @@ function Login() {
                         },
                     }
                 );
-                console.log(res.data.sub);
+                console.log(res.data);
 
-                // login into database
-                const resDb = await loginGoogleService(res.data.sub);
-                alert("Login with google successfully");
-                navigate('/');
+                // dispatch to reducter login successfully with google account
+                dispatch(googleLoginAction(res.data.sub, res.data.email));
+                
+                // create user with google account
+
+                toast.success("Login with google successfully");
+                // navigate('/');
             } catch (err) {
-                console.log(err);
+                toast.error("Login with google failed!");
             }
         }
     });
-
+    // login with facebook
     const handleLoginFacebook = async (res) => {
         try {
-            const resDb = await loginFacebookService(res.data.userID);
-            alert("Login with google successfully");
-            navigate('/');
+            console.log(res);
+            // const resDb = await loginFacebookService(res.data.userID);
+            alert("Login with facebook successfully");
+            // navigate('/');
         } catch (err) {
             console.log(err);
         }
@@ -88,8 +93,7 @@ function Login() {
     }, [])
 
     return (
-        <form
-            onSubmit={handleSubmit}
+        <div
             className='w-full h-full flex animate-slide-in-from-right flex-col gap-5  items-center'
         >
             <div className='flex flex-row items-center justify-center gap-3'>
@@ -104,14 +108,21 @@ function Login() {
                 <div className='w-full items-center' >
                     <Input
                         placeholder="Email"
-                        type={'email'}
+                        type='email'
+                        name='email'
+                        register={register("email")}
                     />
+                    {errors.email && <InlineError text={errors.email.message} />}
                 </div>
                 <div className='w-full ' >
                     <InputPassword
                         placeholder="Password"
                         type='password'
+                        name='password'
+                        register={register("password")}
                     />
+                    {errors.password && <InlineError text={errors.password.message} />}
+
                 </div>
                 <div className='w-full'>
                     <div className="w-full flex flex-col gap-1 justify-end items-center">
@@ -121,9 +132,9 @@ function Login() {
             </div>
             <div className="w-[22rem] h-12 items-center flex">
                 {
-                    loading ? <ClipLoader color='#3B82F6' loading={loading} size={25} className='m-auto items-center justify-center'/> : <button
+                    isLoading ? <ClipLoader color='#3B82F6' loading={isLoading} size={25} className='m-auto items-center justify-center' /> : <button
                         className='bg-primary_main w-full h-full rounded-xl font-medium text-xs text-white button-hover'
-                        onClick={handleSubmit}>
+                        onClick={handleSubmit(onSubmit)} >
                         Login
                     </button>
                 }
@@ -137,27 +148,32 @@ function Login() {
 
 
             <div className='flex flex-row gap-3 items-center'>
+
+                <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover' onClick={handleLoginGoogle}
+                >
+                    <FcGoogle size={20} />
+                    <span className='text-xs text-textprimary font-medium'>Google</span>
+                </button>
+
                 <LoginSocialFacebook
                     appId="1621397548596001"
-                    onResolve={handleLoginFacebook}
-                    onReject={(err) => console.log(err)}
+                    onResolve={(res) => handleLoginFacebook(res)}
+                    onReject={(err) => toast.error("Login with facebook failed!")}
                 >
-                    <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
-                        <FcGoogle size={20} />
-                        <span className='text-xs text-textprimary font-medium'>Google</span>
+                    <button
+                        className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
+                        <FaFacebook size={20} className='text-facebook' />
+                        <span className='text-xs text-textprimary font-medium'>Facebook</span>
                     </button>
                 </LoginSocialFacebook>
-                <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
-                    <FaFacebook size={20} className='text-facebook' />
-                    <span className='text-xs text-textprimary font-medium'>Facebook</span>
-                </button>
+
             </div>
             <div className='w-full flex items-center justify-center text-center'>
                 <span className='text-textdisable items-end font-normal text-xs '>Don't have an account? <span className='text-xs font-normal underline text-primary_main cursor-pointer'
                     onClick={() => navigate('/signup')}
                 >Signup</span></span>
             </div>
-        </form>
+        </div >
     )
 }
 

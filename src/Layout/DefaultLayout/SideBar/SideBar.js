@@ -11,6 +11,7 @@ import { TbCalendarPause, TbInvoice, TbPig, TbReportAnalytics } from "react-icon
 import { NavLink, useLocation } from "react-router-dom";
 import { FiUser } from "react-icons/fi";
 import { CgCalendarToday } from "react-icons/cg";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
   const { pathname } = useLocation();
@@ -18,10 +19,14 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
   useEffect(() => {
     if (isTabletMid) {
       console.log("isTabletMid", isTabletMid);
-      setOpen(false);
-    } else {
-      console.log("isTabletMid", isTabletMid);
-      setOpen(true);
+      if (open) {
+        setOpen();
+      }
+    }
+    else {
+      if (!open) {
+        setOpen();
+      }
     }
   }, [isTabletMid]);
 
@@ -29,33 +34,28 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
     ? {
       open: {
         x: 0,
-        width: "16rem",
+        width: "15rem",
         transition: {
-          damping: 40,
+          damping: 100,
         },
       },
       closed: {
         x: -250,
         width: 0,
         transition: {
-          damping: 40,
-          delay: 0.15,
+          damping: 100,
+          delay: 0.1,
         },
       },
     }
     : {
       open: {
-        width: "16rem",
+        width: "15rem",
         transition: {
           damping: 40,
         },
-      },
-      closed: {
-        width: "4rem",
-        transition: {
-          damping: 40,
-        },
-      },
+
+      }
     };
 
   const MenuList = [
@@ -100,10 +100,6 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
         {
           name: "Vaccine Monitor",
           path: "/Events/VaccineMonitor/VaccineMonitorOverview"
-        },
-        {
-          name: "Dead Monitor",
-          path: "/Events/DeadMonitor/DeadMonitorOverview"
         }
       ],
     },
@@ -136,10 +132,27 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
       path: "/User",
       icon: <FiUser size={20} className="min-w-max" />,
     },
+    {
+      name: "Settings",
+      icon: IoSettingsOutline,
+      menus: [
+        {
+          name: "General",
+          path: "/Settings/General"
+        },
+        {
+          name: "Pig Barn",
+          path: "/Settings/PigBarn"
+        },
+        {
+          name: "Breed",
+          path: "/Settings/Breed"
+        }
+      ],
+    },
   ]
   const [openSubMenu, setOpenSubMenu] = useState("");
   const handleClick = (name) => {
-    setOpen(true);
     console.log("name", name);
     setOpenSubMenu(openSubMenu === name ? "" : name);
   }
@@ -151,11 +164,11 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
         variants={Nav_animation}
         initial={{ x: isTabletMid ? -250 : 0 }}
         animate={open ? "open" : "closed"}
-        className=" bg-white text-gray shadow-xl max-w-[16rem]  w-[16rem] 
+        className=" bg-white text-gray shadow-xl max-w-[15rem]  w-[15rem] 
             overflow-hidden md:relative fixed h-screen z-[999]"
       >
         <div className="flex flex-col h-full">
-          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-none scrollbar-track-white scrollbar-thumb-slate-100  md:h-[68%] h-[70%]">
+          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-none scrollbar-track-white scrollbar-thumb-slate-100  md:h-[74%] h-[70%]">
             <small className={`pl-3 text-slate-500 inline-block mb-2 ${!open && "hidden"}`}>
               Overview
             </small>
@@ -164,7 +177,7 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
                 <MenuItem
                   key={menu.name}
                   {...menu}
-                  onClick={() => { setOpen() }} />
+                  onClick={() => { isTabletMid && setOpen() }} />
               ) :
               menu.icon ? (
                 <div key={menu.name} className="flex flex-col">
@@ -179,7 +192,7 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
               )
             )}
           </ul>
-          <div className={`flex flex-row text-sm max-h-60 my-auto  whitespace-pre  w-full  font-medium   ${!open && "hidden"}`}>
+          <div className={`flex flex-row text-sm max-h-60 my-auto  whitespace-pre  w-full  font-medium`}>
             <div className="flex w-full  border-y border-slate-300 p-4 items-center justify-between">
               <div>
                 <p>PigPalace</p>

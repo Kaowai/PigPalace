@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
-import { NavLink, useLocation } from 'react-router-dom'
-import { DateTimeInput, Input2, MessageInput } from '../../../components/Input'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { DateTimeInput, Input2, InputMoney, MessageInput } from '../../../components/Input'
 import Table2 from '../../../components/TableAddPig'
 import ModalDelete from '../../../components/Modal/ModalDelete'
+import PigAddModal from '../../../components/Modal/PigAddModal'
+import { FaAngleLeft } from 'react-icons/fa6'
 
 function ExpensesAdd() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,13 +27,23 @@ function ExpensesAdd() {
   const closeModal = () => {
     setIsModalOpen(false);
   }
+  const [data, setData] = useState([
+    { id: 'PIG001', name: 'Pig 1', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+    { id: 'PIG002', name: 'Pig 2', breed: 'Yorkshire', age: '12 Months', gender: 'Female', cost: '$3000' },
+    { id: 'PIG003', name: 'Pig 3', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' }
+  ]);
+  const [rowPerPage, setRowPerPage] = useState(5);
+  const handleLeftClick = () => {
 
-  
+  }
 
+  const handleRightLick = () => {
+
+  }
   return (
     <div className='h-full w-full flex flex-col gap-4'>
-      
-      <div className='grid md:grid-cols-2 w-full pr-4 justify-between items-center gap-2'>
+
+      <div className='flex flex-col w-full pr-4 justify-start items-start gap-2'>
         <h1 className='text-2xl font-semibold text-textprimary'>
           {
             isAdd ? 'Add Pig Expenses' : 'Edit Pig Expenses'
@@ -39,86 +51,122 @@ function ExpensesAdd() {
         </h1>
         <div className='flex flex-row gap-3 text-xs items-center justify-end'>
           <NavLink to='/dashboard' className='text-xs text-textdisable hover:text-textprimary hover:cursor-pointer transition-all duration-200 ease-in-out'>Dashboard</NavLink>
-          <FaAngleRight className='text-textdisable' size={20} />
-          <NavLink to='/Invoice/Expenses/ExpensesOverview' className='text-xs text-textdisable bg-white hover:text-textprimary hover:cursor-pointer transition-all duration-200 ease-in-out'>Expenses Overview</NavLink>
-          <FaAngleRight className='text-textdisable' size={20} />
+          <span className='w-1 h-1 rounded-full bg-textdisable' />
+          <Link to='/Invoice/Expenses/ExpensesOverview' className='hover:text-textprimary cursor-pointer transition-all duration-200 ease-in-out'>Expenses Overview</Link>
+          <span className='w-1 h-1 rounded-full bg-textdisable' />
           <span className='text-xs text-textprimary font-semibold'>{isAdd ? "Add Pig Expenses" : "Edit Pig Expenses"}</span>
         </div>
       </div>
-      <div className='w-full items-center grid md:grid-cols-2 gap-5 pr-4  md:px-32'>
-        <div className='w-full'>
-          <Input2
-            label="Invoice Date: *"
-            placeholder="dd-MM-YYYY"
-            type="text"
-            bg={true}
-            name="year"
-          />
-        </div>
-        <div className='w-full'>
-          <Input2
-            label="Client Company Name: "
-            placeholder=""
-            type="text"
-            bg={true}
-            name="year"
-          />
-        </div>
-        <div className='w-full'>
-          <DateTimeInput
-            label="Purchase Date: *"
-            placeholder="dd-MM-YYYY"
-            type="text"
-            bg={true}
-            name="year"
-          />
-        </div>
-        <div className='w-full'>
-          <Input2
-            label="Client Name: "
-            placeholder=""
-            type="text"
-            bg={true}
-            name="year"
-          />
-        </div>
-        <div className='w-full row-span-2 order-1 md:order-none'>
-          <MessageInput
-            label="Note: "
-          />
-        </div>
-        <div className='w-full'>
-          <Input2
-            label="Client Address: "
-            placeholder=""
-            type="text"
-            bg={true}
-            name="year"
-          />
-        </div>
-        <div className='w-full '>
-          <Input2
-            label="Client Phone Number: "
-            placeholder=""
-            type="text"
-            bg={true}
-            name="year"
-          />
+      <div className='w-full md:px-28'>
+        <div className='w-full items-center p-8 grid md:grid-cols-2 gap-5 shadow rounded-xl'>
+          <div className='w-full'>
+            <DateTimeInput
+              label="Invoice Date: *"
+              placeholder="dd-MM-YYYY"
+              type="text"
+              bg={true}
+              name="year"
+            />
+          </div>
+          <div className='w-full'>
+            <Input2
+              label="Client Company Name: "
+              placeholder=""
+              type="text"
+              bg={true}
+              name="year"
+            />
+          </div>
+          <div className='w-full'>
+            <DateTimeInput
+              label="Purchase Date: *"
+              placeholder="dd-MM-YYYY"
+              type="text"
+              bg={true}
+              name="year"
+            />
+          </div>
+          <div className='w-full'>
+            <Input2
+              label="Client Name: "
+              placeholder=""
+              type="text"
+              bg={true}
+              name="year"
+            />
+          </div>
+          <div className='w-full row-span-2 order-1 md:order-none'>
+            <MessageInput
+              label="Note: "
+            />
+          </div>
+          <div className='w-full'>
+            <Input2
+              label="Client Address: "
+              placeholder=""
+              type="text"
+              bg={true}
+              name="year"
+            />
+          </div>
+          <div className='w-full '>
+            <Input2
+              label="Client Phone Number: "
+              placeholder=""
+              type="text"
+              bg={true}
+              name="year"
+            />
+          </div>
         </div>
       </div>
-      <div className='md:px-32'>
-        <Table2 />
+      <div className='md:px-28'>
+        <div className='shadow py-2 rounded-xl flex flex-col gap-3'>
+          <div className='px-2 border-b border-textdisable'>
+            <span className='text-sm font-bold text-textprimary'>List Pig Exported</span>
+          </div>
+          <Table2 data={data} setData={setData} />
+          <div className='flex flex-row justify-between items-center px-4'>
+            <button className='button-close w-32' onClick={() => { setIsModalOpen(true) }}>
+              Add Pig
+            </button>
+            <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary'>
+              <span>Row per page: </span>
+              <select className='outline-none' onChange={(e) => setRowPerPage(e.target.value)}>
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+              </select>
+              <span>6-10</span>
+              <span>of</span>
+              <span>11</span>
+              <FaAngleLeft size={12} className='text-textdisable' onClick={() => handleLeftClick} />
+              <FaAngleRight size={12} className='text-textprimary' onClick={() => handleRightLick} />
+            </div>
+          </div>
+          <div className='flex flex-col w-full gap-5 px-4'>
+
+            <div className='w-1/3'>
+              <div>
+                <InputMoney label="Total cost" isDisable={true} />
+              </div>
+            </div>
+          </div>
+          <div className='w-full flex flex-row gap-2  md:px-4 py-6'>
+            <button className='button-submit-3'>
+              {
+                isAdd ? 'Submit' : 'Confirm'
+              }
+            </button>
+            <button className='button-cancel'>
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
-      <div className='w-full flex flex-row gap-2  md:px-32'>
-        <button className='button-submit'>
-          {
-            isAdd ? 'Submit' : 'Confirm'
-          }
-        </button>
-        <button className='button-cancel'>
-          Cancel
-        </button>
-      </div>
+
+
+      <PigAddModal name="Pig Information" isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} />
+
     </div>
   )
 }

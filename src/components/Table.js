@@ -1,36 +1,30 @@
-import { Select } from 'antd'
 import React, { useState } from 'react'
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
-import { CiCirclePlus } from 'react-icons/ci'
 import { GoSearch } from 'react-icons/go'
 import { IoCheckmark } from 'react-icons/io5'
 import { TiDelete } from 'react-icons/ti'
-import { useNavigate } from 'react-router-dom'
-import PigAddModal from './Modal/PigAddModal'
 import ExpenseModal from './Modal/PigExpenseModal'
-import ModalDelete from './Modal/ModalDelete'
+import { IoIosArrowRoundDown } from "react-icons/io";
 
 
-const Header = 'text-xs font-bold text-textprimary px-2 py-2 text-start'
-const Row = 'text-xs  font-normal text-textprimary px-2 pr-10 mx-1 py-3 text-start'
+const Header = 'text-xs font-bold text-textprimary whitespace-nowrap px-2 py-3 text-start w-56 '
+const Row = 'text-xs  font-normal text-textprimary px-2 pr-10 mx-1 py-3 text-start whitespace-nowrap w-56'
 
 const Progress = 'text-xs font-bold text-warningdark bg-warningbackground rounded-md px-2 py-1'
 const Paid = 'text-xs font-bold text-successlight bg-successbackground rounded-md px-2 py-1'
 
-export default function Table() {
+export default function Table({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [row, setRow] = useState({});
     const [isConfirm, setIsConfirm] = useState(false);
-    const navigate = useNavigate();
-    const [type, setType] = useState('all');
-    const [year, setYear] = useState('all');
-    const [status, setStatus] = useState('all');
-    const [search, setSearch] = useState('');
-
+    const [activeSort, setActiveSort] = useState(false);
     const handleDelete = (row) => {
 
     }
-
+    const [dataPig, setDataPig] = useState([
+        { id: 'PIG001', name: 'Pig 1', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' },
+        { id: 'PIG002', name: 'Pig 2', breed: 'Yorkshire', age: '12 Months', gender: 'Female', cost: '$3000' },
+        { id: 'PIG003', name: 'Pig 3', breed: 'Yorkshire', age: '12 Months', gender: 'Male', cost: '$3000' }
+      ]);
     const handleViewClick = (row) => {
         setIsModalOpen(true);
         setIsConfirm(false);
@@ -43,131 +37,55 @@ export default function Table() {
         setRow(row);
         console.log(row);
     }
-    const data = [
-        { id: 'INV01001', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-        { id: 'INV01002', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV01003', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV01004', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-        { id: 'INV01005', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    ];
-
     return (
-        <div className='flex flex-col  h-full items-start gap-5 '>
-
-            <div className='flex flex-row justify-between w-full items-center' >
-                <div className='items-center gap-2 w-fit flex-row flex text-xs  font-normal text-textsecondary'>
-                    Show
-                    <Select defaultValue={10} className='h-6 text-xs font-semibold' options={[{ value: '10', label: <span>10</span> }, { value: '15', label: <span>15</span> }]} />
-                    entries
-                </div>
-                <button className='flex flex-row px-3 py-2 text-xs text-white bg-other20 rounded gap-2'
-                    onClick={() => { navigate('/Invoice/Expenses/ExpensesOverview/ExpensesAddPig') }}
-                >
-                    <CiCirclePlus className='text-white' size={16} />
-                    Add New
-                </button>
-            </div>
-
-            <div className='flex flex-col justify-start gap-0'>
-                <div className='w-full flex flex-row justify-between items-center'>
-                    <div className='flex flex-row gap-0 items-center'>
-                        <select className='bg-viewbg_hover py-2 text-white text-sm rounded-l-sm'
-                            onChange={(e) => setType(e.target.value)}>
-                            <option value="all">All</option>
-                            <option value="imported">Imported</option>
-                            <option value='exported'>Exported</option>
-                        </select>
-                        <select className='bg-viewbg text-white p-2 text-sm'
-                            onChange={(e) => setYear(e.target.value)}>
-                            <option value="all">All</option>
-                            <option value="2024">2024</option>
-                            <option value='2023'>2023</option>
-                        </select>
-                        <select className='bg-viewbg text-white p-2 text-sm rounded-r-sm'
-                            onChange={(e) => setStatus(e.target.value)}>
-                            <option value="all">All</option>
-                            <option value="progress">Progress</option>
-                            <option value='paid'>Paid</option>
-                        </select>
-                    </div>
-
-                    <div className='flex flex-row gap-3 text-xs items-center '>
-                        Search:
-                        <input
-                            type='text'
-                            className='text-textsecondary text-xs font-normal items-start text-wra h-6 w-48 border border-textdisable rounded pl-2'
-                            onChange={(e) => { setSearch(e.target.value); console.log(e.target.value) }}>
-                        </input>
-                    </div>
-                </div>
-
-                <table className='border border-textdisable rounded-lg '>
+        <div className='flex flex-col h-full items-start gap-5 py-2' >
+            <div className='overflow-x-auto'>
+                <table className='border rounded-lg'>
                     <thead>
-                        <tr className=' bg-textdisable/20 border-textdisable border-b'>
-                            <th scope='col' className={`${Header}`}>ID Invoice</th>
-                            <th scope='col' className={`${Header}`}>Type</th>
+                        <tr className=' bg-textdisable/20 border-textdisable'>
+                            <th scope='col' className={`${Header} flex flex-row gap-2 items-center`}>
+                                <IoIosArrowRoundDown
+                                    size={20}
+                                    className={`${activeSort ? "text-textdisable" : "text-textprimary"} cursor-pointer`}
+                                    onClick={() => setActiveSort(!activeSort)} />
+                                <span>Employee</span>
+                            </th>
                             <th scope='col' className={`${Header}`}>Amount</th>
                             <th scope='col' className={`${Header}`}>Cost</th>
                             <th scope='col' className={`${Header}`}>Invoice Date</th>
-                            <th scope='col' className={`${Header}`}>Purchase Date</th>
                             <th scope='col' className={`${Header}`}>Status</th>
-                            <th scope='col' className={`${Header} w-24`}></th>
+                            <th scope='col' className={`${Header} w-56`}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.filter((row) => {
-                            // search
-                            var row = search.toLocaleLowerCase() === ''
-                                ? row
-                                : row.id.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-                            if (row === false) {
-                                return false
-                            }
-
-                            // type
-                            row = type.toLocaleLowerCase() === 'all' ? row : row.type.toLocaleLowerCase() === type.toLocaleLowerCase()
-
-                            if (row === false) {
-                                return false
-                            }
-
-                            // year 
-                            row = year.toLocaleLowerCase() === 'all' ? row : row.invoiceDate.toLocaleLowerCase().includes(year.toLocaleLowerCase());
-                            
-                            if (row === false) {
-                                return false
-                            }
-                            
-                            // status
-                            row = status.toLocaleLowerCase() === 'all' ? row : row.status.toLocaleLowerCase().includes(status.toLocaleLowerCase());
-                            
-                            if (row === false) {
-                                return false
-                            }
-                            return row
-                        }).map(row => (
-                            <tr className=' border-textdisable border-b hover:bg-slate-100' key={row.id}>
-                                <td className={`${Row}`}>{row.id}</td>
-                                <td className={`${Row}`}>{row.type}</td>
+                        {data.map(row => (
+                            <tr className=' border-slate-300 border-b border-dashed hover:bg-slate-100' key={row.id}>
+                                <td className={`${Row}`}>
+                                    <div className='flex flex-row gap-2 justify-start items-center'>
+                                        <img src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww border boder-disablebg' alt='avatar' className='w-8 h-8 rounded-full' />
+                                        <div className='flex flex-col gap-1'>
+                                            <span className='text-xs font-medium text-textprimary'>{row.employee}</span>
+                                            <span className='text-xs text-textdisable'>{row.id}</span>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td className={`${Row}`}>{row.amount}</td>
                                 <td className={`${Row}`}>{row.cost}</td>
                                 <td className={`${Row}`}>{row.invoiceDate}</td>
-                                <td className={`${Row}`}>{row.purchaseDate}</td>
-                                <td className={`${Row} `}>
+                                <td className={`${Row}`}>
                                     <span className={`${row.status === 'Paid' ? Paid : Progress}`}>{row.status}</span>
                                 </td>
-                                <td className={`flex flex-row items-start gap-2 py-3 px-2`}>
-
+                                <td className='flex flex-row items-start gap-2 py-3 px-2 w-56 '>
                                     {
                                         row.status === 'Paid' ? (
-                                            <button className='flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200'
+                                            <button className='button-view'
                                                 onClick={() => handleViewClick(row)}>
                                                 <GoSearch className='text-white' size={16} />
                                                 View
                                             </button>
                                         ) : (
                                             <button
-                                                className='flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200'
+                                                className='button-confirm'
                                                 onClick={() => handleConfirmClick(row)}>
                                                 <IoCheckmark size={16} />
                                                 Confirm
@@ -185,26 +103,7 @@ export default function Table() {
                     </tbody>
                 </table>
             </div>
-
-            <div className='flex flex-row justify-between items-center w-full'>
-                <span className='text-xs text-textprimary font-bold'>
-                    Show 1 to 2 of 2 entries
-                </span>
-                <div className='flex flex-row justify-center items-center gap-5'>
-                    <AiOutlineLeft className='text-textdisable' size={20} />
-                    <span
-                        className='w-8 pt-2 h-8 text-center text-xs rounded-full bg-success_bg_hover text-white'>
-                        1
-                    </span>
-                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>2</span>
-                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>3</span>
-                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>4</span>
-                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>5</span>
-                    <span className='text-textprimary text-xs cursor-pointer hover:font-bold transition-all duration-200 ease-in-out'>...</span>
-                    <AiOutlineRight className='text-textprimary cursor-pointer hover:bg-slate-200' size={20} />
-                </div>
-            </div>
-            <ExpenseModal name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={row} />
+            <ExpenseModal name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={row} dataPig={dataPig}/>
         </div>
     )
 }

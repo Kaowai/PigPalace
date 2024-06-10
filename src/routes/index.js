@@ -24,6 +24,10 @@ import Inventory from '../Pages/Inventory/Inventory'
 import ExpensesAddFarm from '../Pages/Invoice/Expenses/ExpensesAddFarm'
 import Layout from '../Layout/LoginLayout/Layout'
 import FarmSelected from '../Pages/FarmSelected'
+import General from '../Pages/Settings/General'
+import Breed from '../Pages/Settings/Breed'
+import PigBarn from '../Pages/Settings/PigBarn'
+
 const publicRoutes = [
     { path: '/Login', component: Login, layout: Layout },
     { path: '/Signup', component: Signup, layout: Layout },
@@ -41,7 +45,7 @@ const publicRoutes = [
     // FEED MANAGER
     { path: '/FeedManager/TodayFeed', component: TodayFeed },
     { path: '/FeedManager/FeedPlan', component: FeedPlan },
-    { path: '/FeedManager/AddFeedPlan', component: AddFeedPlan },
+    { path: '/FeedManager/FeedPlan/AddFeedPlan', component: AddFeedPlan },
 
     // INVENTORY
     {path: '/Inventory', component: Inventory},
@@ -55,7 +59,7 @@ const publicRoutes = [
     { path: '/Events/VaccineMonitor/VaccineMonitorAdd', component: VaccineMonitorAdd },
     // Pregnancy
     { path: '/Events/PregnancyMonitor/PregnancyOverview', component: PregnancyOverview },
-    { path: '/Events/PregnancyMonitor/PregnancyAdd', component: PregnancyAdd },
+    { path: '/Events/PregnancyMonitor/PregnancyOverview/PregnancyAdd', component: PregnancyAdd },
 
     // INVOICE 
     // Expeneses
@@ -75,6 +79,9 @@ const publicRoutes = [
     { path: '/User', component: User },
 
     // Farm Setup
+    { path: '/Settings/General', component: General },
+    { path: '/Settings/Breed', component: Breed },
+    { path: '/Settings/PigBarn', component: PigBarn},
 
 ]
 

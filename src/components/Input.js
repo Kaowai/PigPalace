@@ -1,30 +1,39 @@
 import React, { useEffect, useRef, useState } from "react"
-import { DatePicker, Select, Space } from 'antd';
-import { Check, CheckIcon, EyeIcon, EyeOffIcon } from "lucide-react";
+import { DatePicker, Select } from 'antd';
+import { CheckIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { PiFarmLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import { IoIosArrowDown } from 'react-icons/io';
 
 export const Input = (
     {
         placeholder,
-        type,
-        onChange
+        register,
+        name,
+        onChange,
     }
 ) => {
     return (
         <div className="w-full flex flex-col gap-1 justify-center items-center">
             <label className='relative cursor-pointer items-center'>
-                <input type="text" placeholder="Input" className='h-12 w-[22rem] px-5 text-xs text-textprimary bg-white border-textdisable border rounded-xl border-opacity-50 outline-none focus:border-other20 placeholder-gray-300 placeholder-opacity-0 transition duration-200' />
+                <input
+                    name={name}
+                    type="text"
+                    placeholder="Input"
+                    onChange={onChange}
+                    {...register}
+                    className='h-12 w-[22rem] px-5 text-xs text-textprimary bg-white border-textdisable border rounded-xl border-opacity-50 outline-none focus:border-other20 placeholder-gray-300 placeholder-opacity-0 transition duration-200'
+
+                />
                 <span className='text-xs text-textdisable text-opacity-80 bg-white absolute left-4 top-4 px-1 transition duration-200 input-text'>{placeholder}</span>
             </label>
-            <span className="text-xs text-warning10 hidden">* Input invalid</span>
         </div>
     )
 }
 export const SelectedFarm = ({ farmName, onClick }) => {
     return (
         <Link to={'/dashboard'} className="flex flex-col gap-5 justify-center items-center border-2 border-textdisable border-opacity-50 rounded-lg p-2 w-28 h-24 bg-white hover:bg-login cursor-pointer">
-            <PiFarmLight size={48} className="text-textdisable "/>
+            <PiFarmLight size={48} className="text-textdisable " />
             <span className="text-xs text-textdisable text-center">{farmName}</span>
         </Link>
     )
@@ -85,56 +94,41 @@ export const InputPIN = (
     )
 }
 
-export const InputPassword = ({
-    placeholder,
-    onChange
-}) => {
-    const [showPassword, setShowPassword] = useState(false)
+export const InputPassword = (
+    {
+        placeholder,
+        register,
+        name,
+        type
+    }
+) => {
+    const [isShowPassword, setIsShowPassword] = useState(false);
 
-    const [isPlaceholder, setIsPlaceholder] = useState(true)
-    const [isFocused, setIsFocused] = useState(false)
-    const handleClick = (e) => {
-        e.preventDefault();
-        setShowPassword(!showPassword);
-
-    }
-    const PlaceHolderShown = "text-xs text-textdisable text-opacity-80 bg-white absolute left-4 top-4 px-1 transition duration-200";
-    const PlaceholderHidden = "text-xs text-textdisable text-opacity-80 bg-white absolute left-4 top-4 px-1 transition duration-200 placeholder-shown";
-    const handleInputChange = (e) => {
-        console.log(e.target.value);
-        if (e.target.value === '') {
-            setIsPlaceholder(true);
-        } else {
-            setIsPlaceholder(false);
-        }
-    }
-    const handleFocus = () => {
-        console.log("focus");
-        setIsFocused(true); // Set isFocused to true when the input field is focused
-    }
-
-    const handleBlur = () => {
-        console.log("clear focus");
-        setIsFocused(false); // Set isFocused to false when the input field loses focus
-    }
-    console.log("rerender");
     return (
         <div className="w-full flex flex-col gap-1 justify-center items-center">
-            <label className='relative cursor-pointer'>
-                <input type={showPassword ? "text" : "password"} placeholder="Input" className='h-12 w-[22rem] pl-5 pr-11 text-xs text-textprimary bg-white border-textdisable border rounded-xl border-opacity-50 outline-none focus:border-other20 placeholder-gray-300 placeholder-opacity-0 transition duration-200' onChange={handleInputChange} onFocus={handleFocus} onBlur={handleBlur} />
-                <span className={isPlaceholder && !isFocused ? PlaceHolderShown : PlaceholderHidden}>{placeholder}</span>
+            <label className='relative cursor-pointer items-center'>
+                <input
+                    name={name}
+                    type= {isShowPassword ? 'text' : 'password'}
+                    placeholder="Input"
+                    {...register}
+                    className='h-12 w-[22rem] px-5 text-xs text-textprimary bg-white border-textdisable border rounded-xl border-opacity-50 outline-none focus:border-other20 placeholder-gray-300 placeholder-opacity-0 transition duration-200'
+
+                />
+                <span className='text-xs text-textdisable text-opacity-80 bg-white absolute left-4 top-4 px-1 transition duration-200 input-text'>{placeholder}</span>
+
                 {
-                    showPassword ? (
-                        <EyeIcon size={18} className='absolute right-4 top-4 text-textsecondary text-opacity-80 cursor-pointer' onClick={handleClick} />
-                    ) : (
-                        <EyeOffIcon size={18} className='absolute right-4 top-4 text-textsecondary text-opacity-80 cursor-pointer' onClick={handleClick} />
+                    isShowPassword ? (
+                        <EyeIcon size={18} className='absolute right-4 top-4 text-textsecondary text-opacity-80 cursor-pointer' onClick={() => setIsShowPassword(!isShowPassword)} />
+                    ) : ( 
+                        <EyeOffIcon size={18} className='absolute right-4 top-4 text-textsecondary text-opacity-80 cursor-pointer' onClick={() => setIsShowPassword(!isShowPassword)} />
                     )
                 }
             </label>
-            <span className="text-xs text-warning10 hidden">* Input invalid</span>
         </div>
     )
 }
+
 export const Input2 = (
     {
         label,
@@ -205,7 +199,7 @@ export const InputMoney = (
         </div>
     )
 }
-export const Select1 = (
+export const Select2 = (
     {
         label,
         options,
@@ -219,6 +213,34 @@ export const Select1 = (
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
             <select
                 placeholder={"Select..."}
+                onChange={onChange}
+                value={value}
+                readOnly={isDisable}
+                className={`w-32 text-xs border bg-white ${isDisable ? "border-textprimary" : "border-secondary30"} h-10 rounded-lg text-textprimary py-2 px-2 outline-none focus:border-blue-500 focus:ring-blue-500 hover:border-blue-500`} >
+                {options.map((option, index) => {
+                    return (
+                        <option key={index} value={option.value}>{option.title}</option>
+                    )
+                })}
+            </select>
+        </div>
+    )
+}
+export const Select1 = (
+    {
+        label,
+        options,
+        onChange,
+        isDisable,
+        value,
+        placeholder
+    }
+) => {
+    return (
+        <div className="text-xs w-full relative">
+            <label className="text-secondary60 font-semibold text-xs">{label}</label>
+            <select
+                placeholder={placeholder}
                 onChange={onChange}
                 value={value}
                 readOnly={isDisable}
@@ -255,7 +277,7 @@ export const MultiSelect = (
                 }}
                 className="mt-2"
                 placeholder="Please select"
-                defaultValue={['Berkshire']}
+                defaultValue={options[0].value}
                 onChange={handleChange}
                 options={options}
             />
@@ -264,7 +286,24 @@ export const MultiSelect = (
 }
 export const DateTimeInput = (
     {
-        label
+        label,
+        placeholder
+    }
+) => {
+    const handleChange = (value,) => {
+        console.log(`selected ${value}`);
+    };
+    return (
+        <div className="text-xs w-full relative">
+            <label className="text-secondary60 font-semibold text-xs">{label}</label>
+            <DatePicker placeholder={placeholder} className="w-full mt-2 text-xs font-semibold  h-8 date-time-input" />
+        </div>
+    )
+}
+export const DateTimeInput2 = (
+    {
+        label,
+        placeholder
     }
 ) => {
     const handleChange = (value) => {
@@ -273,7 +312,56 @@ export const DateTimeInput = (
     return (
         <div className="text-xs w-full relative">
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
-            <DatePicker className="w-full mt-2 text-xs font-semibold  h-8" />
+            <DatePicker placeholder={placeholder} className="w-full font-semibold text-textprimary h-10 date-time-input" />
         </div>
     )
 }
+
+const Dropdown = ({ data, farmSelected, setFarmSelected }) => {
+    const [openSelect, setOpenSelect] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setOpenSelect(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <div ref={dropdownRef}>
+            <div
+                className='bg-other20 rounded p-2 w-32 text-xs text-white font-medium relative flex flex-row justify-between items-center cursor-pointer'
+                onClick={() => setOpenSelect(!openSelect)}
+            >
+                <span className=''>{farmSelected.name}</span>
+                <IoIosArrowDown
+                    size={16}
+                    className={`transform transition-all ${openSelect ? 'rotate-180' : 'rotate-0'}`}
+                />
+            </div>
+            <div
+                className={`absolute flex flex-col gap-0 top-12 text-xs text-textprimary font-normal w-32 rounded border border-textdisable transition-all p-1 ${!openSelect && 'hidden'
+                    } z-[1000] bg-white`}
+            >
+                {
+                    data?.map((farm, index) => (
+                        <span
+                            key={index}
+                            className={`p-2 bg-white transition-all cursor-pointer z-[1000] ${farmSelected.id !== farm.id ? 'bg-white hover:bg-other30' : 'bg-other20/80'}`}
+                            onClick={() => { setOpenSelect(false); setFarmSelected(farm) }}>{farm.name}</span>
+                    ))
+                }
+            </div>
+        </div>
+
+    );
+};
+
+export default Dropdown;

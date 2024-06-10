@@ -4,7 +4,7 @@ import SubModal from './ModalMain/SubModal'
 import { Link } from 'react-router-dom'
 import Table2 from '../TableAddPig'
 
-export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, data, isFarm }) {
+export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, data, isFarm, dataPig }) {
 
     const handleSubmit = () => {
         onClose();
@@ -63,7 +63,7 @@ export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, 
                         </div>
                     </div>
                 </div>
-                {!isFarm && <Table2 isView={true} />}
+                {!isFarm && <Table2 isView={true} data={dataPig}/>}
 
                 {isConfirm ? (
                     <div className='flex flex-row gap-2 justify-start item-center '>

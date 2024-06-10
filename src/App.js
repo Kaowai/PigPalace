@@ -4,6 +4,9 @@ import { publicRoutes } from './routes/index';
 import { DefaultLayout } from './Layout/index';
 import Layout from './Layout/LoginLayout/Layout';
 import Login from './Pages/Login';
+import { Provider } from 'react-redux';
+import { store } from './Redux/store';
+import ToastContainer from './Notifications/ToastContainer';
 function App() {
   return (
     // <>
@@ -16,18 +19,21 @@ function App() {
     //     <Route path='/forgotpassword3' element={<Forgotpassword3/>}/>
     //   </Routes>
     // </>
-    <Routes>
-      {publicRoutes.map((route, index) => {
-        const Layout2 = route.layout ? Layout : DefaultLayout;
-        const Page = route.component;
-        return (
-          <Route
-            key={index}
-            path={route.path}
-            element={<Layout2><Page/></Layout2>} />
-        )
-      })}
-    </Routes>
+    <>
+      <ToastContainer />
+      <Routes>
+        {publicRoutes.map((route, index) => {
+          const Layout2 = route.layout ? Layout : DefaultLayout;
+          const Page = route.component;
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              element={<Layout2><Page /></Layout2>} />
+          )
+        })}
+      </Routes>
+    </>
   )
 }
 

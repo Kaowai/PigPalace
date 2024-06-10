@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Input, InputPassword } from '../components/Input'
 import { FaFacebook, FaGoogle } from 'react-icons/fa6'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerService } from '../APIs/UserService'
 import { LoginSocialFacebook } from 'reactjs-social-login'
 import { FcGoogle } from 'react-icons/fc'
+import { registerService } from '../Redux/APIs/UserService'
 
 function Signup() {
     const [name, setName] = useState('');

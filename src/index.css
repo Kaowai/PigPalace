@@ -9,12 +9,20 @@ body, html {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  font-size: 1rem;
   color: #637381;
 }
 .title {
-  font-family: "Rouge Script", cursive;
+  font-family: "Poppins", cursive;
   font-weight: 400;
   font-style: normal;
+}
+.date-time-input {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+  color: #919EAB;
 }
 
 .button-edit {
@@ -27,6 +35,10 @@ input[type="text"]:focus ~ .input-text,
 input[type="text"]:not(:placeholder-shown) ~ .input-text{
   @apply text-textsecondary transform -translate-y-6 -translate-x-2 scale-90;
 }
+input[type="password"]:focus ~ .input-text,
+input[type="password"]:not(:placeholder-shown) ~ .input-text{
+  @apply text-textsecondary transform -translate-y-6 -translate-x-2 scale-90;
+}
 
 .placeholder-shown {
   @apply text-textsecondary transform -translate-x-2 -translate-y-6 scale-90;
@@ -36,31 +48,34 @@ input[type="text"]:not(:placeholder-shown) ~ .input-text{
 }
 
 .button-hover {
-  @apply hover:bg-primary_dark transition-all duration-200 ease-in-out;
+  @apply hover:bg-primary_dark transition-all duration-200 ease-in-out whitespace-nowrap;
 }
 .button-submit-2 {
-  @apply text-xs text-white bg-info_bg hover:bg-viewbg_hover rounded font-normal tracking-wide px-4 py-2 
+  @apply text-xs text-white bg-info_bg hover:bg-viewbg_hover rounded font-normal tracking-wide px-4 py-2 whitespace-nowrap
 }
 .button-submit {
-  @apply text-xs text-white rounded bg-primary_main px-4 py-2 hover:bg-other20 transition-all duration-200 ease-in-out font-normal tracking-wide
+  @apply text-xs text-white rounded bg-primary_main px-2 py-2 hover:bg-other20 transition-all duration-200 ease-in-out font-normal tracking-wide flex gap-1 whitespace-nowrap
+}
+.button-submit-3 {
+  @apply text-xs text-white rounded bg-primary_main px-4 py-2 hover:bg-other20 transition-all duration-200 ease-in-out font-normal tracking-wide flex gap-1 whitespace-nowrap
 }
 .button-cancel {
-  @apply text-xs text-warning10 font-normal px-4 py-2 rounded border border-warning10 hover:text-white hover:bg-warning10
+  @apply text-xs text-warning10 font-normal px-4 py-2 rounded border border-warning10 hover:text-white hover:bg-warning10 whitespace-nowrap
 }
 .button-close {
-  @apply text-xs text-white font-normal px-4 py-2 rounded border bg-slate-400 hover:bg-slate-500 transition-all duration-200 ease-in-out
+  @apply text-xs text-white font-normal px-4 py-2 rounded border bg-slate-400 hover:bg-slate-500 transition-all duration-200 ease-in-out whitespace-nowrap
 }
 .button-confirm {
-  @apply flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200
+  @apply flex flex-row rounded text-xs text-white px-3 py-2 bg-success_bg gap-1 hover:bg-success_bg_hover transition-all duration-200 w-24 items-center justify-center whitespace-nowrap
 }
 .button-delete {
-  @apply flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white
+  @apply flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white justify-center whitespace-nowrap
 }
 .button-view {
-  @apply flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200
+  @apply flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200 w-24 items-center justify-center whitespace-nowrap
 }
 .button-social-hover {
-  @apply hover:bg-login1 transition-all duration-200 ease-in-out;
+  @apply hover:bg-login1 transition-all duration-200 ease-in-out whitespace-nowrap;
 }
 
 .tab {
@@ -113,18 +128,18 @@ input[type="text"]:not(:placeholder-shown) ~ .input-text{
 .tab::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -10px;
   left: 0;
   width: 0;
-  height: 4px;
-  border-radius: 4px;
-  background: #ffc107;
+  height: 2px;
+  border-radius: 2px;
+  background: #212B36;
   transition: width 0.4s;
 }
 
 
 .tab.selected::after {
-  width: 50%;
+  width: 100%;
 }
 
 .flex-rows {

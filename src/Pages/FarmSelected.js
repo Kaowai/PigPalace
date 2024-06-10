@@ -1,7 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SelectedFarm } from '../components/Input'
-
+import { useDispatch, useSelector } from 'react-redux';
 export default function FarmSelected() {
+    const dispatch = useDispatch();
+    const {userInfo} = useSelector(state => state.userLogin);
+    const handleLogout = () => {
+        
+    }
+
+    useEffect(() => {
+        console.log(userInfo);
+    }, [])
+
     const farm = [
         {
             farmId: "1",
@@ -45,7 +55,7 @@ export default function FarmSelected() {
                 }
             </div>
             <div className='flex justify-center items-center'>
-                <span className='text-center text-textprimary hover:text-primary_main text-sm cursor-pointer'>Logout</span>
+                <span className='text-center text-textprimary hover:text-primary_main text-sm cursor-pointer ' onClick={() => handleLogout()}>Logout</span>
             </div>
         </div>
     )
