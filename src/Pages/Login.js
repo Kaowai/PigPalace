@@ -12,7 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { loginFacebookService, loginGoogleService } from '../Redux/APIs/UserService';
 import { LoginValidation } from '../Validation/UserValidation';
 import { useForm } from 'react-hook-form'
-import { googleLoginAction, loginAction } from '../Redux/Actions/UserActions';
+import { googleLoginAction, loginAction } from '../Redux/Actions/AccountActions';
 import { InlineError } from '../Notifications/Error';
 import toast from 'react-hot-toast';
 import { FaceBookLoginButton } from 'react-social-login-buttons';
@@ -20,7 +20,7 @@ import { FaceBookLoginButton } from 'react-social-login-buttons';
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { isLoading, isError, userInfo, isSuccess } = useSelector(state => state.userLogin);
+    const { isLoading, isError, userInfo, isSuccess } = useSelector(state => state.accountLogin);
 
 
     // validate user

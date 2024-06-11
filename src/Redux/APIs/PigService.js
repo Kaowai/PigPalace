@@ -1,44 +1,44 @@
 import Axios from "./Axios";
 
-const createPigService = (maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID) => {
+const createPigService = async (maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID) => {
     const url = `/api/Heo/CreateHeo`;
-    const { data } = Axios.post(url, { maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID });
+    const { data } = await Axios.post(url, { maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID });
     return data;
 }
 
-const getAllPigService = (farmID) => { 
+const getAllPigService = async (farmID) => {
     const url = `/api/Heo/GetAllHeo/${farmID}`;
-    const { data } = Axios.get(url);
+    const { data } = await Axios.get(url);
     return data;
 }
 
-const getPigByIDService = (id) => { 
+const getPigByIDService = async (id) => {
     const url = `/api/Heo/GetHeoByID/${id}`;
-    const { data } = Axios.get(url);
+    const { data } = await Axios.get(url);
     return data;
 }
 
-const getPigBoarService = (farmID) => {
+const getPigBoarService = async (farmID) => {
     const url = `/api/Heo/GetListHeoDuc?FarmId=${farmID}`;
-    const { data } = Axios.get(url);
+    const { data } = await Axios.get(url);
     return data;
 }
 
-const getPigSowService = (farmID) => {
+const getPigSowService = async (farmID) => {
     const url = `/api/Heo/GetListHeoCai?FarmId=${farmID}`;
-    const { data } = Axios.get(url);
+    const { data } = await Axios.get(url);
     return data;
 }
 
-const updatePigService = (id, maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID) => { 
+const updatePigService = async (id, maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID) => {
     const url = `/api/Heo/UpdateHeo`;
-    const { data } = Axios.put(url, { id, maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID });
+    const { data } = await Axios.put(url, { id, maHeo, maGiongHeo, maChuong, gioiTinh, trongLuong, maHeoCha, maHeoMe, isThuanChung, ngaySinh, donGiaNhap, ngayDenTrangTrai, farmID });
     return data;
 }
 
-const deletePigService = (id) => { 
+const deletePigService = async (id) => {
     const url = `/api/Heo/DeleteHeo/${id}`;
-    const { data } = Axios.delete(url);
+    const { data } = await Axios.delete(url);
     return data;
 }
 

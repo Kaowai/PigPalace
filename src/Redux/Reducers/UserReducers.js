@@ -1,108 +1,106 @@
 import * as UserConstants from '../Constants/UserConstants';
 
-
-// LOGIN
-export const userLoginReducer = (state = {}, action) => {
+export const getUserByIDReducer = (state = { user: {} }, action) => { 
     switch (action.type) {
-        case UserConstants.USER_LOGIN_REQUEST:
-            return { isLoading: true };
-        case UserConstants.USER_LOGIN_SUCCESS:
-            return { isLoading: false, userInfo: action.payload, isSuccess: true };
-        case UserConstants.USER_LOGIN_FAIL:
-            return { isLoading: false, isError: action.payload };
-        case UserConstants.USER_LOGIN_RESET:
-            return {};
+        case UserConstants.GET_USER_BY_ID_REQUEST:
+            return { loading: true, user: {} }
+        case UserConstants.GET_USER_BY_ID_SUCCESS:
+            return { loading: false, user: action.payload, success: true}
+        case UserConstants.GET_USER_BY_ID_FAIL:
+            return { loading: false, error: action.payload }
+        case UserConstants.GET_USER_BY_ID_RESET:
+            return { user: {} }
         default:
-            return state;
+            return state
     }
 }
 
-// GOOGLE LOGIN
-export const userGoogleLoginReducer = (state = {}, action) => {
-    switch (action.type) {
-        case UserConstants.USER_GOOGLE_LOGIN_REQUEST:
-            return { isLoading: true };
-        case UserConstants.USER_GOOGLE_LOGIN_SUCCESS:
-            return { isLoading: false, userInfo: action.payload, isSuccess: true };
-        case UserConstants.USER_GOOGLE_LOGIN_FAIL:
-            return { isLoading: false, isError: action.payload };
-        case UserConstants.USER_GOOGLE_LOGIN_RESET:
-            return {};
+export const getUserByFarmIDReducer = (state = { users: [] }, action) => { 
+    switch(action.type) {
+        case UserConstants.GET_USER_BY_FARM_ID_REQUEST:
+            return { loading: true, users: [] }
+        case UserConstants.GET_USER_BY_FARM_ID_SUCCESS:
+            return { loading: false, users: action.payload, success: true }
+        case UserConstants.GET_USER_BY_FARM_ID_FAIL:
+            return { loading: false, error: action.payload }
+        case UserConstants.GET_USER_BY_FARM_ID_RESET:
+            return { users: [] }
         default:
-            return state;
+            return state
     }
 }
 
-// FACEBOOK LOGIN
-export const userFacebookLoginReducer = (state = {}, action) => {
+export const deleteUserReducer = (state = { user: {} }, action) => { 
     switch (action.type) {
-        case UserConstants.USER_FACEBOOK_LOGIN_REQUEST:
-            return { isLoading: true };
-        case UserConstants.USER_FACEBOOK_LOGIN_SUCCESS:
-            return { isLoading: false, userInfo: action.payload, isSuccess: true};
-        case UserConstants.USER_FACEBOOK_LOGIN_FAIL:
-            return { isLoading: false, isError: action.payload };
-        case UserConstants.USER_FACEBOOK_LOGIN_RESET:
-            return {};
+        case UserConstants.DELETE_USER_REQUEST:
+            return { loading: true, user: {} }
+        case UserConstants.DELETE_USER_SUCCESS:
+            return { loading: false, user: action.payload, success: true}
+        case UserConstants.DELETE_USER_FAIL:
+            return { loading: false, error: action.payload }
+        case UserConstants.DELETE_USER_RESET:
+            return { user: {} }
         default:
-            return state;
+            return state
     }
 }
 
-// UPGRADE ACCOUNT
-export const userUpgradeAccountReducer = (state = {}, action) => {
+export const updateUserReducer = (state = { user: {} }, action) => { 
     switch (action.type) {
-        case UserConstants.USER_UPGRADE_ACCOUNT_REQUEST:
-            return { isLoading: true };
-        case UserConstants.USER_UPGRADE_ACCOUNT_SUCCESS:
-            return { isLoading: false, userInfo: action.payload, isSuccess: true };
-        case UserConstants.USER_UPGRADE_ACCOUNT_FAIL:
-            return { isLoading: false, isError: action.payload };
-        case UserConstants.USER_UPGRADE_ACCOUNT_RESET:
-            return {};
+        case UserConstants.UPDATE_USER_REQUEST:
+            return { loading: true, user: {} }
+        case UserConstants.UPDATE_USER_SUCCESS:
+            return { loading: false, user: action.payload, success: true}
+        case UserConstants.UPDATE_USER_FAIL:
+            return { loading: false, error: action.payload }
+        case UserConstants.UPDATE_USER_RESET:
+            return { user: {} }
         default:
-            return state;
+            return state
     }
 }
 
-// REGISTER
-export const userRegisterReducer = (state = {}, action) => {
+export const signInReducer = (state = { user: {} }, action) => { 
     switch (action.type) {
-        case UserConstants.USER_REGISTER_REQUEST:
-            return { isLoading: true };
-        case UserConstants.USER_REGISTER_SUCCESS:
-            return { isLoading: false, userInfo: action.payload, isSuccess: true };
-        case UserConstants.USER_REGISTER_FAIL:
-            return { isLoading: false, isError: action.payload };
-        case UserConstants.USER_REGISTER_RESET:
-            return {};
+        case UserConstants.USER_SIGNIN_REQUEST:
+            return { loading: true, user: {} }
+        case UserConstants.USER_SIGNIN_SUCCESS:
+            return { loading: false, user: action.payload, success: true}
+        case UserConstants.USER_SIGNIN_FAIL:
+            return { loading: false, error: action.payload }
+        case UserConstants.USER_SIGNIN_RESET:
+            return { user: {} }
         default:
-            return state;
+            return state
     }
-};
+}
 
-// RESET PASSWORD
-export const userResetPasswordReducer = (state = {}, action) => {
+export const signUpReducer = (state = { user: {} }, action) => { 
     switch (action.type) {
-        case UserConstants.USER_RESET_PASSWORD_REQUEST:
-            return { isLoading: true };
-        case UserConstants.USER_RESET_PASSWORD_SUCCESS:
-            return { isLoading: false, isSuccess: true };
-        case UserConstants.USER_RESET_PASSWORD_FAIL:
-            return { isLoading: false, isError: action.payload };
-        case UserConstants.USER_RESET_PASSWORD_RESET:
-            return {};
+        case UserConstants.USER_SIGNUP_REQUEST:
+            return { loading: true, user: {} }
+        case UserConstants.USER_SIGNUP_SUCCESS:
+            return { loading: false, user: action.payload, success: true}
+        case UserConstants.USER_SIGNUP_FAIL:
+            return { loading: false, error: action.payload }
+        case UserConstants.USER_SIGNUP_RESET:
+            return { user: {} }
         default:
-            return state;
+            return state
     }
-};
+}
 
-// LOGOUT
-export const userLogoutAccountReducer = (state = {}, action) => {
+export const refreshTokenReducer = (state = { user: {} }, action) => { 
     switch (action.type) {
-        case UserConstants.USER_LOGOUT:
-            return {};
+        case UserConstants.REFRESH_TOKEN_REQUEST:
+            return { loading: true, user: {} }
+        case UserConstants.REFRESH_TOKEN_SUCCESS:
+            return { loading: false, user: action.payload, success: true}
+        case UserConstants.REFRESH_TOKEN_FAIL:
+            return { loading: false, error: action.payload }
+        case UserConstants.REFRESH_TOKEN_RESET:
+            return { user: {} }
         default:
-            return state;
+            return state
     }
-};
+}

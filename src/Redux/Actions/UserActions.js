@@ -1,107 +1,83 @@
-import * as UserConstants from '../Constants/UserConstants';  
-import * as userAPI from '../APIs/UserService';
+import * as UserConstants from '../Constants/UserConstants';
+import * as UserAPIs from '../../APIs/UserService';
 import { ErrorsAction, tokenProtection } from '../Protection';
 
-const loginAction = (email, password) => async (dispatch) => {
+const getUserByIDAction = (ID) => async (dispatch) => {
     try {
-        // request user login
-        dispatch({ type: UserConstants.USER_LOGIN_REQUEST });
-        console.log(email, password);
-
-        // call api and recive response
-        const response = await userAPI.loginService(email, password);
-
-        // handle login successfully
-        dispatch({ type: UserConstants.USER_LOGIN_SUCCESS, payload: response });
+        dispatch({ type: UserConstants.GET_USER_BY_ID_REQUEST });
+        const response = await UserAPIs.getUserByIDService(ID);
+        dispatch({ type: UserConstants.GET_USER_BY_ID_SUCCESS, payload: response });
     } catch (error) {
-        ErrorsAction(error, dispatch, UserConstants.USER_LOGIN_FAIL);
+        ErrorsAction(error, dispatch, UserConstants.GET_USER_BY_ID_FAIL);
     }
 }
 
-const registerAction = (name, email, password) => async (dispatch) => {
+const getUserByFarmIDAction = (farmID) => async (dispatch) => {
     try {
-        // request user register
-        dispatch({ type: UserConstants.USER_REGISTER_REQUEST });
-
-        // call api and recive response
-        const response = await userAPI.registerService(name, email, password);
-
-        // handle register successfully
-        dispatch({ type: UserConstants.USER_REGISTER_SUCCESS, payload: response });
+        dispatch({ type: UserConstants.GET_USER_BY_FARM_ID_REQUEST });
+        const response = await UserAPIs.getUserByFarmIDService(farmID);
+        dispatch({ type: UserConstants.GET_USER_BY_FARM_ID_SUCCESS, payload: response });
     } catch (error) {
-        ErrorsAction(error, dispatch, UserConstants.USER_REGISTER_FAIL);
+        ErrorsAction(error, dispatch, UserConstants.GET_USER_BY_FARM_ID_FAIL);
     }
 }
 
-const googleLoginAction = (googleID, gmail) => async (dispatch) => {
+const deleteUserAction = (userID) => async (dispatch) => {
     try {
-        // request user google login
-        dispatch({ type: UserConstants.USER_GOOGLE_LOGIN_REQUEST });
-
-        // get information from user google
-        const res = await userAPI.loginGoogleService(googleID, gmail);
-
-        // handle login with google successfully
-        dispatch({ type: UserConstants.USER_GOOGLE_LOGIN_SUCCESS, payload: res });
+        dispatch({ type: UserConstants.DELETE_USER_REQUEST });
+        const response = await UserAPIs.deleteUserService(userID);
+        dispatch({ type: UserConstants.DELETE_USER_SUCCESS, payload: response });
     } catch (error) {
-        ErrorsAction(error, dispatch, UserConstants.USER_GOOGLE_LOGIN_FAIL);
+        ErrorsAction(error, dispatch, UserConstants.DELETE_USER_FAIL);
     }
 }
 
-const facebookLoginAction = (facebookID) => async (dispatch) => {
+const updateUserAction = (UserID, famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => async (dispatch) => {
     try {
-        // request user facebook login
-        dispatch({ type: UserConstants.USER_FACEBOOK_LOGIN_REQUEST });
-
-        // login into database
-        const res = await userAPI.loginFacebookService(facebookID);
-
-        // handle login with facebook successfully
-        dispatch({ type: UserConstants.USER_FACEBOOK_LOGIN_SUCCESS, payload: res });
+        dispatch({ type: UserConstants.UPDATE_USER_REQUEST });
+        const response = await UserAPIs.updateUserService(UserID, famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName);
+        dispatch({ type: UserConstants.UPDATE_USER_SUCCESS, payload: response });
     } catch (error) {
-        ErrorsAction(error, dispatch, UserConstants.USER_FACEBOOK_LOGIN_FAIL);
+        ErrorsAction(error, dispatch, UserConstants.UPDATE_USER_FAIL);
     }
 }
 
-const upgradeAccountAction = (userID) => async (dispatch) => {
+const signInAction = (UserID, PassWord) => async (dispatch) => { 
     try {
-        // request user upgrade account
-        dispatch({ type: UserConstants.USER_UPGRADE_ACCOUNT_REQUEST });
-
-        // call api and recive response
-        const response = await userAPI.upgradeAccountService(userID);
-
-        // handle upgrade account successfully
-        dispatch({ type: UserConstants.USER_UPGRADE_ACCOUNT_SUCCESS, payload: response });
+        dispatch({ type: UserConstants.USER_SIGNIN_REQUEST });
+        const response = await UserAPIs.signInService(UserID, PassWord);
+        dispatch({ type: UserConstants.USER_SIGNIN_SUCCESS, payload: response });
     } catch (error) {
-        ErrorsAction(error, dispatch, UserConstants.USER_UPGRADE_ACCOUNT_FAIL);
+        ErrorsAction(error, dispatch, UserConstants.USER_SIGNIN_FAIL);
     }
 }
 
-const resetPasswordAction = (email) => async (dispatch) => {
+const signUpAction = (famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => async (dispatch) => { 
     try {
-        // request user reset password
-        dispatch({ type: UserConstants.USER_RESET_PASSWORD_REQUEST });
-
-        // call api and recive response
-        const response = await userAPI.resetPasswordService(email);
-
-        // handle reset password successfully
-        dispatch({ type: UserConstants.USER_RESET_PASSWORD_SUCCESS, payload: response });
-    } catch (error) {
-        ErrorsAction(error, dispatch, UserConstants.USER_RESET_PASSWORD_FAIL);
+        dispatch({ type: UserConstants.USER_SIGNUP_REQUEST });
+        const response = await UserAPIs.signUpService(famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName);
+        dispatch({ type: UserConstants.USER_SIGNUP_SUCCESS, payload: response });
+    } catch (error) { 
+        ErrorsAction(error, dispatch, UserConstants.USER_SIGNUP_FAIL);
     }
 }
 
-const logoutAccountAction = () => async (dispatch) => {
-    userAPI.logoutAccountService();
+const refreshTokenAction = (accessToken, refreshToken) => async (dispatch) => { 
+    try {
+        dispatch({ type: UserConstants.REFRESH_TOKEN_REQUEST });
+        const response = await UserAPIs.refreshTokenService(accessToken, refreshToken);
+        dispatch({ type: UserConstants.REFRESH_TOKEN_SUCCESS, payload: response });
+    } catch (error) {
+        ErrorsAction(error, dispatch, UserConstants.REFRESH_TOKEN_FAIL);
+    }
 }
+
 export {
-    loginAction,
-    registerAction,
-    googleLoginAction,
-    facebookLoginAction,
-    upgradeAccountAction,
-    resetPasswordAction,
-    logoutAccountAction
+    getUserByIDAction,
+    getUserByFarmIDAction,
+    deleteUserAction,
+    updateUserAction,
+    signInAction,
+    signUpAction,
+    refreshTokenAction
 }

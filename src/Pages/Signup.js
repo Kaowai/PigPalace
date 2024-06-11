@@ -4,7 +4,7 @@ import { FaFacebook, FaGoogle } from 'react-icons/fa6'
 import { Link, useNavigate } from 'react-router-dom'
 import { LoginSocialFacebook } from 'reactjs-social-login'
 import { FcGoogle } from 'react-icons/fc'
-import { registerService } from '../Redux/APIs/UserService'
+import { registerService } from '../Redux/APIs/AccountService'
 
 function Signup() {
     const [name, setName] = useState('');

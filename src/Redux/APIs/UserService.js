@@ -1,66 +1,76 @@
-import Axios from './Axios'
+import Axios from "./Axios";
 
-const registerService = async (name, gmail, password) => {
-    const url = `/api/Account/SignUp?Name=${name}&Gmail=${gmail}&Password=${password} `
-    const { data } = await Axios.post(url);
-    if (data) {
-        localStorage.setItem("userInfo", JSON.stringify(data));
-    }
-    return data;
-}
-const loginService = async (gmail, password) => {
-    const url = `/api/Account/NormalSignIn?Gmail=${gmail}&PassWord=${password}`;
-    const { data } = await Axios.post(url);
-    if (data) {
-        localStorage.setItem("userInfo", JSON.stringify(data));
-    }
-    return data;
-}
-const loginGoogleService = async (googleID, gmail) => {
-    const url = `/api/Account/GoogleSignIn?GoogleID=${googleID}&Gmail=${gmail}`;
-    const { data } = await Axios.post(url);
-    if (data) {
-        localStorage.setItem("userInfo", JSON.stringify(data));
-    }
-    return data;
-}
-const loginFacebookService = async (facebookID) => {
-    const url = `api/Account/FbSignIn?FBID=${facebookID}`;
-    const { data } = await Axios.post(url);
-    if (data) {
-        localStorage.setItem("userInfo", JSON.stringify(data));
-    }
-    return data;
-}
-const logoutAccountService = () => {
-    localStorage.removeItem("userInfo");
-    return null;
-}
-
-const upgradeAccountService = async (accountID) => {
-    const url = `api/Account/UpgradeAccount?AccountID=${accountID}`;
-    const { data } = await Axios.put(url);
-    if (data) {
-        localStorage.setItem("userInfo", JSON.stringify(data));
-    }
-    return data;
-}
-const resetPasswordService = async (email, newPassword) => {
-    const url = `api/Account/ResetPassword?Email=${email}&NewPassword=${newPassword}`;
-    const { data } = await Axios.put(url);
-    if (data) {
-        localStorage.setItem("userInfo", JSON.stringify(data));
-    }
+const getUserByIDService = async (ID) => {
+    const url = `/api/User/GetUserByID?ID=${ID}`;
+    const { data } = await Axios.get(url);
     return data;
 }
 
+const getUsersByFarmIDService = async (farmID) => {
+    const url = `/api/User/GetUsersByFarmID?farmID=${farmID}`;
+    const { data } = await Axios.get(url);
+    return data;
+}
+
+const deleteUserService = async (userID) => {
+    const url = `/api/User/DeleteUser?userID=${userID}`;
+    const { data } = await Axios.delete(url);
+    return data;
+}
+
+const updateUserService = async (UserID, famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => {
+    const url = `/api/User/UpdateUser?UserID=${UserID}`;
+    const data = {
+        famrID,
+        name,
+        passWord,
+        dateOfBirth,
+        address,
+        email,
+        phoneNumber,
+        sex,
+        coefficientsSalary,
+        roleName
+    }
+    const { response } = await Axios.put(url, data);
+    return response;
+}
+
+const signInService = async (UserID, PassWord) => {
+    const url = `/api/User/SignIn?UserID=${UserID}&PassWord=${PassWord}`;
+    const { data } = await Axios.post(url);
+    return data;
+}
+
+const signUpService = async (famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => {
+    const url = `/api/User/SignUp`;
+    const data = {
+        famrID,
+        name,
+        passWord,
+        dateOfBirth,
+        address,
+        email,
+        phoneNumber,
+        sex,
+        coefficientsSalary,
+        roleName
+    }
+    const { response } = await Axios.post(url, data);
+}
+
+const refreshTokenService = async (accessToken, refreshToken) => { 
+    const url = `/api/User/RefreshToken`;
+    const { data } = await Axios.post(url, {accessToken, refreshToken});
+    return data;
+}
 
 export {
-    loginService,
-    registerService,
-    loginGoogleService,
-    loginFacebookService,
-    logoutAccountService,
-    upgradeAccountService,
-    resetPasswordService
+    getUserByIDService,
+    getUsersByFarmIDService,
+    deleteUserService,
+    updateUserService,
+    signInService,
+    signUpService,
+    refreshTokenService
 }
