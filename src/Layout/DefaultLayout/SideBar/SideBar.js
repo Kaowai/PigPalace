@@ -12,10 +12,16 @@ import { NavLink, useLocation } from "react-router-dom";
 import { FiUser } from "react-icons/fi";
 import { CgCalendarToday } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { get } from "react-hook-form";
+import { getAccountIsUpgradedAction } from "../../../Redux/Actions/AccountActions";
+import { getAccountIsUpgradeService } from "../../../Redux/APIs/AccountService";
 
 const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
   const { pathname } = useLocation();
-
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector(state => state.accountLogin);
+  const { isUpgraded } = useSelector(state => state.accountGetIsUpgraded);
   useEffect(() => {
     if (isTabletMid) {
       console.log("isTabletMid", isTabletMid);
@@ -28,7 +34,14 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
         setOpen();
       }
     }
-  }, [isTabletMid]);
+  }, [isTabletMid, userInfo, dispatch]);
+
+  useEffect(() => {
+    const id = JSON.parse(localStorage.getItem('userInfo'));
+    dispatch(getAccountIsUpgradedAction(id));
+    console.log(isUpgraded);
+  }, []);
+
 
   const Nav_animation = isTabletMid
     ? {
@@ -58,17 +71,17 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
       }
     };
 
-  const MenuList = [
+  const MenuList = isUpgraded ? [
     // Overview
     {
       name: "Dashboard",
       path: "/Dashboard",
-      icon: <AiOutlineAppstore size={23} className="min-w-max" />,
+      icon: <AiOutlineAppstore size={20} className="min-w-max" />,
     },
     {
       name: "Pig Manager",
       path: "/Pigmanager",
-      icon: <TbPig size={23} className="min-w-max" />,
+      icon: <TbPig size={20} className="min-w-max" />,
     },
     {
       name: "Feed Manager",
@@ -87,7 +100,7 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
     {
       name: "Inventory",
       path: "/Inventory",
-      icon: <HiOutlineDatabase size={23} className="min-w-max" />,
+      icon: <HiOutlineDatabase size={20} className="min-w-max" />,
     },
     {
       name: "Events",
@@ -150,6 +163,93 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
         }
       ],
     },
+  ] : [
+    // Overview
+    {
+      name: "Dashboard",
+      path: "/Dashboard",
+      icon: <AiOutlineAppstore size={20} className="min-w-max" />,
+    },
+    {
+      name: "Pig Manager",
+      path: "/Pigmanager",
+      icon: <TbPig size={20} className="min-w-max" />,
+    },
+    {
+      name: "Feed Manager",
+      icon: CgCalendarToday,
+      menus: [
+        {
+          name: "Today Feed",
+          path: "/FeedManager/TodayFeed"
+        },
+        {
+          name: "Feed Plan",
+          path: "/FeedManager/FeedPlan"
+        }
+      ],
+    },
+    {
+      name: "Inventory",
+      path: "/Inventory",
+      icon: <HiOutlineDatabase size={20} className="min-w-max" />,
+    },
+    {
+      name: "Events",
+      icon: TbCalendarPause,
+      menus: [
+        {
+          name: "Pregnancy Monitor",
+          path: "/Events/PregnancyMonitor/PregnancyOverview"
+        },
+        {
+          name: "Vaccine Monitor",
+          path: "/Events/VaccineMonitor/VaccineMonitorOverview"
+        }
+      ],
+    },
+
+    // Farm Analystics
+    {
+      name: "Farm Analytics",
+    },
+    {
+      name: "Invoice",
+      icon: TbInvoice,
+      menus: [
+        {
+          name: "Sales",
+          path: "/Invoice/Sales/SalesOverview"
+        },
+        {
+          name: "Expenses",
+          path: "/Invoice/Expenses/ExpensesOverview"
+        }
+      ],
+    },
+    {
+      name: "Reports",
+      path: "/Report",
+      icon: <TbReportAnalytics size={20} className="min-w-max" />,
+    },
+    {
+      name: "Settings",
+      icon: IoSettingsOutline,
+      menus: [
+        {
+          name: "General",
+          path: "/Settings/General"
+        },
+        {
+          name: "Pig Barn",
+          path: "/Settings/PigBarn"
+        },
+        {
+          name: "Breed",
+          path: "/Settings/Breed"
+        }
+      ],
+    },
   ]
   const [openSubMenu, setOpenSubMenu] = useState("");
   const handleClick = (name) => {
@@ -168,7 +268,7 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
             overflow-hidden md:relative fixed h-screen z-[999]"
       >
         <div className="flex flex-col h-full">
-          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-none scrollbar-track-white scrollbar-thumb-slate-100  md:h-[74%] h-[70%]">
+          <ul className={`whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-none scrollbar-track-white scrollbar-thumb-slate-100 md:h-[74%] h-[70%] `}>
             <small className={`pl-3 text-slate-500 inline-block mb-2 ${!open && "hidden"}`}>
               Overview
             </small>
@@ -192,17 +292,30 @@ const SideBar = ({ open, setOpen, isTabletMid, sidebarRef }) => {
               )
             )}
           </ul>
-          <div className={`flex flex-row text-sm max-h-60 my-auto  whitespace-pre  w-full  font-medium`}>
-            <div className="flex w-full  border-y border-slate-300 p-4 items-center justify-between">
-              <div>
-                <p>PigPalace</p>
-                <small>Premium $0/month</small>
+          {
+            !isUpgraded ? (
+              <div className={`flex flex-row text-sm max-h-60 my-auto  whitespace-pre  w-full  font-medium`}>
+                <div className="flex w-full  border-y border-slate-300 p-4 items-center justify-between">
+                  <div>
+                    <p>PigPalace</p>
+                    <small>Premium $0/month</small>
+                  </div>
+                  <p className="text-teal-500 py-1.5 px-3 text-xs bg-teal-50 rounded-xl cursor-pointer">
+                    Upgrade
+                  </p>
+                </div>
               </div>
-              <p className="text-teal-500 py-1.5 px-3 text-xs bg-teal-50 rounded-xl cursor-pointer">
-                Upgrade
-              </p>
-            </div>
-          </div>
+            ) : (
+              <div className={`flex flex-row text-sm max-h-60 my-auto  whitespace-pre  w-full  font-medium`}>
+                <div className="flex w-full  border-y border-slate-300 p-4 items-center justify-between">
+                  <div>
+                    <p>PigPalace</p>
+                    <small>Premium account</small>
+                  </div>
+                </div>
+              </div>
+            )
+          }
         </div>
       </motion.div>
     </div>

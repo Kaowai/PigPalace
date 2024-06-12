@@ -62,11 +62,11 @@ const createInvoicePigImportAction = (NgayLap, NgayMua, Note, FarmID, UserId, Te
 
 const confirmInvoicePigImportAction = (MaHoaDon) => async (dispatch) => {
     try {
-        dispatch({ type: InvoicePigConstants.CONFIRM_INVOICE_PIG_REQUEST });
-        const response = await invoicePigAPI.confirmInvoicePigService(MaHoaDon);
-        dispatch({ type: InvoicePigConstants.CONFIRM_INVOICE_PIG_SUCCESS, payload: response });
+        dispatch({ type: InvoicePigConstants.CONFIRM_INVOICE_PIG_IMPORT_REQUEST });
+        const response = await invoicePigAPI.confirmInvoicePigImportService(MaHoaDon);
+        dispatch({ type: InvoicePigConstants.CONFIRM_INVOICE_PIG_IMPORT_SUCCESS, payload: response });
     } catch (err) {
-        ErrorsAction(err, dispatch, InvoicePigConstants.CONFIRM_INVOICE_PIG_FAIL);
+        ErrorsAction(err, dispatch, InvoicePigConstants.CONFIRM_INVOICE_PIG_IMPORT_FAIL);
     }
 }
 

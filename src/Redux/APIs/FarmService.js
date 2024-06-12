@@ -1,7 +1,7 @@
 import Axios from "./Axios";
 
 const getFarmService = async (AccountID) => {
-    const url = `/api/Farm/GetFarm?AccoundID=${AccountID}`;
+    const url = `/api/Farm/GetFarm?AccountID=${AccountID}`;
     const { data } = await Axios.get(url);
     return data;
 }

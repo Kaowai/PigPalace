@@ -18,10 +18,11 @@ const RegisterValidation = yup.object().shape({
         .matches(/^[a-zA-Z0-9]{6,20}$/, "Password must be alphanumeric with no special characters"),
     userName: yup
         .string()
+        .trim()
         .required("User Name is required")
         .min(6, "User Name must be at least 6 characters")
         .max(20, "User Name must be at most 20 characters")
-        .matches(/^[a-zA-Z0-9]{6,20}$/, "User Name must be alphanumeric with no special characters"),
+        .matches(/^[a-zA-Z0-9 ]{6,20}$/, "User Name must be alphanumeric with no special characters"),
     confirmPassword: yup
         .string()
         .required("Confirm Password is required")

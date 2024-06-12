@@ -1,12 +1,13 @@
 import * as AccountConstants from '../Constants/AccountConstants';  
 import * as AccountService from '../APIs/AccountService';
 import { ErrorsAction, tokenProtection } from '../Protection';
+import * as FarmConstants from '../Constants/FarmConstants';
+
 
 const loginAction = (email, password) => async (dispatch) => {
     try {
         // request ACCOUNT login
         dispatch({ type: AccountConstants.ACCOUNT_LOGIN_REQUEST });
-        console.log(email, password);
 
         // call api and recive response
         const response = await AccountService.loginService(email, password);
@@ -58,6 +59,7 @@ const facebookLoginAction = (facebookID) => async (dispatch) => {
 
         // handle login with facebook successfully
         dispatch({ type: AccountConstants.ACCOUNT_FACEBOOK_LOGIN_SUCCESS, payload: res });
+        console.log(res);
     } catch (error) {
         ErrorsAction(error, dispatch, AccountConstants.ACCOUNT_FACEBOOK_LOGIN_FAIL);
     }
@@ -95,6 +97,29 @@ const resetPasswordAction = (email) => async (dispatch) => {
 
 const logoutAccountAction = () => async (dispatch) => {
     AccountService.logoutAccountService();
+    dispatch({ type: AccountConstants.ACCOUNT_LOGOUT });
+    dispatch({ type: AccountConstants.ACCOUNT_GOOGLE_LOGIN_RESET });
+    dispatch({ type: AccountConstants.ACCOUNT_FACEBOOK_LOGIN_RESET });
+    dispatch({ type: AccountConstants.ACCOUNT_LOGIN_RESET });
+    dispatch({ type: AccountConstants.ACCOUNT_REGISTER_RESET });
+    dispatch({ type: FarmConstants.GET_FARM_RESET});
+
+    // clear token
+}
+
+const getAccountIsUpgradedAction = (AccountID) => async (dispatch) => { 
+    try {
+        // request ACCOUNT is upgraded
+        dispatch({ type: AccountConstants.GET_ACCOUNT_IS_UPGRADED_REQUEST });
+
+        // call api and recive response
+        const response = await AccountService.getAccountIsUpgradeService(AccountID);
+
+        // handle get account is upgraded successfully
+        dispatch({ type: AccountConstants.GET_ACCOUNT_IS_UPGRADED_SUCCESS, payload: response });
+    } catch (error) {
+        ErrorsAction(error, dispatch, AccountConstants.GET_ACCOUNT_IS_UPGRADED_FAIL);
+    }
 }
 export {
     loginAction,
@@ -103,5 +128,6 @@ export {
     facebookLoginAction,
     upgradeAccountAction,
     resetPasswordAction,
-    logoutAccountAction
+    logoutAccountAction,
+    getAccountIsUpgradedAction
 }

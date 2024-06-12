@@ -34,7 +34,7 @@ const SubMenu = ({ name, icon, menus, setOpen, open }) => {
           !open && setOpen(!open);
         }}
       >
-        <Icon size={23} className="min-w-max" />
+        <Icon size={20} className="min-w-max" />
         <p className="flex-1 capitalize">{name}</p>
         <IoIosArrowDown
           className={` ${subMenuOpen && "rotate-180"} duration-200 `}

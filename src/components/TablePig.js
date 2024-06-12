@@ -20,6 +20,33 @@ export default function TablePig({ data }) {
     const handleDelete = (row) => {
 
     }
+
+    const calculateAge = (date) => {
+        const birthDate = new Date(date);
+        const today = new Date();
+
+        // Tính toán sự khác biệt về năm và tháng
+        const yearsDifference = today.getFullYear() - birthDate.getFullYear();
+        const monthsDifference = today.getMonth() - birthDate.getMonth();
+
+        // Tổng số tháng = sự khác biệt về năm chuyển đổi thành tháng + sự khác biệt về tháng
+        const ageInMonths = (yearsDifference * 12) + monthsDifference;
+
+        return ageInMonths;
+    }
+
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+    
+        // Định dạng ngày với các tùy chọn cụ thể
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        const formattedDate = date.toLocaleDateString('en-US', options);
+    
+        // Định dạng lại để thêm dấu phẩy
+        const parts = formattedDate.split(' ');
+        return `${parts[0]} ${parts[1]} ${parts[2].replace(',', '')}`;
+    }
     const handleViewClick = (row) => {
         setIsModalOpen(true);
         setIsConfirm(false);
@@ -61,23 +88,23 @@ export default function TablePig({ data }) {
                     <tbody>
                         {data?.map(row => (
                             <tr className=' border-slate-300 border-b border-dashed hover:bg-slate-100' key={row.id}>
-                                <td className={`${Row}`}>{row.MaHeo}</td>
-                                <td className={`${Row}`}>{row.MaGiongHeo}</td>
-                                <td className={`${Row}`}>{row.MaChuong}</td>
-                                <td className={`${Row}`}>{row.NgaySinh}</td>
+                                <td className={`${Row}`}>{row.maHeo}</td>
+                                <td className={`${Row}`}>{row.maGiongHeo}</td>
+                                <td className={`${Row}`}>{row.maChuong}</td>
+                                <td className={`${Row}`}>{calculateAge(row.ngaySinh)} Months</td>
                                 <td className={`${Row}`}>{
-                                    row.GioiTinh === '1' ? "Male" : "Female"
+                                    row.GioiTinh === 'Đực' ? "Male" : "Female"
                                 }</td>
-                                <td className={`${Row}`}>{row.DonGiaNhap}</td>
-                                <td className={`${Row}`}>{row.NgayDenTrangTrai}</td>
+                                <td className={`${Row}`}>{row.donGiaNhap}</td>
+                                <td className={`${Row}`}>{formatDate(row.ngayDenTrangTrai)}</td>
                                 <td className={`${Row}`}>
-                                    <span className={`${row.IsTrongTrangTrai === '1' ? Paid : Progress}`}>{row.IsTrongTrangTrai === '1' ? "In Farm" : "Exported"}</span>
+                                    <span className={`${row.IsTrongTrangTrai === '0' ? Paid : Progress}`}>{row.IsTrongTrangTrai === '0' ? "In Farm" : "Exported"}</span>
                                 </td>
                                 <td className={`${Row}`}>
-                                    <BsThreeDotsVertical size={20}/>
+                                    <BsThreeDotsVertical size={20} />
 
                                 </td>
-                                
+
                                 {/* <td className='flex flex-row items-start gap-2 py-3 px-2 w-56 '>
                                     {
                                         row.status === 'Paid' ? (

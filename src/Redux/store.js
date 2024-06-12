@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { applyMiddleware, combineReducers, configureStore, createStore } from "@reduxjs/toolkit";
 import * as Account from "./Reducers/AccountReducers";
 import * as Farm from "./Reducers/FarmReducers";
 import * as Breed from "./Reducers/BreedReducers";
@@ -14,6 +14,7 @@ import * as PregnancySchedule from "./Reducers/PregnancyScheduleReducers";
 import * as Parameter from "./Reducers/ParameterReducers";
 import * as VaccineSchedule from "./Reducers/VaccineScheduleReducers";
 import * as User from "./Reducers/UserReducers";
+import { thunk } from "redux-thunk";
 const rootReducer = combineReducers({
   // user reducers
   accountLogin: Account.accountLoginReducer,
@@ -23,7 +24,7 @@ const rootReducer = combineReducers({
   accountFacebookLogin: Account.accountFacebookLoginReducer,
   accountUpgradeAccount: Account.accountUpgradeAccountReducer,
   accountLogoutAccount: Account.accountLogoutAccountReducer,
-
+  accountGetIsUpgraded: Account.accountGetAccountIsUpgradedReducer,
   // farm reducers
   farmGet: Farm.farmGetReducer,
   farmCreate: Farm.farmCreateReducer,
@@ -59,6 +60,7 @@ const rootReducer = combineReducers({
 
   // pig reducers
   createPig: Pig.createPigReducer,
+  getAllPig: Pig.getAllPigReducer,
   getPigByID: Pig.getPigByIdReducer,
   getPigBoar: Pig.getPigBoarReducer,
   getPigSow: Pig.getPigSowReducer,
@@ -112,7 +114,7 @@ const rootReducer = combineReducers({
   getAllMedicine: VaccineSchedule.getAllMedicineReducer,
   getAllVaccine: VaccineSchedule.getAllVacineReducer,
   getAllVaccineSchedule: VaccineSchedule.getALlVaccineScheduleReducer,
-  getVaccineScheduleByUser: VaccineSchedule.getVaccineScheduleByUserReducer,  
+  getVaccineScheduleByUser: VaccineSchedule.getVaccineScheduleByUserReducer,
   getPigInVaccineSchedule: VaccineSchedule.getPigInVaccineScheduleReducer,
   createVaccineSchedule: VaccineSchedule.createVaccineScheduleReducer,
   confirmVaccineSchedule: VaccineSchedule.confirmVaccineScheduleReducer,
@@ -136,8 +138,10 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
 };
-
-export const store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
   preloadedState: initialState,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
+
+export default store;

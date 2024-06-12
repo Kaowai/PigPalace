@@ -106,3 +106,19 @@ export const accountLogoutAccountReducer = (state = {}, action) => {
             return state;
     }
 };
+
+// GET ACCOUNT IS UPGRADED
+export const accountGetAccountIsUpgradedReducer = (state = {}, action) => {
+    switch (action.type) {
+        case AccountConstants.GET_ACCOUNT_IS_UPGRADED_REQUEST:
+            return { isLoading: true };
+        case AccountConstants.GET_ACCOUNT_IS_UPGRADED_SUCCESS:
+            return { isLoading: false, isUpgraded: action.payload, isSuccess: true };
+        case AccountConstants.GET_ACCOUNT_IS_UPGRADED_FAIL:
+            return { isLoading: false, isError: action.payload };
+        case AccountConstants.GET_ACCOUNT_IS_UPGRADED_RESET:
+            return {};
+        default:
+            return state;
+    }
+};

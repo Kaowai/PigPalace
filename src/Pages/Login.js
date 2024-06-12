@@ -9,19 +9,17 @@ import { FaFacebook } from 'react-icons/fa';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux'
 import ClipLoader from "react-spinners/ClipLoader";
-import { loginFacebookService, loginGoogleService } from '../Redux/APIs/UserService';
 import { LoginValidation } from '../Validation/UserValidation';
 import { useForm } from 'react-hook-form'
-import { googleLoginAction, loginAction } from '../Redux/Actions/AccountActions';
+import { facebookLoginAction, googleLoginAction, loginAction } from '../Redux/Actions/AccountActions';
 import { InlineError } from '../Notifications/Error';
 import toast from 'react-hot-toast';
-import { FaceBookLoginButton } from 'react-social-login-buttons';
+import { loginFacebookService } from '../Redux/APIs/AccountService';
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { isLoading, isError, userInfo, isSuccess } = useSelector(state => state.accountLogin);
-
 
     // validate user
     const {
@@ -35,7 +33,6 @@ function Login() {
 
     // onSubmit
     const onSubmit = async (data) => {
-        console.log(data);
         dispatch(loginAction(data.email, data.password));
     }
 
@@ -49,6 +46,13 @@ function Login() {
             navigate('/SelectedFarm');
         }
     }, [isError, isSuccess, userInfo, navigate, dispatch])
+
+    useEffect(() => { 
+        const token = localStorage.getItem('userInfo');
+        if (token) {
+            navigate('/SelectedFarm');
+        }
+    }, [])
 
     const handleLoginGoogle = useGoogleLogin({
         onSuccess: async (response) => {
@@ -64,12 +68,12 @@ function Login() {
                 console.log(res.data);
 
                 // dispatch to reducter login successfully with google account
-                dispatch(googleLoginAction(res.data.sub, res.data.email));
-                
+                await dispatch(googleLoginAction(res.data.sub, res.data.email));
+
                 // create user with google account
 
                 toast.success("Login with google successfully");
-                // navigate('/');
+                navigate('/SelectedFarm');
             } catch (err) {
                 toast.error("Login with google failed!");
             }
@@ -79,21 +83,20 @@ function Login() {
     const handleLoginFacebook = async (res) => {
         try {
             console.log(res);
-            // const resDb = await loginFacebookService(res.data.userID);
-            alert("Login with facebook successfully");
-            // navigate('/');
+            console.log(res.data.userID);
+            await dispatch(facebookLoginAction(res.data.userID));
+
+
+            toast.success("Login with facebook successfully");
+            navigate('/SelectedFarm');
         } catch (err) {
             console.log(err);
         }
     }
 
-    // check login
-    useEffect(() => {
-        localStorage.clear();
-    }, [])
-
     return (
         <div
+
             className='w-full h-full flex animate-slide-in-from-right flex-col gap-5  items-center'
         >
             <div className='flex flex-row items-center justify-center gap-3'>
@@ -134,7 +137,8 @@ function Login() {
                 {
                     isLoading ? <ClipLoader color='#3B82F6' loading={isLoading} size={25} className='m-auto items-center justify-center' /> : <button
                         className='bg-primary_main w-full h-full rounded-xl font-medium text-xs text-white button-hover'
-                        onClick={handleSubmit(onSubmit)} >
+                        onClick={handleSubmit(onSubmit)}
+                    >
                         Login
                     </button>
                 }

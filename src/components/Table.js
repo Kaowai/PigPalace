@@ -37,6 +37,19 @@ export default function Table({ data }) {
         setRow(row);
         console.log(row);
     }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+    
+        // Định dạng ngày với các tùy chọn cụ thể
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        const formattedDate = date.toLocaleDateString('en-US', options);
+    
+        // Định dạng lại để thêm dấu phẩy
+        const parts = formattedDate.split(' ');
+        return `${parts[0]} ${parts[1]} ${parts[2].replace(',', '')}`;
+    }
+
     return (
         <div className='flex flex-col h-full items-start gap-5 py-2' >
             <div className='overflow-x-auto'>
@@ -64,20 +77,20 @@ export default function Table({ data }) {
                                     <div className='flex flex-row gap-2 justify-start items-center'>
                                         <img src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww border boder-disablebg' alt='avatar' className='w-8 h-8 rounded-full' />
                                         <div className='flex flex-col gap-1'>
-                                            <span className='text-xs font-medium text-textprimary'>{row.employee}</span>
-                                            <span className='text-xs text-textdisable'>{row.id}</span>
+                                            <span className='text-xs font-medium text-textprimary'>{row.userID}</span>
+                                            <span className='text-xs text-textdisable'>{row.maHoaDon}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td className={`${Row}`}>{row.amount}</td>
-                                <td className={`${Row}`}>{row.cost}</td>
-                                <td className={`${Row}`}>{row.invoiceDate}</td>
+                                <td className={`${Row}`}>{row.soLuong}</td>
+                                <td className={`${Row}`}>{row.tongTien}</td>
+                                <td className={`${Row}`}>{formatDate(row.ngayLap)}</td>
                                 <td className={`${Row}`}>
-                                    <span className={`${row.status === 'Paid' ? Paid : Progress}`}>{row.status}</span>
+                                    <span className={`${row.trangThai === 'Paid' ? Paid : Progress}`}>{row.trangThai}</span>
                                 </td>
                                 <td className='flex flex-row items-start gap-2 py-3 px-2 w-56 '>
                                     {
-                                        row.status === 'Paid' ? (
+                                        row.trangThai === 'Paid' ? (
                                             <button className='button-view'
                                                 onClick={() => handleViewClick(row)}>
                                                 <GoSearch className='text-white' size={16} />

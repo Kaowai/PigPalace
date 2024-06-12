@@ -5,10 +5,11 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux';
-import { store } from './Redux/store';
+import store from './Redux/store';
+import { applyMiddleware, createStore } from 'redux';
+import { thunk } from 'redux-thunk';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
 root.render(
   <BrowserRouter>
     <React.StrictMode>

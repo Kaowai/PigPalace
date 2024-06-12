@@ -25,7 +25,7 @@ const loginGoogleService = async (googleID, gmail) => {
     return data;
 }
 const loginFacebookService = async (facebookID) => {
-    const url = `api/Account/FbSignIn?FBID=${facebookID}`;
+    const url = `/api/Account/FbSignIn?FBID=${facebookID}`;
     const { data } = await Axios.post(url);
     if (data) {
         localStorage.setItem("userInfo", JSON.stringify(data));
@@ -34,11 +34,13 @@ const loginFacebookService = async (facebookID) => {
 }
 const logoutAccountService = () => {
     localStorage.removeItem("userInfo");
+    localStorage.clear();
+    localStorage.removeItem("farmID");
     return null;
 }
 
 const upgradeAccountService = async (accountID) => {
-    const url = `api/Account/UpgradeAccount?AccountID=${accountID}`;
+    const url = `/api/Account/UpgradeAccount?AccountID=${accountID}`;
     const { data } = await Axios.put(url);
     if (data) {
         localStorage.setItem("userInfo", JSON.stringify(data));
@@ -46,7 +48,7 @@ const upgradeAccountService = async (accountID) => {
     return data;
 }
 const resetPasswordService = async (email, newPassword) => {
-    const url = `api/Account/ResetPassword?Email=${email}&NewPassword=${newPassword}`;
+    const url = `/api/Account/ResetPassword?Email=${email}&NewPassword=${newPassword}`;
     const { data } = await Axios.put(url);
     if (data) {
         localStorage.setItem("userInfo", JSON.stringify(data));
@@ -54,6 +56,11 @@ const resetPasswordService = async (email, newPassword) => {
     return data;
 }
 
+const getAccountIsUpgradeService = async (accountID) => { 
+    const url = `/api/Account/GetIsUpgraded?AccountID=${accountID}`;
+    const { data } = await Axios.get(url);
+    return data;
+}
 
 export {
     loginService,
@@ -62,5 +69,6 @@ export {
     loginFacebookService,
     logoutAccountService,
     upgradeAccountService,
-    resetPasswordService
+    resetPasswordService,
+    getAccountIsUpgradeService
 }

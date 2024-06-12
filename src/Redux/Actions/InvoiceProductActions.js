@@ -7,7 +7,7 @@ const getInvoiceProductAllAction = (FarmID) => async (dispatch) => {
         dispatch({ type: InvoiceProductConstants.GET_LIST_INVOICE_REQUEST });
 
         // call api and recive response
-        const response = await invoiceProductAPI.getAllInvoiceProductService(FarmID);
+        const response = await invoiceProductAPI.getListInvoiceProductService(FarmID);
 
         // handle get invoice product successfully
         dispatch({ type: InvoiceProductConstants.GET_LIST_INVOICE_SUCCESS, payload: response });
@@ -16,7 +16,7 @@ const getInvoiceProductAllAction = (FarmID) => async (dispatch) => {
     }
 }
 
-const createInvoiceProduct = (tenHangHoa, loaiHangHoa, soLuong, giaTien, ngayLap, ngayMua, ghiChu, tienTrenDVT, donViTinh, tongTien, tenCongTy, tenKhachHang, diaChi, sdt, email, userID, farmID) => async (dispatch) => { 
+const createInvoiceProductAction = (tenHangHoa, loaiHangHoa, soLuong, giaTien, ngayLap, ngayMua, ghiChu, tienTrenDVT, donViTinh, tongTien, tenCongTy, tenKhachHang, diaChi, sdt, email, userID, farmID) => async (dispatch) => { 
     try {
         dispatch({ type: InvoiceProductConstants.CREATE_INVOICE_REQUEST });
 
@@ -30,7 +30,7 @@ const createInvoiceProduct = (tenHangHoa, loaiHangHoa, soLuong, giaTien, ngayLap
     }
 }
 
-const updateInvoiceProduct = (id, tenHangHoa, loaiHangHoa, soLuong, giaTien, ngayLap, ngayMua, ghiChu, tienTrenDVT, donViTinh, tongTien, tenCongTy, tenKhachHang, diaChi, sdt, email, userID, farmID) => async (dispatch) => {
+const updateInvoiceProductAction = (id, tenHangHoa, loaiHangHoa, soLuong, giaTien, ngayLap, ngayMua, ghiChu, tienTrenDVT, donViTinh, tongTien, tenCongTy, tenKhachHang, diaChi, sdt, email, userID, farmID) => async (dispatch) => {
     try {
         dispatch({ type: InvoiceProductConstants.UPDATE_INVOICE_REQUEST });
 
@@ -44,7 +44,7 @@ const updateInvoiceProduct = (id, tenHangHoa, loaiHangHoa, soLuong, giaTien, nga
     }
 }
 
-const confirmInvoiceProduct = (maHoaDon) => async (dispatch) => {
+const confirmInvoiceProductAction = (maHoaDon) => async (dispatch) => {
     try {
         dispatch({ type: InvoiceProductConstants.CONFIRM_INVOICE_REQUEST });
 
@@ -58,7 +58,7 @@ const confirmInvoiceProduct = (maHoaDon) => async (dispatch) => {
     }
 }
 
-const deleteInvoiceProduct = (maHoaDon) => async (dispatch) => {
+const deleteInvoiceProductAction = (maHoaDon) => async (dispatch) => {
     try {
         dispatch({ type: InvoiceProductConstants.DELETE_INVOICE_REQUEST });
 
@@ -70,4 +70,12 @@ const deleteInvoiceProduct = (maHoaDon) => async (dispatch) => {
     } catch (error) {
         ErrorsAction(error, dispatch, InvoiceProductConstants.DELETE_INVOICE_FAIL);
     }
+}
+
+export {
+    getInvoiceProductAllAction,
+    createInvoiceProductAction,
+    updateInvoiceProductAction,
+    confirmInvoiceProductAction,
+    deleteInvoiceProductAction
 }

@@ -30,12 +30,12 @@ export const Input = (
         </div>
     )
 }
-export const SelectedFarm = ({ farmName, onClick }) => {
+export const SelectedFarm = ({ farmName, handleClick }) => {
     return (
-        <Link to={'/dashboard'} className="flex flex-col gap-5 justify-center items-center border-2 border-textdisable border-opacity-50 rounded-lg p-2 w-28 h-24 bg-white hover:bg-login cursor-pointer">
-            <PiFarmLight size={48} className="text-textdisable " />
-            <span className="text-xs text-textdisable text-center">{farmName}</span>
-        </Link>
+        <div className="flex flex-row gap-5 justify-center items-center border-2 border-textprimary border-opacity-50 rounded-lg p-2 w-full h-12 bg-white hover:bg-textdisable cursor-pointer hover:text-white" onClick={handleClick}>
+            <PiFarmLight size={20} className="text-textprimary " />
+            <span className="text-xs text-textprimary  text-center">{farmName}</span>
+        </div>
     )
 }
 
@@ -109,7 +109,7 @@ export const InputPassword = (
             <label className='relative cursor-pointer items-center'>
                 <input
                     name={name}
-                    type= {isShowPassword ? 'text' : 'password'}
+                    type={isShowPassword ? 'text' : 'password'}
                     placeholder="Input"
                     {...register}
                     className='h-12 w-[22rem] px-5 text-xs text-textprimary bg-white border-textdisable border rounded-xl border-opacity-50 outline-none focus:border-other20 placeholder-gray-300 placeholder-opacity-0 transition duration-200'
@@ -120,7 +120,7 @@ export const InputPassword = (
                 {
                     isShowPassword ? (
                         <EyeIcon size={18} className='absolute right-4 top-4 text-textsecondary text-opacity-80 cursor-pointer' onClick={() => setIsShowPassword(!isShowPassword)} />
-                    ) : ( 
+                    ) : (
                         <EyeOffIcon size={18} className='absolute right-4 top-4 text-textsecondary text-opacity-80 cursor-pointer' onClick={() => setIsShowPassword(!isShowPassword)} />
                     )
                 }
@@ -204,6 +204,7 @@ export const Select2 = (
         label,
         options,
         onChange,
+        setState,
         isDisable,
         value,
     }
@@ -213,7 +214,7 @@ export const Select2 = (
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
             <select
                 placeholder={"Select..."}
-                onChange={onChange}
+                onChange={setState ? (e) => setState(e.target.value) : onChange}
                 value={value}
                 readOnly={isDisable}
                 className={`w-32 text-xs border bg-white ${isDisable ? "border-textprimary" : "border-secondary30"} h-10 rounded-lg text-textprimary py-2 px-2 outline-none focus:border-blue-500 focus:ring-blue-500 hover:border-blue-500`} >
@@ -303,16 +304,23 @@ export const DateTimeInput = (
 export const DateTimeInput2 = (
     {
         label,
-        placeholder
+        placeholder, 
+        setDate
     }
 ) => {
-    const handleChange = (value) => {
-        console.log(`selected ${value}`);
-    };
+
+    function onSelectDate(date, dateString) {
+        console.log( dateString);
+        setDate(dateString);
+    }
     return (
         <div className="text-xs w-full relative">
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
-            <DatePicker placeholder={placeholder} className="w-full font-semibold text-textprimary h-10 date-time-input" />
+            <DatePicker
+                placeholder={placeholder}
+                className="w-full font-semibold text-textprimary h-10 date-time-input"
+                onChange={onSelectDate}
+            />
         </div>
     )
 }
@@ -360,7 +368,6 @@ const Dropdown = ({ data, farmSelected, setFarmSelected }) => {
                 }
             </div>
         </div>
-
     );
 };
 

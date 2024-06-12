@@ -7,6 +7,10 @@ import { TbInvoice } from "react-icons/tb";
 import { useSpring, animated } from 'react-spring';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { DateTimeInput2, Select2 } from '../../../components/Input';
+import { useDispatch, useSelector } from 'react-redux';
+import { getListInvoicePigImportAction } from '../../../Redux/Actions/InvoicePigActions';
+import { getInvoiceProductAllAction } from '../../../Redux/Actions/InvoiceProductActions';
+import { set } from 'react-hook-form';
 
 const AnimatedNumber = ({ value }) => {
   const [isAnimated, setIsAnimated] = useState(false);
@@ -20,12 +24,16 @@ const AnimatedNumber = ({ value }) => {
 
   useEffect(() => {
     setIsAnimated(true);
-  }, []);
+  }, [value]);
 
   return <animated.span>{props.number.to(n => n.toFixed(2))}</animated.span>;
 };
 
+
 export default function ExpensesOverview() {
+  const dispatch = useDispatch();
+  const { invoiceProducts } = useSelector(state => state.getInvoiceProduct);
+  const { invoices } = useSelector(state => state.getListInvoicePigImport);
   const [rowPerPage, setRowPerPage] = useState(5);
   const [selectedTab, setSelectedTab] = React.useState('Pig Expenses');
   const [search, setSearch] = useState('');
@@ -43,7 +51,11 @@ export default function ExpensesOverview() {
       title: 'Paid'
     }
   ]
-
+  useEffect(() => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getListInvoicePigImportAction(farmID));
+    dispatch(getInvoiceProductAllAction(farmID));
+  }, [dispatch]);
   const handleLeftClick = () => {
 
   }
@@ -115,14 +127,15 @@ export default function ExpensesOverview() {
                 fill='none'
                 stroke='#00B8D9'
                 strokeWidth='1'
-                strokeDasharray='75 25'
+                strokeDasharray='100'
               />
             </svg>
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Total</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={275.43} /></span>
+            <span className='text-xs text-textdisable font-normal'>
+              {invoices.length + invoiceProducts.length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.reduce((sum, invoice) => sum + invoice.tongTien, 0) + invoiceProducts.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center border-dashed border-r border-textdisable w-full gap-1'>
@@ -150,14 +163,14 @@ export default function ExpensesOverview() {
                 fill='none'
                 stroke='#22C55E'
                 strokeWidth='1'
-                strokeDasharray='75 25'
+                strokeDasharray={parseFloat(invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid') + ' ' + (invoices.length + invoiceProducts.length)) / parseFloat(invoices.length + invoiceProducts.length) * 100.0}
               />
             </svg>
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Paid</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={446.61} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid')} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.filter((invoice) => invoice.trangThai === 'Paid').reduce((sum, invoice) => sum + invoice.tongTien, 0) + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid').reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center w-full gap-1 border-dashed border-r border-textdisable'>
@@ -185,14 +198,16 @@ export default function ExpensesOverview() {
                 fill='none'
                 stroke='#FFAB00'
                 strokeWidth='1'
-                strokeDasharray='75 25'
+                strokeDasharray={parseFloat(invoices.filter((invoice) => invoice.trangThai === 'Progress').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Progress') + ' ' + (invoices.length + invoiceProducts.length)) / parseFloat(invoices.length + invoiceProducts.length) * 100.0}
               />
             </svg>
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Progress</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={200.67} /></span>
+            <span className='text-xs text-textdisable font-normal'>
+              {invoices.filter((invoice) => invoice.trangThai === 'Progress').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Progress')}
+            </span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.filter((invoice) => invoice.trangThai === 'Progress').reduce((sum, invoice) => sum + invoice.tongTien, 0) + invoiceProducts.filter((invoice) => invoice.trangThai === 'Progress').reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center w-full gap-1 border-dashed border-r border-textdisable/95'>
@@ -220,14 +235,14 @@ export default function ExpensesOverview() {
                 fill='none'
                 stroke='#2C7A51'
                 strokeWidth='1'
-                strokeDasharray='75 25'
+                strokeDasharray={(parseFloat(invoices.length) / parseFloat(invoices.length + invoiceProducts.length)) * 100.0}
               />
             </svg>
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Pig Expenses</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={200.67} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices.length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center w-full gap-1 '>
@@ -255,14 +270,14 @@ export default function ExpensesOverview() {
                 fill='none'
                 stroke='#637381'
                 strokeWidth='1'
-                strokeDasharray='75 25'
+                strokeDasharray={parseFloat(invoiceProducts.length) / parseFloat(invoices.length + invoiceProducts.length) * 100.0}
               />
             </svg>
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Farm Expenses</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={200.67} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoiceProducts.length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoiceProducts.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
       </div>
@@ -277,7 +292,7 @@ export default function ExpensesOverview() {
           >
             <div className='flex flex-row gap-2 items-center'>
               <span className={`text-xs font-medium ${selectedTab === 'Pig Expenses' ? 'text-textprimary' : 'text-textdisable'}`}>Pig Expenses</span>
-              <span className='text-xs items-center flex justify-center font-semibold w-6 h-6 rounded-md text-other20 bg-other30'>10</span>
+              <span className='text-xs items-center flex justify-center font-semibold w-6 h-6 rounded-md text-other20 bg-other30'>{invoices.length}</span>
             </div>
           </div>
           <div
@@ -286,7 +301,7 @@ export default function ExpensesOverview() {
           >
             <div className='flex flex-row gap-2 items-center'>
               <span className={`text-xs font-medium ${selectedTab === 'Farm Expenses' ? 'text-textprimary' : 'text-textdisable'}`}>Farm Expenses</span>
-              <span className='text-xs items-center flex justify-center font-semibold w-6 h-6 rounded-md text-textsecondary bg-slate-300'>12</span>
+              <span className='text-xs items-center flex justify-center font-semibold w-6 h-6 rounded-md text-textsecondary bg-slate-300'>{invoiceProducts.length}</span>
             </div>
           </div>
         </div>
@@ -315,11 +330,11 @@ export default function ExpensesOverview() {
           {
             selectedTab === 'Pig Expenses' ? (
               <div className=''>
-                <Table data={data} />
+                <Table data={invoices} />
               </div>
             ) : (
               <div>
-                <TableFarmExpenses data={dataFarmInvoice}/>
+                <TableFarmExpenses data={invoiceProducts} />
               </div>
             )
           }

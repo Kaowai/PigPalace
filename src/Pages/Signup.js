@@ -1,41 +1,89 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input, InputPassword } from '../components/Input'
 import { FaFacebook, FaGoogle } from 'react-icons/fa6'
 import { Link, useNavigate } from 'react-router-dom'
 import { LoginSocialFacebook } from 'reactjs-social-login'
 import { FcGoogle } from 'react-icons/fc'
 import { registerService } from '../Redux/APIs/AccountService'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { RegisterValidation } from '../Validation/UserValidation'
+import { InlineError } from '../Notifications/Error'
+import toast from 'react-hot-toast'
+import ClipLoader from 'react-spinners/ClipLoader'
+import { facebookLoginAction, googleLoginAction, registerAction } from '../Redux/Actions/AccountActions'
+import { useGoogleLogin } from '@react-oauth/google'
+import axios from 'axios'
 function Signup() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isLoading, isError, userInfo, isSuccess } = useSelector(state => state.accountRegister);
 
-    const handleSignUp = async(e) => {
-        e.preventDefault();
-        if (!name) {
-            alert('Name is required');
-            return;
-        } else if (!email) {
-            alert('Email is required')
-            return;
-        } else if (!password) {
-            alert('Password is required');
-            return;
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm({
+        resolver: yupResolver(RegisterValidation)
+    })
+
+    const onSubmit = async (data) => {
+        console.log(data);
+        dispatch(registerAction(data.userName, data.email, data.password));
+    }
+
+    useEffect(() => {
+        if (isError) {
+            dispatch({ type: 'USER_REGISTER_RESET' });
         }
-        try {
-            const res = await registerService(name, email, password);
-            console.log(res);
-            alert('Sign up successfully');
+        if (isSuccess) {
+            toast.success("Register Successfully!");
             navigate('/login');
-        } catch(err) {
-            alert(err.response.data);
+        }
+    }, [isError, isSuccess, userInfo, navigate, dispatch])
+
+    const handleLoginGoogle = useGoogleLogin({
+        onSuccess: async (response) => {
+            try {
+                // get information from user google
+                const res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${response.access_token}`,
+                        },
+                    }
+                );
+                console.log(res.data);
+
+                // dispatch to reducter login successfully with google account
+                await dispatch(googleLoginAction(res.data.sub, res.data.email));
+
+                // create user with google account
+
+                toast.success("Login with google successfully");
+                navigate('/SelectedFarm');
+            } catch (err) {
+                toast.error("Login with google failed!");
+            }
+        }
+    });
+
+    const handleLoginFacebook = async (res) => {
+        try {
+            console.log(res);
+            console.log(res.data.userID);
+            await dispatch(facebookLoginAction(res.data.userID));
+
+
+            toast.success("Login with facebook successfully");
+            navigate('/SelectedFarm');
+        } catch (err) {
+            console.log(err);
         }
     }
     return (
-        <form
-            onSubmit={handleSignUp}
+        <div
             className='w-full h-full flex animate-slide-in-from-right flex-col gap-5 items-center'
         >
             <div className='flex flex-row items-center justify-center gap-3'>
@@ -51,32 +99,49 @@ function Signup() {
                     <Input
                         placeholder="User Name"
                         type={'text'}
+                        name={'userName'}
+                        register={register('userName')}
                     />
+                    {errors.userName && <InlineError text={errors.userName.message} />}
                 </div>
                 <div className='w-full items-center' >
                     <Input
                         placeholder="Email"
                         type={'email'}
+                        name={'email'}
+                        register={register('email')}
                     />
+                    {errors.email && <InlineError text={errors.email.message} />}
+
                 </div>
                 <div className='w-full' >
                     <InputPassword
                         placeholder="Password"
                         type='password'
+                        name={'password'}
+                        register={register('password')}
                     />
+                    {errors.password && <InlineError text={errors.password.message} />}
                 </div>
                 <div className='w-full' >
                     <InputPassword
                         placeholder="Confirm Password"
                         type='password'
+                        name={'confirmPassword'}
+                        register={register('confirmPassword')}
                     />
+                    {errors.confirmPassword && <InlineError text={errors.confirmPassword.message} />}
                 </div>
             </div>
             <div className="w-[22rem] h-12 items-center">
-                <button
-                    className='bg-primary_main w-full h-full rounded-xl font-medium text-xs text-white button-hover'>
-                    Login
-                </button>
+                {
+                    isLoading ? <ClipLoader color='#3B82F6' loading={isLoading} size={25} className='m-auto items-center justify-center' /> : <button
+                        className='bg-primary_main w-full h-full rounded-xl font-medium text-xs text-white button-hover'
+                        onClick={handleSubmit(onSubmit)}
+                    >
+                        Login
+                    </button>
+                }
             </div>
             <div className='flex flex-row gap-2 px-4 items-center'>
                 <span className='w-16 outline-none border-t-[0.5px] border-textdisable'></span>
@@ -86,26 +151,28 @@ function Signup() {
 
 
             <div className='flex flex-row gap-3 items-center'>
+                <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover' onClick={handleLoginGoogle}
+                >
+                    <FcGoogle size={20} />
+                    <span className='text-xs text-textprimary font-medium'>Google</span>
+                </button>
                 <LoginSocialFacebook
                     appId="1621397548596001"
-                    // onResolve={handleLoginFacebook}
-                    onReject={(err) => console.log(err)}
+                    onResolve={(res) => handleLoginFacebook(res)}
+                    onReject={(err) => toast.error("Login with facebook failed!")}
                 >
-                    <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
-                        <FcGoogle size={20} />
-                        <span className='text-xs text-textprimary font-medium'>Google</span>
+                    <button
+                        className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
+                        <FaFacebook size={20} className='text-facebook' />
+                        <span className='text-xs text-textprimary font-medium'>Facebook</span>
                     </button>
                 </LoginSocialFacebook>
-                <button className='flex w-40 rounded-lg h-10 outline-none border border-opacity-50 border-textdisable flex-row gap-2 items-center justify-center button-social-hover'>
-                    <FaFacebook size={20} className='text-facebook' />
-                    <span className='text-xs text-textprimary font-medium'>Facebook</span>
-                </button>
             </div>
             <div className='w-full flex items-center justify-center'>
                 <span className='text-textdisable items-end font-normal text-xs '>Already have an account? <span className='text-xs font-normal underline text-primary_main cursor-pointer' onClick={() => navigate('/login')
                 }>Login</span></span>
             </div>
-        </form>
+        </div>
     )
 }
 
