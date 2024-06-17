@@ -5,6 +5,10 @@ import { IoCheckmark } from 'react-icons/io5'
 import { TiDelete } from 'react-icons/ti'
 import ExpenseModalView from './Modal/PigExpenseModal'
 import { Edit2Icon } from 'lucide-react'
+import ProductModal from './Modal/ProductModal'
+import ModalDelete from './Modal/ModalDelete'
+import { deleteProductService } from '../Redux/APIs/ProductService'
+import toast from 'react-hot-toast'
 
 const Header = 'text-xs font-bold text-textprimary whitespace-nowrap px-2 py-3 text-start w-56 '
 const Row = 'text-xs  font-normal text-textprimary px-2 pr-10 mx-1 py-3 text-start whitespace-nowrap w-56'
@@ -12,28 +16,31 @@ const Row = 'text-xs  font-normal text-textprimary px-2 pr-10 mx-1 py-3 text-sta
 const Progress = 'text-xs font-bold text-warningdark bg-warningbackground rounded-md px-2 py-1'
 const Paid = 'text-xs font-bold text-successlight bg-successbackground rounded-md px-2 py-1'
 
-export default function TableInventory({ data }) {
+export default function TableInventory({ data, refreshInventory }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [row, setRow] = useState({});
-  const [isConfirm, setIsConfirm] = useState(false);
   const [activeSort, setActiveSort] = useState(false);
-  const handleDelete = (row) => {
 
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      const farmID = JSON.parse(localStorage.getItem('farmID'));
+      await deleteProductService(farmID, row.tenHangHoa);
+      toast.success('Delete barn successfully');
+      refreshInventory();
+      setIsModalDeleteOpen(false);
+    } catch (error) {
+      console.log(error);
+      toast.error('Delete barn failed');
+    }
   }
-  const handleViewClick = (row) => {
-    setIsModalOpen(true);
-    setIsConfirm(false);
-    setRow(row);
-    console.log(row);
-  }
-  const handleConfirmClick = (row) => {
-    setIsModalOpen(true);
-    setIsConfirm(true);
-    setRow(row);
-    console.log(row);
-  }
+
+
   return (
     <div className='flex flex-col h-full items-start gap-5 py-2' >
+      <ModalDelete name="Delete Product" isvisible={isModalDeleteOpen} onClose={() => { setIsModalDeleteOpen(false) }} onDelete={handleDelete} />
+      <ProductModal name="Add Product" isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} product={row} />
       <div className='overflow-x-auto'>
         <table className='border rounded-lg'>
           <thead>
@@ -46,24 +53,30 @@ export default function TableInventory({ data }) {
                   onClick={() => setActiveSort(!activeSort)} />
               </th>
               <th scope='col' className={`${Header}`}>Amount</th>
+              <th scope='col' className={`${Header}`}>Type</th>
               <th scope='col' className={`${Header}`}>Minimum Level</th>
               <th scope='col' className={`${Header}`}>Cost Per Unit ($)</th>
-              <th scope='col' className={`${Header}`}>Date</th>
               <th scope='col' className={`${Header} w-56`}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {data.map(row => (
               <tr className=' border-slate-300 border-b border-dashed hover:bg-slate-100' key={row.id}>
-                <td className={`${Row}`}>{row.TenHangHoa}</td>
-                <td className={`${Row}`}>{row.TonKho}</td>
-                <td className={`${Row}`}>{row.GiaTriToiThieu}</td>
-                <td className={`${Row}`}>{row.TienMuaTrenMotDonVi}</td>
-                <td className={`${Row}`}>{row.NgayNhap}</td>
+                <td className={`${Row}`}>{row.tenHangHoa}</td>
+                <td className={`${Row}`}>{row.tonKho} ({row.donViTinh})</td>
+                <td className={`${Row}`}>
+                  {row.loaiHangHoa === 'Thức ăn' ? "Food" : row.loaiHangHoa === 'Vắc xin' ? "Vaccine" : "Medicine"
+                  }
+                </td>
+                <td className={`${Row}`}>{row.giaTriToiThieu}</td>
+                <td className={`${Row}`}>{row.tienMuaTrenMotDonVi}</td>
                 <td className='flex flex-row items-start gap-2 py-3 px-2 w-56 '>
                   <button
                     className='button-confirm'
-                    onClick={() => handleConfirmClick(row)}>
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setRow(row);
+                    }}>
                     <Edit2Icon size={16} />
                     Edit
                   </button>
@@ -78,7 +91,6 @@ export default function TableInventory({ data }) {
           </tbody>
         </table>
       </div>
-      <ExpenseModalView name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={row} />
     </div>
   )
 }

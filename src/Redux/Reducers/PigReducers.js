@@ -48,13 +48,13 @@ export const createPigReducer = (state = { pig: {} }, action) => {
 export const getPigBoarReducer = (state = { pigs: [] }, action) => { 
     switch (action.type) {
         case PigConstants.GET_PIG_BOAR_REQUEST:
-            return { loading: true, pigs: [] }
+            return { loading: true, boars: [] }
         case PigConstants.GET_PIG_BOAR_SUCCESS:
-            return { loading: false, pigs: action.payload, succcess: true}
+            return { loading: false, boars: action.payload, succcess: true}
         case PigConstants.GET_PIG_BOAR_FAIL:
             return { loading: false, error: action.payload }
         case PigConstants.GET_PIG_BOAR_RESET:
-            return { pigs: [] }
+            return { boars: [] }
         default:
             return state
     }
@@ -63,13 +63,13 @@ export const getPigBoarReducer = (state = { pigs: [] }, action) => {
 export const getPigSowReducer = (state = { pigs: [] }, action) => { 
     switch (action.type) {
         case PigConstants.GET_PIG_SOW_REQUEST:
-            return { loading: true, pigs: [] }
+            return { loading: true, sows: [] }
         case PigConstants.GET_PIG_SOW_SUCCESS:
-            return { loading: false, pigs: action.payload, succcess: true}
+            return { loading: false, sows: action.payload, succcess: true}
         case PigConstants.GET_PIG_SOW_FAIL:
             return { loading: false, error: action.payload }
         case PigConstants.GET_PIG_SOW_RESET:
-            return { pigs: [] }
+            return { sows: [] }
         default:
             return state
     }

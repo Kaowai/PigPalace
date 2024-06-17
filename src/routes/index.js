@@ -27,6 +27,8 @@ import FarmSelected from '../Pages/FarmSelected'
 import General from '../Pages/Settings/General'
 import Breed from '../Pages/Settings/Breed'
 import PigBarn from '../Pages/Settings/PigBarn'
+import SelectedRoles from '../Pages/SelectedRoles'
+import InputPassword from '../Pages/InputPassword'
 
 const publicRoutes = [
     { path: '/Login', component: Login, layout: Layout },
@@ -35,7 +37,8 @@ const publicRoutes = [
     { path: '/ForgotPassword2', component: Forgotpassword2, layout: Layout },
     { path: '/ForgotPassword3', component: Forgotpassword3, layout: Layout },
     { path: '/SelectedFarm', component: FarmSelected, layout: Layout},
-
+    { path: '/SelectedRole', component: SelectedRoles, layout: Layout},
+    { path: '/InputPassword', component: InputPassword, layout: Layout},
     // DASHBOARD
     { path: '/Dashboard', component: Dashboard },
 

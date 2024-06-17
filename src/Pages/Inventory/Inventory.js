@@ -1,16 +1,32 @@
 import { Link } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoAddCircleOutline, IoSearchOutline } from 'react-icons/io5'
 import { NavLink } from 'react-router-dom'
 import { DateTimeInput2, Select2 } from '../../components/Input'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import TableInventory from '../../components/TableInventory'
+import { useDispatch, useSelector } from 'react-redux'
+import { getProductAction } from '../../Redux/Actions/ProductActions'
 
 export default function Inventory() {
+  const dispatch = useDispatch();
+  const { products } = useSelector(state => state.productGetAll);
 
   const [rowPerPage, setRowPerPage] = useState(5);
   const [selectedTab, setSelectedTab] = React.useState('Pig Expenses');
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+
+    const farm = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getProductAction(farm));
+  },[])
+
+  const refreshInventory = () => { 
+    const farm = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getProductAction(farm));
+  }
+
   const options = [
     {
       value: 'all',
@@ -32,34 +48,6 @@ export default function Inventory() {
   const handleRightLick = () => {
 
   }
-
-  const data = [
-    {
-      id: '1',
-      TenHangHoa: 'Thức ăn',
-      TonKho: '100',
-      GiaTriToiThieu: '10',
-      TienMuaTrenMotDonVi: '1000',
-      NgayNhap: '2021-10-10'
-    },
-    {
-      id: '2',
-      TenHangHoa: 'Vaccine',
-      TonKho: '100',
-      GiaTriToiThieu: '10',
-      TienMuaTrenMotDonVi: '1000',
-      NgayNhap: '2021-10-10'
-    },
-    {
-      id: '3',
-      TenHangHoa: 'Thuốc',
-      TonKho: '100',
-      GiaTriToiThieu: '10',
-      TienMuaTrenMotDonVi: '1000',
-      NgayNhap: '2021-10-10'
-    }
-  ]
-
   return (
     <div className='h-full w-full flex flex-col gap-4'>
       {/* Navigation */}
@@ -82,14 +70,14 @@ export default function Inventory() {
         </div>
       </div>
       {/* Table */}
-      <div className='flex flex-col gap-2 shadow py-2 rounded-xl'>
-        
+      <div className='flex flex-col gap-2 shadow py-6 rounded-xl'>
+
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
           <div className='flex flex-row gap-2'>
             <Select2 options={options} />
           </div>
           <div className='flex flex-row gap-2'>
-            <DateTimeInput2 options={options} placeholder={"Date Imported"}/>
+            <DateTimeInput2 options={options} placeholder={"Date Imported"} />
           </div>
           <div className='flex flex-row gap-2 text-xs items-center font-normal h-10 w-64 border border-secondary30 rounded-lg pl-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-all duration-200 ease-in-out'>
             <IoSearchOutline size={20} className='text-textdisable' />
@@ -108,7 +96,7 @@ export default function Inventory() {
 
         {/* Table */}
         <div className='items-center justify-center flex w-full'>
-          <TableInventory data={data}/>
+          <TableInventory data={products} refreshInventory={refreshInventory}/>
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
           <span>Row per page: </span>

@@ -8,14 +8,6 @@ export default function AddFeedPlan() {
   const navigate = useNavigate();
   const [timeForDay, setTimeForDay] = useState('1 time/day');
 
-  const optionsHour = [
-    "1 hour",
-    "2 hours",
-    "3 hours",
-    "4 hours",
-    "5 hours",
-    "6 hours",
-  ]
   const optionsTime = [
     "1 time/day",
     "2 times/day",
@@ -192,20 +184,6 @@ export default function AddFeedPlan() {
                 placeholder={"Select time..."}
                 className={`w-full text-xs border mt-2 bg-white  h-8 rounded text-textprimary py-1 px-2 outline-none focus:border-blue-500 focus:ring-blue-500 hover:border-blue-500`} >
                 {optionsTimeFirst.map((option, index) => {
-                  return (
-                    <option key={index} value={option}>{option}</option>
-                  )
-                })}
-              </select>
-            </div>
-          </div>
-          <div className={`w-full ${timeForDay === '1 time/day' && "hidden"}`}>
-            <div className="text-xs w-full relative">
-              <label className="text-secondary60 font-semibold text-xs">Hours difference each feeding: *</label>
-              <select
-                placeholder={"Select time..."}
-                className={`w-full text-xs border mt-2 bg-white  h-8 rounded text-textprimary py-1 px-2 outline-none focus:border-blue-500 focus:ring-blue-500 hover:border-blue-500`} >
-                {optionsHour.map((option, index) => {
                   return (
                     <option key={index} value={option}>{option}</option>
                   )

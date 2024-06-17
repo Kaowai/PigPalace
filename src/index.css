@@ -71,6 +71,9 @@ input[type="password"]:not(:placeholder-shown) ~ .input-text{
 .button-delete {
   @apply flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white justify-center whitespace-nowrap
 }
+.button-edit {
+  @apply flex flex-row rounded text-xs text-other20 px-3 py-2 border border-other20 items-center gap-1 hover:bg-other20 transition-all duration-200 hover:text-white justify-center whitespace-nowrap
+}
 .button-view {
   @apply flex flex-row rounded text-xs text-white px-3 py-2 bg-viewbg gap-1 hover:bg-viewbg_hover transition-all duration-200 w-24 items-center justify-center whitespace-nowrap
 }

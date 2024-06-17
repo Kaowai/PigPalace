@@ -29,7 +29,7 @@ export default function FarmSelected() {
     const handleFarmClick = (farmID, name) => {
         localStorage.setItem('farmID', JSON.stringify(farmID));
         localStorage.setItem('farmName', JSON.stringify(name));
-        navigate('/Dashboard');
+        navigate('/SelectedRole');
     }
 
     return (

@@ -1,5 +1,5 @@
 import * as BreedConstants from '../Constants/BreedConstants';
-import * as pigAPI from '../APIs/BreedServiceService';
+import * as pigAPI from '../APIs/BreedService';
 import { ErrorsAction, tokenProtection } from '../Protection';
 
 const createBreedAction = (tenGiongHeo, moTa, farmID) => async (dispatch) => {

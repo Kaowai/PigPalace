@@ -25,7 +25,7 @@ const confirmInvoiceProductService = async(maHoaDon) => {
 }
 
 const deleteInvoiceProductService = async(maHoaDon) => { 
-    const url = `/api/HoaDonHangHoa/DeleteHoaDonHangHoa?maHoaDon=${maHoaDon}`;
+    const url = `/api/HoaDonHangHoa/XoaHoaDonHangHoa?maHoaDon=${maHoaDon}`;
     const { data } = await Axios.delete(url);
     return data;
 }

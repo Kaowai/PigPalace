@@ -21,3 +21,8 @@ const updateParameterAction = (FarmID, trongLuongToiThieuXuatChuong, trongLuongT
         ErrorsAction(error, dispatch, ParameterConstants.UPDATE_PARAMETER_FAIL);
     }
 }
+
+export {
+    getListParameterAction,
+    updateParameterAction
+}

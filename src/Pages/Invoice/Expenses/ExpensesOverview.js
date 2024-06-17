@@ -37,6 +37,10 @@ export default function ExpensesOverview() {
   const [rowPerPage, setRowPerPage] = useState(5);
   const [selectedTab, setSelectedTab] = React.useState('Pig Expenses');
   const [search, setSearch] = useState('');
+  const [date, setDate] = useState('');
+  const [selectedState, setSelectedState] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái để lưu thông tin trang hiện tại
+  const [filteredInvoicePigs, setFilteredInvoicePigs] = useState([]);
   const options = [
     {
       value: 'all',
@@ -51,31 +55,62 @@ export default function ExpensesOverview() {
       title: 'Paid'
     }
   ]
+
+  const handleRefresh = () => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getListInvoicePigImportAction(farmID));
+    dispatch(getInvoiceProductAllAction(farmID));
+  }
   useEffect(() => {
     const farmID = JSON.parse(localStorage.getItem('farmID'));
     dispatch(getListInvoicePigImportAction(farmID));
     dispatch(getInvoiceProductAllAction(farmID));
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    let filteredInvoicePigs = invoices;
+
+    if (date) {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => areDatesEqual(invoice.ngayLap, date));
+    }
+
+    if (selectedState === 'Progress') {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => invoice.trangThai === 'Progress');
+    } else if (selectedState === 'Paid') {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => invoice.trangThai === 'Paid');
+    }
+
+    if (search.trim().length > 0) {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => invoice.maHoaDon.toLowerCase().includes(search.toLowerCase()));
+    }
+
+    setFilteredInvoicePigs(filteredInvoicePigs);
+  }, [date, invoices, selectedState, search]);
+
+
+  function areDatesEqual(date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate();
+  }
+
   const handleLeftClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-  }
-  const handleRightLick = () => {
+  const handleRightClick = () => {
+    if (currentPage < Math.ceil(filteredInvoicePigs.length / rowPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-  }
-  const data = [
-    { id: 'INV01001', employee: 'David Ngo', employeeId: 'E001', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-    { id: 'INV01002', employee: 'David Dang', employeeId: 'E002', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV01003', employee: 'Marry Nguyen', employeeId: 'E003', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV01004', employee: 'Luis Ngo', employeeId: 'E004', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV01005', employee: 'King Ngo', employeeId: 'E005', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-  ];
-  const dataFarmInvoice = [
-    { id: 'INV04052024', employee: 'David Ngo', employeeId: 'E001', type: 'Feed', name: 'Rice bran', quantity: '1,000 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Feed', name: 'Rice bran', quantity: '1,500 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Feed', name: 'Rice bran', quantity: '1,200 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Vaccine', name: 'Porcine Parvovirus', quantity: '200 (Shots)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Vaccine', name: 'Porcine Parvovirus', quantity: '200 (Shots)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-  ];
+  const indexOfLastPig = currentPage * rowPerPage;
+  const indexOfFirstPig = indexOfLastPig - rowPerPage;
+  const currentInvoicePigs = filteredInvoicePigs.slice(indexOfFirstPig, indexOfLastPig);
   return (
 
     <div className='h-full w-full flex flex-col gap-6'>
@@ -91,7 +126,7 @@ export default function ExpensesOverview() {
         </div>
         <div className='flex place-items-end '>
           <Link className='button-submit w-24'
-            to={'/Invoice/Expenses/ExpensesOverview/ExpensesAddPig'}
+            to={selectedTab === 'Pig Expenses' ? '/Invoice/Expenses/ExpensesOverview/ExpensesAddPig' : '/Invoice/Expenses/ExpensesOverview/ExpensesAddFarm'}
           >
             <IoAddCircleOutline className='text-white font-semibold' size={16} />
             Add New
@@ -163,13 +198,13 @@ export default function ExpensesOverview() {
                 fill='none'
                 stroke='#22C55E'
                 strokeWidth='1'
-                strokeDasharray={parseFloat(invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid') + ' ' + (invoices.length + invoiceProducts.length)) / parseFloat(invoices.length + invoiceProducts.length) * 100.0}
+                strokeDasharray={(parseFloat(invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid') + ' ' + (invoices.length + invoiceProducts.length)) / parseFloat(invoices.length + invoiceProducts.length) * 100.0) }
               />
             </svg>
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Paid</span>
-            <span className='text-xs text-textdisable font-normal'>{invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid')} invoinces</span>
+            <span className='text-xs text-textdisable font-normal'>{invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid').length} invoinces</span>
             <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.filter((invoice) => invoice.trangThai === 'Paid').reduce((sum, invoice) => sum + invoice.tongTien, 0) + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid').reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
@@ -205,7 +240,7 @@ export default function ExpensesOverview() {
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Progress</span>
             <span className='text-xs text-textdisable font-normal'>
-              {invoices.filter((invoice) => invoice.trangThai === 'Progress').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Progress')}
+              {invoices.filter((invoice) => invoice.trangThai === 'Progress').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Progress').length}
             </span>
             <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.filter((invoice) => invoice.trangThai === 'Progress').reduce((sum, invoice) => sum + invoice.tongTien, 0) + invoiceProducts.filter((invoice) => invoice.trangThai === 'Progress').reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
@@ -284,7 +319,7 @@ export default function ExpensesOverview() {
 
       {/* Content */}
 
-      <div className='flex flex-col gap-2 shadow py-2 rounded-xl'>
+      <div className='flex flex-col gap-2 shadow pt-2 pb-4 rounded-xl'>
         <div className='flex flex-row gap-10 items-center p-2 border-b-2 border-textdisable/20'>
           <div
             className={`flex flex-col cursor-pointer tab ${selectedTab === 'Pig Expenses' ? 'selected' : ''}`}
@@ -305,12 +340,12 @@ export default function ExpensesOverview() {
             </div>
           </div>
         </div>
-        <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
+        <div className='w-full flex flex-row justify-start items-start gap-5 px-4 py-2'>
           <div className='flex flex-row gap-2'>
-            <Select2 options={options} />
+            <Select2 options={options} setSelectedState={setSelectedState}/>
           </div>
           <div className='flex flex-row gap-2'>
-            <DateTimeInput2 options={options} />
+            <DateTimeInput2 options={options} setDate={setDate}/>
           </div>
           <div className='flex flex-row gap-2 text-xs items-center font-normal h-10 w-64 border border-secondary30 rounded-lg pl-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-all duration-200 ease-in-out'>
             <IoSearchOutline size={20} className='text-textdisable' />
@@ -323,33 +358,33 @@ export default function ExpensesOverview() {
           </div>
         </div>
         <div className='flex justify-start px-4 gap-1 items-center'>
-          <span className='font-medium text-textprimary text-xs'>8 </span>
+          <span className='font-medium text-textprimary text-xs'>{ currentInvoicePigs.length} </span>
           <span className='font-normal text-textdisable text-xs'>results for found</span>
         </div>
         <div className='items-center justify-center flex w-full'>
           {
             selectedTab === 'Pig Expenses' ? (
               <div className=''>
-                <Table data={invoices} />
+                <Table data={currentInvoicePigs} handleRefresh={handleRefresh}/>
               </div>
             ) : (
               <div>
-                <TableFarmExpenses data={invoiceProducts} />
+                <TableFarmExpenses data={invoiceProducts} handleRefresh={handleRefresh}/>
               </div>
             )
           }
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
-          <span>Row per page: </span>
-          <select className='outline-none' onChange={(e) => setRowPerPage(e.target.value)}>
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-          </select>
-          <span>6-10</span>
-          <span>of</span>
-          <span>11</span>
-          <FaAngleLeft size={12} className='text-textdisable' onClick={() => handleLeftClick} />
-          <FaAngleRight size={12} className='text-textprimary' onClick={() => handleRightLick} />
+        <span>Row per page: </span>
+            <select className='outline-none' value={rowPerPage} onChange={(e) => setRowPerPage(Number(e.target.value))}>
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+            </select>
+            <span>{indexOfFirstPig + 1}-{indexOfLastPig > filteredInvoicePigs.length ? filteredInvoicePigs.length : indexOfLastPig}</span>
+            <span>of</span>
+          <FaAngleLeft size={12} className='text-textdisable cursor-pointer' onClick={() => handleLeftClick} />
+          <FaAngleRight size={12} className='text-textprimary cursor-pointer' onClick={() => handleRightClick} />
         </div>
       </div>
     </div>

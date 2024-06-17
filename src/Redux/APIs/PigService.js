@@ -7,7 +7,7 @@ const createPigService = async (maHeo, maGiongHeo, maChuong, gioiTinh, trongLuon
 }
 
 const getAllPigService = async (farmID) => {
-    const url = `/api/Heo/GetAllHeo/${farmID}`;
+    const url = `/api/Heo/GetHeoTrongTrangTrai?FarmID=${farmID}`;
     const { data } = await Axios.get(url);
     return data;
 }

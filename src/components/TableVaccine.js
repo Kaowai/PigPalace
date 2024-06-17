@@ -1,10 +1,17 @@
 import { Edit2Icon } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosArrowRoundDown } from 'react-icons/io'
 import { TiDelete } from 'react-icons/ti'
 import ExpenseModalView from './Modal/PigExpenseModal'
 import { FaCheck } from 'react-icons/fa'
 import { PiEyeBold } from 'react-icons/pi'
+import VaccineModal from './Modal/VaccineModal'
+import { GoSearch } from 'react-icons/go'
+import { IoCheckmark } from 'react-icons/io5'
+import { getUserByFarmIDAction } from '../Redux/Actions/UserActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllVacineAction } from '../Redux/Actions/VaccineScheduleActions'
+import { formatDate } from '../Functionalities/GlobalFunctions'
 
 
 const Header = 'text-xs font-bold text-textprimary whitespace-nowrap px-2 py-3 text-start w-48'
@@ -19,9 +26,21 @@ export default function TableVaccine({ data }) {
   const [row, setRow] = useState({});
   const [isConfirm, setIsConfirm] = useState(false);
   const [activeSort, setActiveSort] = useState(false);
+
+  const dispatch = useDispatch();
+  const { vaccines} = useSelector(state => state.getAllVaccine);
+  const { loading, success, users, error } = useSelector(state => state.getUserByFarmID);
+
   const handleDelete = (row) => {
 
   }
+
+  useEffect(() => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getUserByFarmIDAction(farmID));
+    dispatch(getAllVacineAction(farmID));
+    console.log(users);
+  }, [])
   const handleViewClick = (row) => {
     setIsModalOpen(true);
     setIsConfirm(false);
@@ -56,7 +75,6 @@ export default function TableVaccine({ data }) {
                     onClick={() => setActiveSort(!activeSort)} />
                 </div>
               </th>
-              <th scope='col' className={`${Header}`}>Pig</th>
               <th scope='col' className={`${Header}`}>Vaccine Date</th>
               <th scope='col' className={`${Header}`}>Quantity (dots)</th>
               <th scope='col' className={`${Header}`}>Status</th>
@@ -64,52 +82,55 @@ export default function TableVaccine({ data }) {
             </tr>
           </thead>
           <tbody>
-            {data.map(row => (
+            {data?.map(row => (
               <tr className=' border-slate-300 border-b border-dashed hover:bg-slate-100' key={row.id}>
                 <td className={`${Row}`}>
                   <div className='flex flex-row gap-2 justify-start items-center'>
                     <img src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww border boder-disablebg' alt='avatar' className='w-8 h-8 rounded-full' />
                     <div className='flex flex-col gap-1'>
-                      <span className='text-xs font-medium text-textprimary'>{row.UserID}</span>
-                      <span className='text-xs text-textdisable'>{row.MaLichTiem}</span>
+                      <span className='text-xs font-medium text-textprimary'>
+                        {
+                          // get User by ID
+                          users?.find(user => user.userID === row.userID)?.name
+                        }
+                      </span>
+                      <span className='text-xs text-textdisable'>{row.maLichTiem}</span>
                     </div>
                   </div>
                 </td>
-                <td className={`${Row}`}>{row.MaHangHoa}</td>
-                <td className={`${Row}`}>{row.MaHeo}</td>
-                <td className={`${Row}`}>{row.NgayTiem}</td>
-                <td className={`${Row}`}>{row.LieuLuong}</td>
+                <td className={`${Row}`}>
+                  {vaccines?.find(vaccine => vaccine.id === row.maHangHoa)?.tenHangHoa}
+                  </td>
+                <td className={`${Row}`}>{formatDate(row.ngayTiem)}</td>
+                <td className={`${Row}`}>{row.lieuLuong}</td>
                 <td className={`${Row}`}>
                   {
                     row.TinhTrang === '0' ? <span className={Waiting}>Waiting</span> : <span className={Success}>Completed</span>
                   }
                 </td>
-                <td className='flex flex-row items-start gap-2 py-3 px-2 w-16'>
-
+                <td className='flex flex-row items-start gap-2 py-3 px-2 w-56 '>
                   {
-                    row.TinhTrang === '0' ?
-                      (
-                        <button
-                          className='flex flex-row rounded text-xs text-warningdark px-2 py-2 border border-warningdark items-center gap-1 hover:bg-warningdark transition-all duration-200 hover:text-white'
-                          onClick={() => handleConfirmClick(row)}>
-                          <FaCheck size={12} />
-                        </button>
-                      ) : (
-                        <button
-                          className='flex flex-row rounded text-xs text-viewbg_hover px-2 py-2 border border-viewbg_hover items-center gap-1 hover:bg-viewbg_hover transition-all duration-200 hover:text-white'
-                          onClick={() => handleConfirmClick(row)}>
-                          <PiEyeBold size={12} />
-                        </button>
-                      )
+                    row.trangThai === 'Paid' ? (
+                      <button className='button-view'
+                        onClick={() => handleViewClick(row)}>
+                        <GoSearch className='text-white' size={16} />
+                        View
+                      </button>
+                    ) : (
+                      <button
+                        className='button-confirm'
+                        onClick={() => {
+
+                        }}>
+                        <IoCheckmark size={16} />
+                        Confirm
+                      </button>
+                    )
                   }
-                  <button
-                    className='flex flex-row rounded text-xs text-other20 px-2 py-2 border border-other20 items-center gap-1 hover:bg-other20 transition-all duration-200 hover:text-white'
-                    onClick={() => handleConfirmClick(row)}>
-                    <Edit2Icon size={12} />
-                  </button>
-                  <button className='flex flex-row rounded text-xs text-warning10 px-2 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white'
-                    onClick={() => { handleDelete(row) }}>
-                    <TiDelete size={12} />
+                  <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white'
+                    onClick={() => { }}>
+                    <TiDelete size={16} />
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -117,7 +138,7 @@ export default function TableVaccine({ data }) {
           </tbody>
         </table>
       </div>
-      <ExpenseModalView name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={row} />
+      <VaccineModal name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={row} />
     </div>
   )
 }

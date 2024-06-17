@@ -23,3 +23,8 @@ const updateParameterService = async (trongLuongToiThieuXuatChuong, trongLuongTo
     const { response } = await Axios.put(url, data);
     return response;
 }
+
+export {
+    getListParameterService,
+    updateParameterService
+}

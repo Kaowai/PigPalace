@@ -95,7 +95,7 @@ function PigManager() {
       </div>
 
       {/* Content */}
-      <div className='flex flex-row gap-2 shadow py-2 rounded-xl'>
+      <div className='flex flex-row gap-2 shadow py-6 rounded-xl'>
         <div className='flex flex-col gap-4 items-start '>
           <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
             <div className='flex flex-row gap-2'>

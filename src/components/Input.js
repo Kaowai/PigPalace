@@ -136,30 +136,38 @@ export const Input2 = (
         type,
         onChange,
         isDisable,
+        register,
         value,
     }
 ) => {
+
+    const handleChange = (value) => { 
+        console.log(value)
+    }
     return (
         <div className="text-xs w-full relative">
             <label className={`font-semibold   text-xs ${isDisable ? "text-textdisable" : "text-secondary60"}`}>{label}</label>
             <input
                 type={type}
                 placeholder={placeholder}
-                onChange={onChange}
+                onChange={(e) => handleChange(e.target.value)}
                 value={value}
+                disabled={isDisable}
                 readOnly={isDisable}
+                {...register}
                 className={`w-full text-xs border mt-2 bg-white ${isDisable && "font-semibold"} border-secondary30 h-8 rounded text-textprimary py-2 px-2 outline-none focus:border-blue-500 hover:border-blue-500 focus:ring-blue-500`} />
         </div>
     )
 }
 
-export const MessageInput = ({ label, placeholder }) => {
+export const MessageInput = ({ label, placeholder, register }) => {
     return (
         <div className="text-xs w-full relative">
             <label className="text-secondary60 font-semibold text-xs ">{label}</label>
             <textarea
                 placeholder={placeholder}
-                className="w-full text-xs border mt-2 bg-white border-secondary30 rounded text-textprimary py-2 px-2 outline-none focus:border-blue-500 hover:border-blue-500 resize-none max-md:h-30 h-28 focus:ring-blue-500" />
+                {...register}
+                className="w-full text-xs border mt-2 bg-white border-secondary30 rounded text-textprimary py-2 px-2 outline-none focus:border-blue-500 hover:border-blue-500 resize-none max-md:h-full h-48 focus:ring-blue-500" />
         </div>
     )
 }
@@ -168,7 +176,9 @@ export const InputMoney = (
     {
         label,
         onChange,
-        isDisable
+        isDisable,
+        register,
+        value
     }
 ) => {
     return (
@@ -183,13 +193,17 @@ export const InputMoney = (
                             readOnly
                             type="number"
                             placeholder=""
+                            value={value}
+                            {...register}
                             onChange={onChange}
                             className="outline-none px-2 text-xs text-textprimary w-full bg-transparent"
                         />
                     ) : (
                         <input
                             type="number"
+                            {...register}
                             placeholder=""
+                            value={value}
                             onChange={onChange}
                             className="outline-none px-2 text-xs text-textprimary w-full bg-transparent"
                         />
@@ -199,6 +213,17 @@ export const InputMoney = (
         </div>
     )
 }
+
+export const UserRoles = ({ name, onHandle }) => {
+    return (
+        <div className="flex flex-row gap-2 justify-center items-center w-full py-2 hover:border hover:border-textdisable rounded-md cursor-pointer" onClick={onHandle}>
+            <img src="https://www.svgrepo.com/show/382101/male-avatar-boy-face-man-user.svg" alt="user" className="w-12 h-12 rounded-full" />
+            <span className="text-xs font-semibold text-textprimary">{name}</span>
+        </div>
+
+    )
+}
+
 export const Select2 = (
     {
         label,
@@ -207,6 +232,7 @@ export const Select2 = (
         setState,
         isDisable,
         value,
+        setSelectedState
     }
 ) => {
     return (
@@ -214,7 +240,7 @@ export const Select2 = (
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
             <select
                 placeholder={"Select..."}
-                onChange={setState ? (e) => setState(e.target.value) : onChange}
+                onChange={setSelectedState ? (e) => setSelectedState(e.target.value) : onChange}
                 value={value}
                 readOnly={isDisable}
                 className={`w-32 text-xs border bg-white ${isDisable ? "border-textprimary" : "border-secondary30"} h-10 rounded-lg text-textprimary py-2 px-2 outline-none focus:border-blue-500 focus:ring-blue-500 hover:border-blue-500`} >
@@ -233,6 +259,7 @@ export const Select1 = (
         options,
         onChange,
         isDisable,
+        register,
         value,
         placeholder
     }
@@ -245,6 +272,7 @@ export const Select1 = (
                 onChange={onChange}
                 value={value}
                 readOnly={isDisable}
+                {...register}
                 className={`w-full text-xs border mt-2 bg-white ${isDisable ? "border-textprimary" : "border-secondary30"} h-8 rounded text-textprimary py-2 px-2 outline-none focus:border-blue-500 focus:ring-blue-500 hover:border-blue-500`} >
                 {options.map((option, index) => {
                     return (
@@ -288,38 +316,41 @@ export const MultiSelect = (
 export const DateTimeInput = (
     {
         label,
-        placeholder
+        placeholder,
+        setDate
     }
 ) => {
-    const handleChange = (value,) => {
-        console.log(`selected ${value}`);
-    };
+    function onSelectDate(date, dateString) {
+        console.log(dateString);
+        setDate(dateString);
+    }
     return (
         <div className="text-xs w-full relative">
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
-            <DatePicker placeholder={placeholder} className="w-full mt-2 text-xs font-semibold  h-8 date-time-input" />
+            <DatePicker placeholder={placeholder} className="w-full mt-2 text-xs font-semibold  h-8 date-time-input" onChange={onSelectDate} />
         </div>
     )
 }
 export const DateTimeInput2 = (
     {
         label,
-        placeholder, 
+        placeholder,
         setDate
     }
 ) => {
 
     function onSelectDate(date, dateString) {
-        console.log( dateString);
+        console.log(dateString);
         setDate(dateString);
     }
     return (
-        <div className="text-xs w-full relative">
+        <div className="text-xs w-full relative flex flex-col">
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
             <DatePicker
                 placeholder={placeholder}
-                className="w-full font-semibold text-textprimary h-10 date-time-input"
+                className="w-full font-semibold text-textprimary h-10 date-time-input rounded-lg"
                 onChange={onSelectDate}
+                aria-orientation="horizontal"
             />
         </div>
     )

@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoSearch } from 'react-icons/go'
 import { IoIosArrowRoundDown } from 'react-icons/io'
 import { IoCheckmark } from 'react-icons/io5'
 import { TiDelete } from 'react-icons/ti'
 import ExpenseModalView from './Modal/PigExpenseModal'
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllBarnAction } from '../Redux/Actions/BarnActions'
+import { getBreedByFarmIDAction } from '../Redux/Actions/BreedActions'
 
 
 const Header = 'text-xs font-bold text-textprimary whitespace-nowrap px-2 py-3 text-start w-56 '
 const Row = 'text-xs  font-normal text-textprimary px-2 pr-10 mx-1 py-3 text-start whitespace-nowrap w-56'
-const Progress = 'text-xs font-bold text-warningdark bg-warningbackground rounded-md px-2 py-1'
-const Paid = 'text-xs font-bold text-successlight bg-successbackground rounded-md px-2 py-1'
+const Progress = 'text-xs font-semibold text-warningdark bg-warningbackground rounded-md px-2 py-1'
+const Paid = 'text-xs font-semibold text-successlight bg-successbackground rounded-md px-2 py-1'
 
 export default function TablePig({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +23,15 @@ export default function TablePig({ data }) {
     const handleDelete = (row) => {
 
     }
+    const dispatch = useDispatch();
+    const { barns } = useSelector(state => state.barnGetAll);
+    const { breedInfo } = useSelector(state => state.breedGetAllByFarmID);
+
+    useEffect(() => {
+        const farmID = JSON.parse(localStorage.getItem('farmID'));
+        dispatch(getAllBarnAction(farmID));
+        dispatch(getBreedByFarmIDAction(farmID));
+    }, []);
 
     const calculateAge = (date) => {
         const birthDate = new Date(date);
@@ -38,11 +50,11 @@ export default function TablePig({ data }) {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-    
+
         // Định dạng ngày với các tùy chọn cụ thể
         const options = { day: '2-digit', month: 'short', year: 'numeric' };
         const formattedDate = date.toLocaleDateString('en-US', options);
-    
+
         // Định dạng lại để thêm dấu phẩy
         const parts = formattedDate.split(' ');
         return `${parts[0]} ${parts[1]} ${parts[2].replace(',', '')}`;
@@ -78,7 +90,7 @@ export default function TablePig({ data }) {
                             <th scope='col' className={`${Header}`}>Pig Barn</th>
                             <th scope='col' className={`${Header}`}>Age</th>
                             <th scope='col' className={`${Header}`}>Gender</th>
-                            <th scope='col' className={`${Header}`}>Cost</th>
+                            <th scope='col' className={`${Header}`}>Cost ($)</th>
                             <th scope='col' className={`${Header}`}>Date</th>
                             <th scope='col' className={`${Header}`}>Status</th>
                             <th scope='col' className={`${Header}`}>Actions</th>
@@ -89,8 +101,12 @@ export default function TablePig({ data }) {
                         {data?.map(row => (
                             <tr className=' border-slate-300 border-b border-dashed hover:bg-slate-100' key={row.id}>
                                 <td className={`${Row}`}>{row.maHeo}</td>
-                                <td className={`${Row}`}>{row.maGiongHeo}</td>
-                                <td className={`${Row}`}>{row.maChuong}</td>
+                                <td className={`${Row}`}>{
+                                    breedInfo?.find(b => b.maGiongHeo === row.maGiongHeo)?.tenGiongHeo
+                                }</td>
+                                <td className={`${Row}`}>{
+                                    barns?.find(b => b.maChuong === row.maChuong)?.ghiChu
+                                }</td>
                                 <td className={`${Row}`}>{calculateAge(row.ngaySinh)} Months</td>
                                 <td className={`${Row}`}>{
                                     row.GioiTinh === 'Đực' ? "Male" : "Female"
@@ -98,7 +114,7 @@ export default function TablePig({ data }) {
                                 <td className={`${Row}`}>{row.donGiaNhap}</td>
                                 <td className={`${Row}`}>{formatDate(row.ngayDenTrangTrai)}</td>
                                 <td className={`${Row}`}>
-                                    <span className={`${row.IsTrongTrangTrai === '0' ? Paid : Progress}`}>{row.IsTrongTrangTrai === '0' ? "In Farm" : "Exported"}</span>
+                                    <span className={`${row.isThuanChung ? Paid : Progress}`}>{row.isThuanChung ? "Full Breed" : "Normal"}</span>
                                 </td>
                                 <td className={`${Row}`}>
                                     <BsThreeDotsVertical size={20} />

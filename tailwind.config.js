@@ -65,6 +65,7 @@ module.exports = {
         disablebg: '#3919EAB',
         viewbg: '#00B8D9',
         viewbg_hover: '#006C9C',
+        warning_bg: '#FF5630',
         success_bg: '#22C55E',
         success_bg_hover: '#118D57',
         info_bg: '#00B8D9',

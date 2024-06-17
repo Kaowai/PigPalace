@@ -39,6 +39,7 @@ const updateUserService = async (UserID, famrID, name, passWord, dateOfBirth, ad
 const signInService = async (UserID, PassWord) => {
     const url = `/api/User/SignIn?UserID=${UserID}&PassWord=${PassWord}`;
     const { data } = await Axios.post(url);
+    if (data) localStorage.setItem('userInfo2', data);
     return data;
 }
 
@@ -74,3 +75,4 @@ export {
     signUpService,
     refreshTokenService
 }
+

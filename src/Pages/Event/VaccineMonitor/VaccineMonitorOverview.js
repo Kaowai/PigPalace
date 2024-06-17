@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoAddCircleOutline, IoSearchOutline } from 'react-icons/io5';
 import { NavLink } from 'react-router-dom';
 import { DateTimeInput2, Select2 } from '../../../components/Input';
@@ -7,6 +7,9 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import TableVaccine from '../../../components/TableVaccine';
 import { UserRoundIcon } from 'lucide-react';
 import VaccineModal from '../../../components/Modal/VaccineModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserByFarmIDAction } from '../../../Redux/Actions/UserActions';
+import { getALlVaccineScheduleAction } from '../../../Redux/Actions/VaccineScheduleActions';
 
 function VaccineMonitorOverview() {
   const [rowPerPage, setRowPerPage] = useState(5);
@@ -17,6 +20,11 @@ function VaccineMonitorOverview() {
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
 
+
+  const dispatch = useDispatch();
+
+
+  const { vaccineSchedules } = useSelector(state => state.getAllVaccineSchedule);
   const options = [
     {
       value: 'all',
@@ -39,58 +47,11 @@ function VaccineMonitorOverview() {
 
   }
 
-  const data = [
-    {
-      MaLichTiem: '1',
-      NgayTiem: '2021-10-10',
-      MaHangHoa: 'Vaccine1',
-      LieuLuong: '1',
-      UserID: 'UserID001',
-      TinhTrang: '0',
-      FarmID: 'FarmID001',
-      MaHeo: 'Pig002',
-    },
-    {
-      MaLichTiem: '2',
-      NgayTiem: '2022-10-10',
-      MaHangHoa: 'Vaccine1',
-      LieuLuong: '2',
-      UserID: 'UserID002',
-      TinhTrang: '0',
-      FarmID: 'FarmID001',
-      MaHeo: 'Pig002',
-    },
-    {
-      MaLichTiem: '3',
-      NgayTiem: '2021-10-10',
-      MaHangHoa: 'Vaccine1',
-      LieuLuong: '1',
-      UserID: 'UserID002',
-      TinhTrang: '1',
-      FarmID: 'FarmID001',
-      MaHeo: 'Pig002',
-    },
-    {
-      MaLichTiem: '4',
-      NgayTiem: '2021-10-10',
-      MaHangHoa: 'Vaccine3',
-      LieuLuong: '1',
-      UserID: 'UserID002',
-      TinhTrang: '0',
-      FarmID: 'FarmID001',
-      MaHeo: 'Pig002',
-    },
-    {
-      MaLichTiem: '5',
-      NgayTiem: '2021-10-10',
-      MaHangHoa: 'Vaccine1',
-      LieuLuong: '1',
-      UserID: 'UserID001',
-      TinhTrang: '0',
-      FarmID: 'FarmID001',
-      MaHeo: 'Pig001',
-    },
-  ]
+  useEffect(() => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getALlVaccineScheduleAction(farmID));
+  }, [])
+
   return (
     <div className='h-full w-full flex flex-col gap-4'>
       {/* Navigation */}
@@ -111,7 +72,7 @@ function VaccineMonitorOverview() {
         </div>
       </div>
       {/* Table */}
-      <div className='flex flex-col gap-2 shadow py-2 rounded-xl'>
+      <div className='flex flex-col gap-2 shadow py-6 rounded-xl'>
 
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
           <div className='flex flex-row gap-2'>
@@ -137,7 +98,7 @@ function VaccineMonitorOverview() {
 
         {/* Table */}
         <div className='items-center justify-center flex w-full'>
-          <TableVaccine data={data} />
+          <TableVaccine data={vaccineSchedules} />
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
           <span>Row per page: </span>

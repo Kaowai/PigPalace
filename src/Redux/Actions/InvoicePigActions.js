@@ -56,6 +56,7 @@ const createInvoicePigImportAction = (NgayLap, NgayMua, Note, FarmID, UserId, Te
         const response = await invoicePigAPI.createInvoicePigImportService(NgayLap, NgayMua, Note, FarmID, UserId, TenCongTy, TenDoiTac, DiaChi, SoDienThoai, Email, dataPig);
         dispatch({ type: InvoicePigConstants.CREATE_INVOICE_PIG_IMPORT_SUCCESS, payload: response });
     } catch (err) {
+        console.log(err);
         ErrorsAction(err, dispatch, InvoicePigConstants.CREATE_INVOICE_PIG_IMPORT_FAIL);
     }
 }

@@ -1,6 +1,9 @@
 import * as InvoiceProductConstants from '../Constants/InvoiceProductConstants';
 import * as invoiceProductAPI from '../APIs/InvoiceProductService';
 import { ErrorsAction, tokenProtection } from '../Protection';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 
 const getInvoiceProductAllAction = (FarmID) => async (dispatch) => { 
     try {
@@ -25,7 +28,10 @@ const createInvoiceProductAction = (tenHangHoa, loaiHangHoa, soLuong, giaTien, n
 
         // handle create invoice product successfully
         dispatch({ type: InvoiceProductConstants.CREATE_INVOICE_SUCCESS, payload: response });
+
+        toast.success("Create Invoice Successfully!");
     } catch (error) {
+        console.log("lỗi");
         ErrorsAction(error, dispatch, InvoiceProductConstants.CREATE_INVOICE_FAIL);
     }
 }

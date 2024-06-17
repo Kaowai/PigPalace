@@ -8,6 +8,8 @@ import { useSpring, animated } from 'react-spring';
 import { DateTimeInput2, Select2 } from '../../../components/Input'
 import { FaAngleLeft } from 'react-icons/fa6'
 import TableFarmExpenses from '../../../components/TableFarmExpenses'
+import { useDispatch, useSelector } from 'react-redux'
+import { getListInvoicePigExportAction } from '../../../Redux/Actions/InvoicePigActions'
 
 
 const AnimatedNumber = ({ value }) => {
@@ -31,6 +33,14 @@ function SalesOverview() {
   const [rowPerPage, setRowPerPage] = useState(5);
   const [selectedTab, setSelectedTab] = React.useState('Pig Expenses');
   const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
+  const { invoices } = useSelector(state => state.getListInvoicePigExport);
+
+  useEffect(() => { 
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getListInvoicePigExportAction(farmID));
+  }, [dispatch]);
+
   const options = [
     {
       value: 'all',
@@ -52,21 +62,6 @@ function SalesOverview() {
   const handleRightLick = () => {
 
   }
-
-  const data = [
-    { id: 'INV01001', employee: 'David Ngo', employeeId: 'E001', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-    { id: 'INV01002', employee: 'David Dang', employeeId: 'E002', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV01003', employee: 'Marry Nguyen', employeeId: 'E003', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV01004', employee: 'Luis Ngo', employeeId: 'E004', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV01005', employee: 'King Ngo', employeeId: 'E005', type: 'PIG', amount: 15, cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-  ];
-  const dataFarmInvoice = [
-    { id: 'INV04052024', employee: 'David Ngo', employeeId: 'E001', type: 'Feed', name: 'Rice bran', quantity: '1,000 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Progress' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Feed', name: 'Rice bran', quantity: '1,500 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Feed', name: 'Rice bran', quantity: '1,200 (Kg)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Vaccine', name: 'Porcine Parvovirus', quantity: '200 (Shots)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-    { id: 'INV04032024', employee: 'David Ngo', employeeId: 'E001', type: 'Vaccine', name: 'Porcine Parvovirus', quantity: '200 (Shots)', cost: '$3,000', invoiceDate: '03-03-2024', purchaseDate: '03-03-2024', status: 'Paid' },
-  ];
   return (
     <div className='h-full w-full flex flex-col gap-4'>
       {/* Navigation */}
@@ -81,7 +76,7 @@ function SalesOverview() {
         </div>
         <div className='flex place-items-end '>
           <Link className='button-submit w-24'
-            to={'/Invoice/Expenses/ExpensesOverview/ExpensesAddPig'}
+            to={'/Invoice/Sales/AddSales'}
           >
             <IoAddCircleOutline className='text-white font-semibold' size={16} />
             Add New
@@ -122,8 +117,8 @@ function SalesOverview() {
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Total</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={275.43} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices?.length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center border-dashed border-r border-textdisable w-full gap-1'>
@@ -157,8 +152,8 @@ function SalesOverview() {
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Paid</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={446.61} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices.filter((invoice) => invoice.trangThai === 'Paid').length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.filter((invoice) => invoice.trangThai === 'Paid').reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center w-full gap-1 border-dashed border-r border-textdisable'>
@@ -192,11 +187,11 @@ function SalesOverview() {
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Progress</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
+            <span className='text-xs text-textdisable font-normal'>{invoices.filter((invoice) => invoice.trangThai === 'Progress').length} invoinces</span>
             <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={200.67} /></span>
           </div>
         </div>
-        <div className='p-2 flex flex-row items-center justify-center w-full gap-1 border-dashed border-r border-textdisable/95'>
+        <div className='p-2 flex flex-row items-center justify-center w-full gap-1 border-dashed '>
           <div className='relative flex items-center justify-center'>
             <div className='p-3'>
               <TbInvoice size={36} className='text-other20' />
@@ -227,43 +222,8 @@ function SalesOverview() {
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Pig Sales</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={200.67} /></span>
-          </div>
-        </div>
-        <div className='p-2 flex flex-row items-center justify-center w-full gap-1 '>
-          <div className='relative flex items-center justify-center'>
-            <div className='p-3'>
-              <TbInvoice size={36} className='text-textsecondary' />
-            </div>
-            <svg
-              className='absolute'
-              width='60'
-              height='60'
-              viewBox='0 0 36 36'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <circle
-                cx='18'
-                cy='18'
-                r='16'
-                fill='none'
-                stroke='#d3d3d3'
-                strokeWidth='1'
-              />
-              <path
-                d='M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32'
-                fill='none'
-                stroke='#637381'
-                strokeWidth='1'
-                strokeDasharray='75 25'
-              />
-            </svg>
-          </div>
-          <div className='flex flex-col gap-2 ml-2'>
-            <span className='text-xs text-textprimary font-bold'>Dung Sales</span>
-            <span className='text-xs text-textdisable font-normal'>4 invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={200.67} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices.length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
       </div>
@@ -281,15 +241,7 @@ function SalesOverview() {
               <span className='text-xs items-center flex justify-center font-semibold w-6 h-6 rounded-md text-other20 bg-other30'>10</span>
             </div>
           </div>
-          <div
-            className={`flex flex-col cursor-pointer tab ${selectedTab === 'Dung Sales' ? 'selected' : ''}`}
-            onClick={() => setSelectedTab('Dung Sales')}
-          >
-            <div className='flex flex-row gap-2 items-center'>
-              <span className={`text-xs font-medium ${selectedTab === 'Dung Sales' ? 'text-textprimary' : 'text-textdisable'}`}>Dung Sales</span>
-              <span className='text-xs items-center flex justify-center font-semibold w-6 h-6 rounded-md text-textsecondary bg-slate-300'>12</span>
-            </div>
-          </div>
+          
         </div>
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
           <div className='flex flex-row gap-2'>
@@ -314,15 +266,11 @@ function SalesOverview() {
         </div>
         <div className='items-center justify-center flex w-full'>
           {
-            selectedTab === 'Pig Sales' ? (
+             (
               <div className=''>
-                <Table data={data} />
+                <Table  data={invoices} />
               </div>
-            ) : (
-              <div>
-                <TableFarmExpenses data={dataFarmInvoice} />
-              </div>
-            )
+            ) 
           }
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>

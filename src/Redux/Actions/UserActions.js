@@ -1,5 +1,5 @@
 import * as UserConstants from '../Constants/UserConstants';
-import * as UserAPIs from '../../APIs/UserService';
+import * as UserAPIs from '../APIs/UserService';
 import { ErrorsAction, tokenProtection } from '../Protection';
 
 const getUserByIDAction = (ID) => async (dispatch) => {
@@ -15,7 +15,7 @@ const getUserByIDAction = (ID) => async (dispatch) => {
 const getUserByFarmIDAction = (farmID) => async (dispatch) => {
     try {
         dispatch({ type: UserConstants.GET_USER_BY_FARM_ID_REQUEST });
-        const response = await UserAPIs.getUserByFarmIDService(farmID);
+        const response = await UserAPIs.getUsersByFarmIDService(farmID);
         dispatch({ type: UserConstants.GET_USER_BY_FARM_ID_SUCCESS, payload: response });
     } catch (error) {
         ErrorsAction(error, dispatch, UserConstants.GET_USER_BY_FARM_ID_FAIL);

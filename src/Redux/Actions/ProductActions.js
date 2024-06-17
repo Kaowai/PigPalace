@@ -15,3 +15,7 @@ const getProductAction = (farmID) => async (dispatch) => {
         ErrorsAction(error, dispatch, ProductConstants.GET_ALL_PRODUCT_FAIL);
     }
 }
+
+export {
+    getProductAction
+}

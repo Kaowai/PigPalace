@@ -63,13 +63,13 @@ export const updateUserReducer = (state = { user: {} }, action) => {
 export const signInReducer = (state = { user: {} }, action) => { 
     switch (action.type) {
         case UserConstants.USER_SIGNIN_REQUEST:
-            return { loading: true, user: {} }
+            return { loading: true, user2: {} }
         case UserConstants.USER_SIGNIN_SUCCESS:
-            return { loading: false, user: action.payload, success: true}
+            return { loading: false, user2: action.payload, success: true}
         case UserConstants.USER_SIGNIN_FAIL:
             return { loading: false, error: action.payload }
         case UserConstants.USER_SIGNIN_RESET:
-            return { user: {} }
+            return { user2: {} }
         default:
             return state
     }

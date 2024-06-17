@@ -1,8 +1,8 @@
-import * as AccountConstants from '../Constants/AccountConstants';  
+import * as AccountConstants from '../Constants/AccountConstants';
 import * as AccountService from '../APIs/AccountService';
 import { ErrorsAction, tokenProtection } from '../Protection';
 import * as FarmConstants from '../Constants/FarmConstants';
-
+import * as UserConstants from '../Constants/UserConstants';
 
 const loginAction = (email, password) => async (dispatch) => {
     try {
@@ -102,12 +102,13 @@ const logoutAccountAction = () => async (dispatch) => {
     dispatch({ type: AccountConstants.ACCOUNT_FACEBOOK_LOGIN_RESET });
     dispatch({ type: AccountConstants.ACCOUNT_LOGIN_RESET });
     dispatch({ type: AccountConstants.ACCOUNT_REGISTER_RESET });
-    dispatch({ type: FarmConstants.GET_FARM_RESET});
+    dispatch({ type: FarmConstants.GET_FARM_RESET });
+    dispatch({ type: UserConstants.USER_SIGNIN_RESET })
 
     // clear token
 }
 
-const getAccountIsUpgradedAction = (AccountID) => async (dispatch) => { 
+const getAccountIsUpgradedAction = (AccountID) => async (dispatch) => {
     try {
         // request ACCOUNT is upgraded
         dispatch({ type: AccountConstants.GET_ACCOUNT_IS_UPGRADED_REQUEST });
