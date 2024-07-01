@@ -1,150 +1,112 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { IoAddCircleOutline, IoSearchOutline } from 'react-icons/io5';
 import { NavLink } from 'react-router-dom';
 import { DateTimeInput2, Select2 } from '../../../components/Input';
 import TableInventory from '../../../components/TableInventory';
 import TablePregnancy from '../../../components/TablePregnancy';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPregnancyScheduleAction } from '../../../Redux/Actions/PregnancyScheduleActions';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function PregnancyOverview() {
-  const [rowPerPage, setRowPerPage] = useState(5);
-  const [selectedTab, setSelectedTab] = React.useState('Pig Expenses');
-  const [search, setSearch] = useState('');
+  const [rowPerPagePregnancy, setRowPerPagePregnancy] = useState(5);
+  const [selectedStatePregnancy, setSelectedStatePregnancy] = useState('all');
+
+  const [searchPregnancy, setSearchPregnancy] = useState('');
+  const [datePregnancy, setDatePregnancy] = useState('');
+  const [currentPagePregnancy, setCurrentPagePregnancy] = useState(1); // Trạng thái để lưu thông tin trang hiện tại
+  const [filteredPregnancySchedule, setfilteredPregnancySchedule] = useState([]);
+
+  const { loading, pregnancySchedules } = useSelector(state => state.getAllPregnancySchedule);
+  const dispatch = useDispatch();
   const options = [
     {
       value: 'all',
       title: 'All'
     },
     {
-      value: 'Food',
-      title: 'Food'
+      value: 'Farrowing Successful',
+      title: 'Farrowing Successful'
     },
     {
-      value: 'Vaccine',
-      title: 'Vaccine'
+      value: 'Pregnancy Fail',
+      title: 'Pregnancy Fail'
+    },
+    {
+      value: 'Waiting Pregnancy',
+      title: 'Waiting Pregnancy'
+    },
+    {
+      value: 'Waiting Farrowing',
+      title: 'Waiting Farrowing'
+    },
+    {
+      value: 'Farrowing Fail',
+      title: 'Farrowing Fail'
     }
   ]
+  useEffect(() => {
+    let filteredSchedule = pregnancySchedules;
 
-  const handleLeftClick = () => {
+    if (datePregnancy) {
+      filteredSchedule = pregnancySchedules.filter((pig) => areDatesEqual(pig.ngayPhoi, datePregnancy));
+    }
 
+    if (selectedStatePregnancy === 'Farrowing Successful') {
+      filteredSchedule = pregnancySchedules.filter((pig) => pig.trangThai === 'Farrowing Successful');
+    } else if (selectedStatePregnancy === 'Pregnancy Fail') {
+      filteredSchedule = pregnancySchedules.filter((pig) => pig.trangThai === 'Pregnancy Fail');
+    } else if (selectedStatePregnancy === 'Waiting Pregnancy') {
+      filteredSchedule = pregnancySchedules.filter((pig) => pig.trangThai === 'Waiting Pregnancy');
+    } else if (selectedStatePregnancy === 'Waiting Farrowing') { 
+      filteredSchedule = pregnancySchedules.filter((pig) => pig.trangThai === 'Waiting Farrowing');
+    } else if (selectedStatePregnancy === 'Farrowing Fail') { 
+      filteredSchedule = pregnancySchedules.filter((pig) => pig.trangThai === 'Farrowing Fail');
+    } 
+ 
+    if (searchPregnancy.trim().length > 0) {
+      filteredSchedule = pregnancySchedules.filter((pig) => pig.maLich.toLowerCase().includes(searchPregnancy.toLowerCase()));
+    }
+
+    setfilteredPregnancySchedule(filteredSchedule);
+  }, [datePregnancy, pregnancySchedules, selectedStatePregnancy, searchPregnancy]);
+
+
+  function areDatesEqual(date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate();
   }
-  const handleRightLick = () => {
 
+  const handleLeftClickPregnancy = () => {
+    if (currentPagePregnancy > 1) {
+      setCurrentPagePregnancy(currentPagePregnancy - 1);
+    }
+  }
+  const handleRightLickPregnancy = () => {
+    if (currentPagePregnancy < Math.ceil(filteredPregnancySchedule.length / rowPerPagePregnancy)) {
+      setCurrentPagePregnancy(currentPagePregnancy + 1);
+    }
+  }
+
+  useEffect(() => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getAllPregnancyScheduleAction(farmID));
+  }, [dispatch])
+
+  const refreshData = () => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getAllPregnancyScheduleAction(farmID));
   }
 
   // Trang thai: 0 - Dang doi dau thai | 1 - Da dau thai | 2 - That bai | 3 - Da de | 4 - De that bai
-  const data = [
-    {
-      MaLich: '1',
-      MaHeoNai: 'HN001',
-      MaHeoDuc: 'HD001',
-      NgayPhoi: '2021-10-10',
-      NgayDeDuKien: '2022-10-10',
-      NgayDauThai: '2022-10-10',
-      NgayDeChinhThuc: '2022-10-10',
-      UserID: 'UserID001',
-      TrangThai: '0',
-      GhiChu: '',
-      LoaiPhoiGiong: 'Mating',
-      MaGiongHeoDuc: 'Breeding1',
-      SoHeoCai: 0,
-      SoHeoDuc: 0,
-      SoHeoChet: 0,
-      SoHeoTat: 0,
-      NguyenNhanThatBai: '',
-      CachGiaiQuyet: '',
-      GhiChuTaiSaoThatBai: '',
-      FarmID: 'FarmID001',
-    },
-    {
-      MaLich: '2',
-      MaHeoNai: 'HN001',
-      MaHeoDuc: 'HD001',
-      NgayPhoi: '2021-10-10',
-      NgayDeDuKien: '2022-10-10',
-      NgayDauThai: '2022-10-10',
-      NgayDeChinhThuc: '2022-10-10',
-      UserID: 'UserID001',
-      TrangThai: '1',
-      GhiChu: '',
-      LoaiPhoiGiong: 'Mating',
-      MaGiongHeoDuc: 'Breeding1',
-      SoHeoCai: 0,
-      SoHeoDuc: 0,
-      SoHeoChet: 0,
-      SoHeoTat: 0,
-      NguyenNhanThatBai: '',
-      CachGiaiQuyet: '',
-      GhiChuTaiSaoThatBai: '',
-      FarmID: 'FarmID001',
-    },
-    {
-      MaLich: '3',
-      MaHeoNai: 'HN001',
-      MaHeoDuc: 'HD001',
-      NgayPhoi: '2021-10-10',
-      NgayDeDuKien: '2022-10-10',
-      NgayDauThai: '2022-10-10',
-      NgayDeChinhThuc: '2022-10-10',
-      UserID: 'UserID001',
-      TrangThai: '2',
-      GhiChu: '',
-      LoaiPhoiGiong: 'Mating',
-      MaGiongHeoDuc: 'Breeding1',
-      SoHeoCai: 0,
-      SoHeoDuc: 0,
-      SoHeoChet: 0,
-      SoHeoTat: 0,
-      NguyenNhanThatBai: '',
-      CachGiaiQuyet: '',
-      GhiChuTaiSaoThatBai: '',
-      FarmID: 'FarmID001',
-    },
-    {
-      MaLich: '4',
-      MaHeoNai: 'HN001',
-      MaHeoDuc: 'HD001',
-      NgayPhoi: '2021-10-10',
-      NgayDeDuKien: '2022-10-10',
-      NgayDauThai: '2022-10-10',
-      NgayDeChinhThuc: '2022-10-10',
-      UserID: 'UserID001',
-      TrangThai: '3',
-      GhiChu: '',
-      LoaiPhoiGiong: 'Mating',
-      MaGiongHeoDuc: 'Breeding1',
-      SoHeoCai: 0,
-      SoHeoDuc: 0,
-      SoHeoChet: 0,
-      SoHeoTat: 0,
-      NguyenNhanThatBai: '',
-      CachGiaiQuyet: '',
-      GhiChuTaiSaoThatBai: '',
-      FarmID: 'FarmID001',
-    },
-    {
-      MaLich: '5',
-      MaHeoNai: 'HN001',
-      MaHeoDuc: 'HD001',
-      NgayPhoi: '2021-10-10',
-      NgayDeDuKien: '2022-10-10',
-      NgayDauThai: '2022-10-10',
-      NgayDeChinhThuc: '2022-10-10',
-      UserID: 'UserID001',
-      TrangThai: '4',
-      GhiChu: '',
-      LoaiPhoiGiong: 'Mating',
-      MaGiongHeoDuc: 'Breeding1',
-      SoHeoCai: 0,
-      SoHeoDuc: 0,
-      SoHeoChet: 0,
-      SoHeoTat: 0,
-      NguyenNhanThatBai: '',
-      CachGiaiQuyet: '',
-      GhiChuTaiSaoThatBai: '',
-      FarmID: 'FarmID001',
-    },
-  ]
+  const indexOfLastPigPregnancy = currentPagePregnancy * rowPerPagePregnancy;
+  const indexOfFirstPigPregnancy = indexOfLastPigPregnancy - rowPerPagePregnancy;
+  const currentSchedulePregnancy = filteredPregnancySchedule.slice(indexOfFirstPigPregnancy, indexOfLastPigPregnancy);
+
 
   return (
     <div className='h-full w-full flex flex-col gap-4'>
@@ -168,14 +130,13 @@ function PregnancyOverview() {
         </div>
       </div>
       {/* Table */}
-      <div className='flex flex-col gap-2 shadow py-2 rounded-xl'>
-
+      <div className='flex flex-col gap-2 shadow py-6 rounded-xl'>
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
           <div className='flex flex-row gap-2'>
-            <Select2 options={options} />
+            <Select2 options={options} setSelectedState={setSelectedStatePregnancy}/>
           </div>
           <div className='flex flex-row gap-2'>
-            <DateTimeInput2 options={options} placeholder={"Date Imported"} />
+            <DateTimeInput2 options={options} placeholder={"Date Imported"} setDate={setDatePregnancy}/>
           </div>
           <div className='flex flex-row gap-2 text-xs items-center font-normal h-10 w-64 border border-secondary30 rounded-lg pl-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-all duration-200 ease-in-out'>
             <IoSearchOutline size={20} className='text-textdisable' />
@@ -183,30 +144,31 @@ function PregnancyOverview() {
               type='text'
               placeholder='Search...'
               className='outline-none text-textprimary text-xs font-normal items-start text-wrap'
-              onChange={(e) => { setSearch(e.target.value); console.log(e.target.value) }}>
+              onChange={(e) => { setSearchPregnancy(e.target.value); console.log(e.target.value) }}>
             </input>
           </div>
         </div>
         <div className='flex justify-start px-4 gap-1 items-center'>
-          <span className='font-medium text-textprimary text-xs'>8 </span>
+          <span className='font-medium text-textprimary text-xs'>{filteredPregnancySchedule?.length} </span>
           <span className='font-normal text-textdisable text-xs'>results for found</span>
         </div>
 
         {/* Table */}
         <div className='items-center justify-center flex w-full'>
-          <TablePregnancy data={data} />
+        {loading ? <ClipLoader color='#3B82F6' loading={loading} size={25} className='m-auto items-center justify-center' /> : <TablePregnancy data={currentSchedulePregnancy} refreshData={refreshData} /> }
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
           <span>Row per page: </span>
-          <select className='outline-none' onChange={(e) => setRowPerPage(e.target.value)}>
+          <select className='outline-none' value={rowPerPagePregnancy} onChange={(e) => setRowPerPagePregnancy(Number(e.target.value))}>
             <option value={5}>5</option>
             <option value={10}>10</option>
+            <option value={20}>20</option>
           </select>
-          <span>6-10</span>
+          <span>{indexOfFirstPigPregnancy + 1}-{indexOfLastPigPregnancy > filteredPregnancySchedule.length ? filteredPregnancySchedule.length : indexOfLastPigPregnancy}</span>
           <span>of</span>
-          <span>11</span>
-          <FaAngleLeft size={12} className='text-textdisable' onClick={() => handleLeftClick} />
-          <FaAngleRight size={12} className='text-textprimary' onClick={() => handleRightLick} />
+          <span>{filteredPregnancySchedule.length}</span>
+          <FaAngleLeft size={12} className='text-textdisable cursor-pointer' onClick={handleLeftClickPregnancy} />
+          <FaAngleRight size={12} className='text-textprimary cursor-pointer' onClick={handleRightLickPregnancy} />
         </div>
       </div>
     </div>

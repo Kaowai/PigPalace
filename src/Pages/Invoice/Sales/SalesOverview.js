@@ -36,11 +36,15 @@ function SalesOverview() {
   const dispatch = useDispatch();
   const { invoices } = useSelector(state => state.getListInvoicePigExport);
 
-  useEffect(() => { 
+  useEffect(() => {
     const farmID = JSON.parse(localStorage.getItem('farmID'));
     dispatch(getListInvoicePigExportAction(farmID));
   }, [dispatch]);
 
+  const handleRefresh = async () => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getListInvoicePigExportAction(farmID));
+  }
   const options = [
     {
       value: 'all',
@@ -118,7 +122,7 @@ function SalesOverview() {
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Total</span>
             <span className='text-xs text-textdisable font-normal'>{invoices?.length} invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices?.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center border-dashed border-r border-textdisable w-full gap-1'>
@@ -152,8 +156,8 @@ function SalesOverview() {
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Paid</span>
-            <span className='text-xs text-textdisable font-normal'>{invoices.filter((invoice) => invoice.trangThai === 'Paid').length} invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.filter((invoice) => invoice.trangThai === 'Paid').reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices?.filter((invoice) => invoice.trangThai === 'Paid').length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices?.filter((invoice) => invoice.trangThai === 'Paid')?.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center w-full gap-1 border-dashed border-r border-textdisable'>
@@ -187,8 +191,8 @@ function SalesOverview() {
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Progress</span>
-            <span className='text-xs text-textdisable font-normal'>{invoices.filter((invoice) => invoice.trangThai === 'Progress').length} invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={200.67} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices?.filter((invoice) => invoice.trangThai === 'Progress').length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices?.filter((invoice) => invoice.trangThai === 'Progress')?.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
         <div className='p-2 flex flex-row items-center justify-center w-full gap-1 border-dashed '>
@@ -222,8 +226,8 @@ function SalesOverview() {
           </div>
           <div className='flex flex-col gap-2 ml-2'>
             <span className='text-xs text-textprimary font-bold'>Pig Sales</span>
-            <span className='text-xs text-textdisable font-normal'>{invoices.length} invoinces</span>
-            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
+            <span className='text-xs text-textdisable font-normal'>{invoices?.length} invoinces</span>
+            <span className='text-xs text-textprimary font-normal'>$<AnimatedNumber value={invoices?.reduce((sum, invoice) => sum + invoice.tongTien, 0)} /></span>
           </div>
         </div>
       </div>
@@ -241,7 +245,7 @@ function SalesOverview() {
               <span className='text-xs items-center flex justify-center font-semibold w-6 h-6 rounded-md text-other20 bg-other30'>10</span>
             </div>
           </div>
-          
+
         </div>
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
           <div className='flex flex-row gap-2'>
@@ -266,11 +270,11 @@ function SalesOverview() {
         </div>
         <div className='items-center justify-center flex w-full'>
           {
-             (
+            (
               <div className=''>
-                <Table  data={invoices} />
+                <Table data={invoices} handleRefresh={handleRefresh} />
               </div>
-            ) 
+            )
           }
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>

@@ -21,7 +21,6 @@ export default function PigBarn() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [barn, setBarn] = useState('');
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [rowPerPage, setRowPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +42,6 @@ export default function PigBarn() {
   const refreshBarn = () => {
     const farmID = JSON.parse(localStorage.getItem('farmID'));
     dispatch(getAllBarnAction(farmID));
-    setIsEdit(false);
   }
 
   const handleDelete = async () => {

@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   farmCreate: Farm.farmCreateReducer,
   farmUpdate: Farm.farmUpdateReducer,
 
-  // pig reducers
+  // breed reducers
   breedCreate: Breed.breedCreateReducer,
   breedGetAllByFarmID: Breed.breedGetByFarmIdReducer,
   breedGetByID: Breed.breedGetByIdReducer,

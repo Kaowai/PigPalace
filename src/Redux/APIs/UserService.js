@@ -18,12 +18,12 @@ const deleteUserService = async (userID) => {
     return data;
 }
 
-const updateUserService = async (UserID, famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => {
+const updateUserService = async (UserID, farmID, name, password, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => {
     const url = `/api/User/UpdateUser?UserID=${UserID}`;
     const data = {
-        famrID,
+        farmID,
         name,
-        passWord,
+        password,
         dateOfBirth,
         address,
         email,
@@ -43,12 +43,12 @@ const signInService = async (UserID, PassWord) => {
     return data;
 }
 
-const signUpService = async (famrID, name, passWord, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => {
+const signUpService = async (farmID, name, password, dateOfBirth, address, email, phoneNumber, sex, coefficientsSalary, roleName) => {
     const url = `/api/User/SignUp`;
     const data = {
-        famrID,
+        farmID,
         name,
-        passWord,
+        password,
         dateOfBirth,
         address,
         email,
@@ -58,6 +58,7 @@ const signUpService = async (famrID, name, passWord, dateOfBirth, address, email
         roleName
     }
     const { response } = await Axios.post(url, data);
+    console.log(response);
 }
 
 const refreshTokenService = async (accessToken, refreshToken) => { 

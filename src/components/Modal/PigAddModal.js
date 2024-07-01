@@ -20,7 +20,7 @@ const PigValidation = yup.object().shape({
     donGiaNhap: yup.number().required("Cost is required").positive("Cost must be positive").integer("Cost must be an integer"),
 });
 
-export default function PigAddModal({ name, isvisible, onClose, setPigData, dataPig }) {
+export default function PigAddModal({ name, isvisible, onClose, setPigData, dataPig, }) {
     const dispatch = useDispatch();
     const [isOutFarm, setIsFromFarm] = useState(true);
     const { barns } = useSelector(state => state.barnGetAll);
@@ -32,9 +32,13 @@ export default function PigAddModal({ name, isvisible, onClose, setPigData, data
     const [isFullBreed, setIsFullBreed] = useState(false);
     const [maHeoCha, setMaHeoCha] = useState('');
     const [maHeoMe, setMaHeoMe] = useState('');
-    const [isFirstTime, setIsFirstTime] = useState(true);
     const [maHeo, setMaHeo] = useState('');
+    const [errorDateOfBirth, setErrorDateOfBirth] = useState(false);
+    const [errorDateToFarm, setErrorDateToFarm] = useState(false);
+
     useEffect(() => {
+        setDateOfBirth('');
+        setDateToFarm('');
         const farmID = JSON.parse(localStorage.getItem('farmID'));
         dispatch(getAllBarnAction(farmID));
         dispatch(getBreedByFarmIDAction(farmID));
@@ -66,8 +70,12 @@ export default function PigAddModal({ name, isvisible, onClose, setPigData, data
     } = useForm({ resolver: yupResolver(PigValidation) });
 
     const onSubmit = async (data) => {
-        if (dateOfBirth === '' || dateToFarm === '') { 
-            setIsFirstTime(false);
+        if (dateOfBirth === '') {
+            setErrorDateOfBirth(true);
+            return;
+        }
+        if (dateToFarm === '') {
+            setErrorDateToFarm(true);
             return;
         }
         const farmID = JSON.parse(localStorage.getItem('farmID'));
@@ -118,6 +126,7 @@ export default function PigAddModal({ name, isvisible, onClose, setPigData, data
                                         {options.map((option, index) => (
                                             <option key={index} value={option.title}>{option.title}</option>
                                         ))}
+
                                     </select>
                                 </div>
                                 {errors.gioiTinh && <InlineError text={errors.gioiTinh.message} />}
@@ -185,12 +194,12 @@ export default function PigAddModal({ name, isvisible, onClose, setPigData, data
                         </div>
                         <div className='flex flex-col gap-4'>
                             <div className='w-full'>
-                                <DateTimeInput label="Date of Birth: *" setDate={setDateOfBirth} />
-                                {!dateOfBirth && !isFirstTime && <InlineError text={"Date of birth is required"} />}
+                                <DateTimeInput label="Date of Birth: *" setDate={setDateOfBirth} setError={setErrorDateOfBirth} />
+                                {errorDateOfBirth && <InlineError text={"Date of birth is required"} />}
                             </div>
                             <div className='w-full'>
-                                <DateTimeInput label="Date to farm: *" setDate={setDateToFarm} />
-                                {!dateToFarm && !isFirstTime && <InlineError text={"Date of birth is required"} />}
+                                <DateTimeInput label="Date to farm: *" setDate={setDateToFarm} setError={setErrorDateToFarm} />
+                                {errorDateToFarm && <InlineError text={"Date of birth is required"} />}
                             </div>
                             <div className='w-full'>
                                 <div className="text-xs w-full relative">

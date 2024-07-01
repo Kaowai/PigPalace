@@ -13,26 +13,22 @@ const getPregnancyScheduleByUserService = async (FarmID, UserID) => {
 }
 
 const getPigByIDService = async (HeoID) => {
-    const url = `/api/Heo/GetByHeoID?HeoID=${HeoID}`;
+    const url = `api/LichPhoiGiong/GetByHeoID?HeoID=${HeoID}`;
     const { data } = await Axios.get(url);
     return data;
 }
 
-const createPregnancyScheduleService = async (maLich, maHeoNai, maHeoDuc, ngayPhoi, userID, farmID, ghiChu, loaiPhoiGiong, maGiongHeoDuc) => {
-    const url = '/api/LichPhoiGiong/CreateLPG';
-    const data = {
-        maLich,
-        maHeoNai,
-        maHeoDuc,
-        ngayPhoi,
-        userID,
-        farmID,
-        ghiChu,
-        loaiPhoiGiong,
-        maGiongHeoDuc
+const createPregnancyScheduleService = async (data) => {
+    try {
+        const url = '/api/LichPhoiGiong/CreateLPG';
+        const { dataresponse } = await Axios.post(url, data);;
+        return dataresponse;
+    } catch (error) {
+        return error;
     }
-    const { dataresponse } = await Axios.post(url, data);
-    return dataresponse;
+    
+
+
 }
 
 const confirmPregnancyService = async (MaLich, NgayDauThai, IsSuccess, FarmID) => {
@@ -44,8 +40,10 @@ const confirmPregnancyService = async (MaLich, NgayDauThai, IsSuccess, FarmID) =
 
 const confirmFarrowingSuccessService = async (MaLich, NgayDeChinhThuc, SoHeoConSong, SoHeoDuc, SoHeoCai, SoHeoChet, SoHeoTat) => {
     const url = `/api/LichPhoiGiong/XacNhanDeThanhCong?MaLich=${MaLich}&NgayDeChinhThuc=${NgayDeChinhThuc}&SoHeoConSong=${SoHeoConSong}&SoHeoDuc=${SoHeoDuc}&SoHeoCai=${SoHeoCai}&SoHeoChet=${SoHeoChet}&SoHeoTat=${SoHeoTat}`;
+    console.log(url);
 
     const { data } = await Axios.put(url);
+    console.log(data);
     return data;
 }
 

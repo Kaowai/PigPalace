@@ -1,8 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { IoAddCircleOutline } from 'react-icons/io5'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom'
+import { getListFeedSheduleAction } from '../../Redux/Actions/FeedScheduleActions';
 
 export default function TodayFeed() {
+  const dispatch = useDispatch();
+  const { loading, success, feedSchedules, error } = useSelector(state => state.getAllFeedSchedule);
+
+  const filterByCurrentDate = (data) => {
+    const currentDate = new Date();
+    const currentDateString = currentDate.toISOString().split('T')[0]; // Lấy phần ngày dưới dạng yyyy-mm-dd
+
+    return data.filter(item => {
+      const ngayChoAnDateString = new Date(item.ngayChoAn).toISOString().split('T')[0];
+      return ngayChoAnDateString === currentDateString;
+    });
+  };
+  useEffect(() => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getListFeedSheduleAction(farmID));
+
+    const feedToday = filterByCurrentDate(feedSchedules);
+    console.log(feedToday);
+  }, [dispatch])
+
+
   return (
     <div className='h-full w-full flex flex-col gap-6'>
       {/* Navigation */}
@@ -47,14 +70,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -76,14 +96,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -96,8 +113,8 @@ export default function TodayFeed() {
             <div className='flex flex-row gap-4 justify-center items-center'>
               {/* Date */}
               <div className='flex flex-col gap-2 justify-center items-center p-3 bg-slate-200 rounded-md '>
-                <span className='text-sm font-bold text-textprimary'>24</span>
-                <span className='text-xs font-semibold text-textprimary'>Apr</span>
+                <span className='text-sm font-bold text-textprimary'>23</span>
+                <span className='text-xs font-semibold text-textprimary'>Jun</span>
               </div>
               {/* Time and info */}
               <div className='flex flex-col gap-2 justify-start items-start'>
@@ -105,14 +122,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -122,7 +136,7 @@ export default function TodayFeed() {
         </div>
 
         <div className='flex flex-col gap-2 justify-start items-start px-4 py-2 shadow rounded-xl'>
-          <span className='text-base text-textprimary font-bold'>Barn 1</span>
+          <span className='text-base text-textprimary font-bold'>Barn pig for Cows</span>
 
           {/* Schedule */}
           <div className='flex flex-row justify-between items-center gap-2 bg-other30 w-full p-4'>
@@ -139,14 +153,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -168,14 +179,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -197,14 +205,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -231,14 +236,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -260,14 +262,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete
@@ -289,14 +288,11 @@ export default function TodayFeed() {
                 <span className='text-white text-xs p-2 bg-other20 rounded-lg w-96'>Pig Feed for Cow: 0.25 [KG]</span>
               </div>
             </div>
-            
+
             {/* Actions */}
             <div className='flex flex-row gap-2'>
               <button className='button-confirm w-24'>
                 Complete
-              </button>
-              <button className='button-close w-24'>
-                View task
               </button>
               <button className='button-delete w-24'>
                 Delete

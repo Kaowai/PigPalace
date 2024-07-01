@@ -19,7 +19,7 @@ const getAllVaccineScheduleService = async (FarmID) => {
 }
 
 const getAllVaccineScheduleByUserService = async (FarmID, UserID) => { 
-    const url = `/api/LichTiem/GetAllLichTiemByUser?FarmID=${FarmID}&UserID=${UserID}`;
+    const url = `/api/LichTiem/GetLichTiemByNhanVienThucHien?FarmID=${FarmID}&UserID=${UserID}`;
     const { data } = await Axios.get(url);
     return data;
 }
@@ -47,7 +47,11 @@ const confirmVaccineScheduleService = async (MaLichTiem) => {
     const { data } = await Axios.put(url);
     return data;
 }
-
+const deleteVaccineScheduleService = async (MaLichTiem) => { 
+    const url = `/api/LichTiem/DeleteLichTiem?MaLichTiem=${MaLichTiem}`;
+    const { data } = await Axios.delete(url);
+    return data;
+}
 export {
     getAllMedicineService,
     getAllVaccineService,
@@ -56,5 +60,6 @@ export {
     getVaccineScheduleByPigIDService,
     getPigInVaccineScheduleService,
     createVaccineScheduleService,
-    confirmVaccineScheduleService
+    confirmVaccineScheduleService,
+    deleteVaccineScheduleService
 }

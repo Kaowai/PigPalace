@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ClipLoader from "react-spinners/ClipLoader";
 import { LoginValidation } from '../Validation/UserValidation';
 import { useForm } from 'react-hook-form'
-import { facebookLoginAction, googleLoginAction, loginAction } from '../Redux/Actions/AccountActions';
+import { facebookLoginAction, googleLoginAction, loginAction, logoutAccountAction } from '../Redux/Actions/AccountActions';
 import { InlineError } from '../Notifications/Error';
 import toast from 'react-hot-toast';
 import { loginFacebookService } from '../Redux/APIs/AccountService';
@@ -48,10 +48,7 @@ function Login() {
     }, [isError, isSuccess, userInfo, navigate, dispatch])
 
     useEffect(() => { 
-        const token = localStorage.getItem('userInfo');
-        if (token) {
-            navigate('/SelectedFarm');
-        }
+        dispatch(logoutAccountAction());
     }, [])
 
     const handleLoginGoogle = useGoogleLogin({

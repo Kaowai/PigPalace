@@ -56,10 +56,10 @@ export default function ExpensesOverview() {
     }
   ]
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     const farmID = JSON.parse(localStorage.getItem('farmID'));
-    dispatch(getListInvoicePigImportAction(farmID));
-    dispatch(getInvoiceProductAllAction(farmID));
+    await dispatch(getListInvoicePigImportAction(farmID));
+    await dispatch(getInvoiceProductAllAction(farmID));
   }
   useEffect(() => {
     const farmID = JSON.parse(localStorage.getItem('farmID'));
@@ -198,7 +198,7 @@ export default function ExpensesOverview() {
                 fill='none'
                 stroke='#22C55E'
                 strokeWidth='1'
-                strokeDasharray={(parseFloat(invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid') + ' ' + (invoices.length + invoiceProducts.length)) / parseFloat(invoices.length + invoiceProducts.length) * 100.0) }
+                strokeDasharray={(parseFloat(invoices.filter((invoice) => invoice.trangThai === 'Paid').length + invoiceProducts.filter((invoice) => invoice.trangThai === 'Paid') + ' ' + (invoices.length + invoiceProducts.length)) / parseFloat(invoices.length + invoiceProducts.length) * 100.0)}
               />
             </svg>
           </div>
@@ -342,10 +342,10 @@ export default function ExpensesOverview() {
         </div>
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4 py-2'>
           <div className='flex flex-row gap-2'>
-            <Select2 options={options} setSelectedState={setSelectedState}/>
+            <Select2 options={options} setSelectedState={setSelectedState} />
           </div>
           <div className='flex flex-row gap-2'>
-            <DateTimeInput2 options={options} setDate={setDate}/>
+            <DateTimeInput2 options={options} setDate={setDate} />
           </div>
           <div className='flex flex-row gap-2 text-xs items-center font-normal h-10 w-64 border border-secondary30 rounded-lg pl-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-all duration-200 ease-in-out'>
             <IoSearchOutline size={20} className='text-textdisable' />
@@ -358,33 +358,34 @@ export default function ExpensesOverview() {
           </div>
         </div>
         <div className='flex justify-start px-4 gap-1 items-center'>
-          <span className='font-medium text-textprimary text-xs'>{ currentInvoicePigs.length} </span>
+          <span className='font-medium text-textprimary text-xs'>{filteredInvoicePigs.length} </span>
           <span className='font-normal text-textdisable text-xs'>results for found</span>
         </div>
         <div className='items-center justify-center flex w-full'>
           {
             selectedTab === 'Pig Expenses' ? (
               <div className=''>
-                <Table data={currentInvoicePigs} handleRefresh={handleRefresh}/>
+                <Table data={currentInvoicePigs} handleRefresh={handleRefresh} />
               </div>
             ) : (
               <div>
-                <TableFarmExpenses data={invoiceProducts} handleRefresh={handleRefresh}/>
+                <TableFarmExpenses data={invoiceProducts} handleRefresh={handleRefresh} />
               </div>
             )
           }
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
-        <span>Row per page: </span>
-            <select className='outline-none' value={rowPerPage} onChange={(e) => setRowPerPage(Number(e.target.value))}>
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-            </select>
-            <span>{indexOfFirstPig + 1}-{indexOfLastPig > filteredInvoicePigs.length ? filteredInvoicePigs.length : indexOfLastPig}</span>
-            <span>of</span>
-          <FaAngleLeft size={12} className='text-textdisable cursor-pointer' onClick={() => handleLeftClick} />
-          <FaAngleRight size={12} className='text-textprimary cursor-pointer' onClick={() => handleRightClick} />
+          <span>Row per page: </span>
+          <select className='outline-none' value={rowPerPage} onChange={(e) => setRowPerPage(Number(e.target.value))}>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+          <span>{indexOfFirstPig + 1}-{indexOfLastPig > filteredInvoicePigs.length ? filteredInvoicePigs.length : indexOfLastPig}</span>
+          <span>of</span>
+          <span>{filteredInvoicePigs.length}</span>
+          <FaAngleLeft size={12} className='text-textdisable cursor-pointer' onClick={handleLeftClick} />
+          <FaAngleRight size={12} className='text-textprimary cursor-pointer' onClick={handleRightClick} />
         </div>
       </div>
     </div>

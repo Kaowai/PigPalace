@@ -11,8 +11,9 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBarnAction } from '../Redux/Actions/BarnActions';
 import { getBreedByFarmIDAction } from '../Redux/Actions/BreedActions';
+import { formatDate } from '../Functionalities/GlobalFunctions';
 
-export default function TableAddPig({ isView, data, setData, barn, breed }) {
+export default function TableAddPig({ isView, data, setData, isExport }) {
     const Header = 'text-xs font-bold text-textprimary px-2 py-4 whitespace-nowrap text-start'
     const Row = 'text-xs  font-normal text-textprimary px-2 pr-8 whitespace-nowrap py-3 text-start'
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,7 +57,7 @@ export default function TableAddPig({ isView, data, setData, barn, breed }) {
                             <th scope='col' className={`${Header}`}>Breed</th>
                             <th scope='col' className={`${Header}`}>Date of Birth</th>
                             <th scope='col' className={`${Header}`}>Gender</th>
-                            <th scope='col' className={`${Header}`}>Cost ($)</th>
+                            <th scope='col' className={`${Header}`}>{isExport ? "Weight (Kg)" : "Cost ($)"}</th>
                             {!isView && <th scope='col' className={`${Header}`}></th>}
                         </tr>
                     </thead>
@@ -75,9 +76,13 @@ export default function TableAddPig({ isView, data, setData, barn, breed }) {
                                         breedInfo?.find(b => b.maGiongHeo === row.maGiongHeo)?.tenGiongHeo
                                     }
                                 </td>
-                                <td className={`${Row}`}>{row.ngaySinh}</td>
+                                <td className={`${Row}`}>{formatDate(row.ngaySinh)}</td>
                                 <td className={`${Row}`}>{row.gioiTinh}</td>
-                                <td className={`${Row}`}>{row.donGiaNhap}</td>
+                                {isExport ? (
+                                    <td className={`${Row}`}>{row.trongLuong}</td>
+                                ) : (
+                                    <td className={`${Row}`}>{row.donGiaNhap}</td>
+                                )}
                                 {
                                     !isView &&
                                     <td className={`flex flex-row items-start gap-2 py-3 px-2`}>

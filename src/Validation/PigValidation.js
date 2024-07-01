@@ -9,6 +9,17 @@ const InvoiceValidation = yup.object().shape({
     DiaChi: yup.string().required("Address is required").trim(),
     SoDienThoai: yup.string().required("Phone Number is required").trim(),
     Email: yup.string().email().required("Email is required").trim(),
+    
+});
+
+const InvoiceExportValidation = yup.object().shape({
+    Note: yup.string().required("Note is required").trim(),
+    TenCongTy: yup.string().required("Company Name is required").trim(),
+    TenDoiTac: yup.string().required("Partner Name is required").trim(),
+    DiaChi: yup.string().required("Address is required").trim(),
+    SoDienThoai: yup.string().required("Phone Number is required").trim(),
+    Email: yup.string().email().required("Email is required").trim(),
+    TienTrenDVT: yup.number().required("Amount is required").positive("Amount must be positive").integer("Amount must be an integer"),
 });
 
 const BarnValidation = yup.object().shape({
@@ -65,10 +76,33 @@ const ProductValidation = yup.object().shape({
 });
 
 const VaccineScheduleValidation = yup.object().shape({
-    maChuong: yup.string().required("Barn is required").trim(),
     maHangHoa: yup.string().required("Vaccine is required").trim(),
     lieuLuong: yup.number().required("Quantity is required").positive("Quantity must be positive").integer("Quantity must be an integer"),
 });
+
+const PregnancyScheduleValidation = yup.object().shape({
+    ghiChu: yup.string().required("Note is required").trim(),
+})
+
+const FeedScheduleValidation = yup.object().shape({
+    maHangHoa: yup.string().required("Food is required").trim(),
+    soLuongCho1ConHeo1Ngay: yup.number().required("Quantity is required").positive("Quantity must be positive").integer("Quantity must be an integer"),
+    firstFeedingTime: yup.string().required("First Feeding Time is required"),
+})
+
+const PregnancySuccessValidation = yup.object().shape({
+    SoHeoDuc: yup.number().required("Amount of Male is required").positive("Amount of Male must be positive").integer("Amount of Male must be an integer"),
+    SoHeoCai: yup.number().required("Amount of Female is required").positive("Amount of Female must be positive").integer("Amount of Female must be an integer"),
+    SoHeoChet: yup.number().required("Amount of Dead is required").positive("Amount of Dead must be positive").integer("Amount of Dead must be an integer"),
+    SoHeoTat: yup.number().required("Amount of disabilities is required").positive("Amount of disabilities must be positive").integer("Amount of disabilities must be an integer"),
+});
+
+const PregnancyFailureValidation = yup.object().shape({
+    NguyenNhan: yup.string().required("Reason is required").trim(),
+    CachGiaiQuyet: yup.string().required("Solution is required").trim(),
+    GhiChuTaiSaoThatBai: yup.string().required("Note is required").trim(),
+});
+
 export {
     InvoiceValidation,
     PigValidation,
@@ -78,5 +112,10 @@ export {
     ParameterValidation,
     ProductValidation,
     VaccineScheduleValidation,
+    PregnancyScheduleValidation,
+    FeedScheduleValidation,
+    PregnancySuccessValidation,
+    PregnancyFailureValidation,
+    InvoiceExportValidation
 }
 

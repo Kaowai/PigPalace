@@ -1,12 +1,12 @@
 import * as FeedScheduleConstants from '../Constants/FeedScheduleConstants';
-import * as feedScheduleAPI  from '../../Services/FoodScheduleService';
+import * as feedScheduleAPI  from '../APIs/FeedScheduleService';
 import { ErrorsAction, tokenProtection } from '../Protection';
 
 const getListFoodAction = (FarmID) => async (dispatch) => {
     try {
         dispatch({ type: FeedScheduleConstants.GET_LIST_FOOD_REQUEST });
 
-        const response = await feedScheduleAPI.getListFeedService(FarmID);
+        const response = await feedScheduleAPI.getListFoodService(FarmID);
 
         dispatch({ type: FeedScheduleConstants.GET_LIST_FOOD_SUCCESS, payload: response });
     } catch (error) {

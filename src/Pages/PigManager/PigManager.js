@@ -48,6 +48,11 @@ function PigManager() {
     setFilteredPigs(filterPigs);
   }, [date, pigs, selectedState, search]);
 
+  const refreshData = async () => { 
+    const FarmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getPigAllAction(FarmID));
+  }
+
   function areDatesEqual(date1, date2) {
     const d1 = new Date(date1);
     const d2 = new Date(date2);
@@ -121,7 +126,7 @@ function PigManager() {
 
           {/* Table */}
           <div className='items-center justify-center flex w-full'>
-            <TablePig data={currentPigs} />
+            <TablePig data={currentPigs} refreshData={refreshData}/>
           </div>
 
           <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>

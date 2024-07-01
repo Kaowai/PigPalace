@@ -53,7 +53,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Minimum Pig Weight Export'
-              value={parameters[0]?.trongLuongToiThieuXuatChuong}
+              placeholder={parameters[0]?.trongLuongToiThieuXuatChuong}
               type='number'
               register={register("trongLuongToiThieuXuatChuong")}
             />
@@ -62,7 +62,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Maximum Pig Weight Export'
-              value={parameters[0]?.trongLuongToiDaXuatChuong}
+              placeholder={parameters[0]?.trongLuongToiDaXuatChuong}
               type='number'
               register={register("trongLuongToiDaXuatChuong")}
             />
@@ -71,7 +71,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Minimum Age Export'
-              value={parameters[0]?.tuoiToiThieuXuatChuong}
+              placeholder={parameters[0]?.tuoiToiThieuXuatChuong}
               type='number'
               register={register("tuoiToiThieuXuatChuong")}
             />
@@ -80,7 +80,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Maximum Age Export'
-              value={parameters[0]?.tuoiToiDaXuatChuong}
+              placeholder={parameters[0]?.tuoiToiDaXuatChuong}
               type='number'
               register={register("tuoiToiDaXuatChuong")}
             />
@@ -89,7 +89,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Minimum Age Piglet'
-              value={parameters[0]?.tuoiNhapDanHeoCon}
+              placeholder={parameters[0]?.tuoiNhapDanHeoCon}
               type='number'
               register={register("tuoiNhapDanHeoCon")}
             />
@@ -98,7 +98,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Minimum Blood Mating'
-              value={parameters[0]?.giaoPhoiCanHuyetToiThieu}
+              placeholder={parameters[0]?.giaoPhoiCanHuyetToiThieu}
               type='number'
               register={register("giaoPhoiCanHuyetToiThieu")}
             />
@@ -107,7 +107,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Minimum Age Mating Boar'
-              value={parameters[0]?.tuoiPhoiGiongToiThieuHeoDuc}
+              placeholder={parameters[0]?.tuoiPhoiGiongToiThieuHeoDuc}
               type='number'
               register={register("tuoiPhoiGiongToiThieuHeoDuc")}
             />
@@ -116,7 +116,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Minimum Age Mating Sow'
-              value={parameters[0]?.tuoiPhoiGiongToiThieuHeoCai}
+              placeholder={parameters[0]?.tuoiPhoiGiongToiThieuHeoCai}
               type='number'
               register={register("tuoiPhoiGiongToiThieuHeoCai")}
             />
@@ -125,7 +125,7 @@ export default function General() {
           <div className='w-full'>
             <Input2
               label='Minimum Days Mating Again'
-              value={parameters[0]?.soNgayToiThieuPhoiGiongLai}
+              placeholder={parameters[0]?.soNgayToiThieuPhoiGiongLai}
               type='number'
               register={register("soNgayToiThieuPhoiGiongLai")}
             />

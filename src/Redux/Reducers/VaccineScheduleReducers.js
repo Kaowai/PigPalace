@@ -75,16 +75,16 @@ export const getVaccineScheduleByPigReducer = (state = { vaccineSchedules: [] },
     }
 }
 
-export const getPigInVaccineScheduleReducer = (state = { pigs: [] }, action) => { 
+export const getPigInVaccineScheduleReducer = (state = { schedules: [] }, action) => { 
     switch (action.type) {
         case VaccineScheduleConstants.GET_PIG_IN_VACCINE_SCHEDULE_REQUEST:
-            return { loading: true, pigs: [] }
+            return { loading: true, schedules: [] }
         case VaccineScheduleConstants.GET_PIG_IN_VACCINE_SCHEDULE_SUCCESS:
-            return { loading: false, pigs: action.payload, success: true}
+            return { loading: false, schedules: action.payload, success: true}
         case VaccineScheduleConstants.GET_PIG_IN_VACCINE_SCHEDULE_FAIL:
             return { loading: false, error: action.payload }
         case VaccineScheduleConstants.GET_PIG_IN_VACCINE_SCHEDULE_RESET:
-            return { pigs: [] }
+            return { schedules: [] }
         default:
             return state
     }

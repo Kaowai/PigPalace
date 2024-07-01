@@ -1,87 +1,90 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoAddCircleOutline, IoSearchOutline } from 'react-icons/io5'
 import { Link, NavLink } from 'react-router-dom'
 import TableFeedPlan from '../../components/TableFeedPlan'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
 import { DateTimeInput2, Select2 } from '../../components/Input'
+import { useDispatch, useSelector } from 'react-redux'
+import { getListFeedSheduleAction } from '../../Redux/Actions/FeedScheduleActions'
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function FeedPlan() {
-
   const [rowPerPage, setRowPerPage] = useState(5);
   const [search, setSearch] = useState('');
+  const [selectedState, setSelectedState] = useState('all');
+  const [modalAddOpen, setModalAddOpen] = useState(false);
+  const [date, setDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái để lưu thông tin trang hiện tại
+  const [filteredVaccineSchedule, setfilteredVaccineSchedule] = useState([]);
+  const dispatch = useDispatch();
+  const { loading, success, feedSchedules, error } = useSelector(state => state.getAllFeedSchedule);
   const options = [
     {
       value: 'all',
       title: 'All'
     },
     {
-      value: 'InFarm',
-      title: 'In Farm'
+      value: 'Completed',
+      title: 'Completed'
     },
     {
-      value: 'Exported',
-      title: 'Exported'
+      value: 'Not Completed',
+      title: 'Not Completed'
     }
   ]
+  useEffect(() => {
+    let filteredSchedule = feedSchedules;
 
+    if (date) {
+      filteredSchedule = feedSchedules.filter((pig) => areDatesEqual(pig.ngayTiem, date));
+    }
+
+    if (selectedState === 'Completed') {
+      filteredSchedule = feedSchedules.filter((pig) => pig.tinhTrang === 'Completed');
+    } else if (selectedState === 'Not Completed') {
+      filteredSchedule = feedSchedules.filter((pig) => pig.tinhTrang === 'Not Completed');
+    }
+
+    if (search.trim().length > 0) {
+      filteredSchedule = feedSchedules.filter((pig) => pig.maLichTiem.toLowerCase().includes(search.toLowerCase()));
+    }
+
+    setfilteredVaccineSchedule(filteredSchedule);
+  }, [date, feedSchedules, selectedState, search]);
+
+
+  function areDatesEqual(date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate();
+  }
+
+
+
+  const indexOfLastPig = currentPage * rowPerPage;
+  const indexOfFirstPig = indexOfLastPig - rowPerPage;
+  const currentSchedule = filteredVaccineSchedule.slice(indexOfFirstPig, indexOfLastPig);
+  useEffect(() => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getListFeedSheduleAction(farmID));
+  }, [dispatch])
   const handleLeftClick = () => {
-
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   }
   const handleRightLick = () => {
+    if (currentPage < Math.ceil(filteredVaccineSchedule.length / rowPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
   }
 
-  const feedPlan = [
-    {
-      ID: 'FP001',
-      NgayChoAn: '2021-01-01',
-      MaChuong: 'Barn01',
-      MaHangHoa: 'Feed01',
-      UserID: 'U001',
-      TinhTrang: '1',
-      LuongThucAn1Con: '2kg',
-      FarmID: 'F01'
-    },
-    {
-      ID: 'FP001',
-      NgayChoAn: '2021-01-01',
-      MaChuong: 'Barn01',
-      MaHangHoa: 'Feed01',
-      UserID: 'U001',
-      TinhTrang: '0',
-      LuongThucAn1Con: '2kg',
-      FarmID: 'F01'
-    },
-    {
-      ID: 'FP001',
-      NgayChoAn: '2021-01-01',
-      MaChuong: 'Barn01',
-      MaHangHoa: 'Feed01',
-      UserID: 'U001',
-      TinhTrang: '0',
-      LuongThucAn1Con: '2kg',
-      FarmID: 'F01'
-    },
-    {
-      ID: 'FP001',
-      NgayChoAn: '2021-01-01',
-      MaChuong: 'Barn01',
-      MaHangHoa: 'Feed01',
-      UserID: 'U001',
-      TinhTrang: '1',
-      LuongThucAn1Con: '2kg',
-      FarmID: 'F01'
-    },
-    {
-      ID: 'FP001',
-      NgayChoAn: '2021-01-01',
-      MaChuong: 'Barn01',
-      MaHangHoa: 'Feed01',
-      UserID: 'U001',
-      TinhTrang: '0',
-      LuongThucAn1Con: '2kg',
-      FarmID: 'F01'
-    },
-  ]
+  const refreshData = async () => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    await dispatch(getListFeedSheduleAction(farmID));
+  }
 
   return (
     <div className='h-full w-full flex flex-col gap-6'>
@@ -118,10 +121,10 @@ export default function FeedPlan() {
 
           <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
             <div className='flex flex-row gap-2'>
-              <Select2 options={options} />
+              <Select2 options={options} setSelectedState={setSelectedState} />
             </div>
             <div className='flex flex-row gap-2'>
-              <DateTimeInput2 options={options} placeholder="Feeding Date" />
+              <DateTimeInput2 options={options} placeholder={"Vaccine Date"} setDate={setDate} />
             </div>
             <div className='flex flex-row gap-2 text-xs items-center font-normal h-10 w-64 border border-secondary30 rounded-lg pl-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-all duration-200 ease-in-out'>
               <IoSearchOutline size={20} className='text-textdisable' />
@@ -134,12 +137,13 @@ export default function FeedPlan() {
             </div>
           </div>
           <div className='flex justify-start px-4 gap-1 items-start'>
-            <span className='font-medium text-textprimary text-xs'>8 </span>
+            <span className='font-medium text-textprimary text-xs'>{feedSchedules?.length} </span>
             <span className='font-normal text-textdisable text-xs'>results for found</span>
           </div>
           {/* Table */}
           <div className='items-center justify-center flex w-full'>
-            <TableFeedPlan data={feedPlan} />
+            {loading ? <ClipLoader color='#3B82F6' loading={loading} size={25} className='m-auto items-center justify-center' /> : <TableFeedPlan data={currentSchedule} refreshData={refreshData} />}
+
           </div>
           <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
             <span>Row per page: </span>
@@ -150,8 +154,8 @@ export default function FeedPlan() {
             <span>6-10</span>
             <span>of</span>
             <span>11</span>
-            <FaAngleLeft size={12} className='text-textdisable' onClick={() => handleLeftClick} />
-            <FaAngleRight size={12} className='text-textprimary' onClick={() => handleRightLick} />
+            <FaAngleLeft size={12} className='text-textdisable' onClick={handleLeftClick} />
+            <FaAngleRight size={12} className='text-textprimary' onClick={handleRightLick} />
           </div>
         </div>
       </div >

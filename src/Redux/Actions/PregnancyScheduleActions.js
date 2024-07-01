@@ -38,10 +38,10 @@ const getPigByIDAction = (HeoID) => async (dispatch) => {
     }
 }
 
-const createPregnancyScheduleAction = (maLich, maHeoNai, maHeoDuc, ngayPhoi, userID, farmID, ghiChu, loaiPhoiGiong, maGiongHeoDuc) => async (dispatch) =>{
+const createPregnancyScheduleAction = (data) => async (dispatch) =>{
     try {
         dispatch({ type: PregnancyScheduleConstants.CREATE_PREGNANCY_SCHEDULE_REQUEST });
-        const response = await pregnancyScheduleAPI.createPregnancyScheduleService(maLich, maHeoNai, maHeoDuc, ngayPhoi, userID, farmID, ghiChu, loaiPhoiGiong, maGiongHeoDuc);
+        const response = await pregnancyScheduleAPI.createPregnancyScheduleService(data);
         dispatch({ type: PregnancyScheduleConstants.CREATE_PREGNANCY_SCHEDULE_SUCCESS, payload: response });
     } catch (err) {
         ErrorsAction(err, dispatch, PregnancyScheduleConstants.CREATE_PREGNANCY_SCHEDULE_FAIL);
@@ -86,4 +86,14 @@ const deletePregnancyScheduleAction = (MaLich) => async (dispatch) => {
     } catch (err) {
         ErrorsAction(err, dispatch, PregnancyScheduleConstants.DELETE_PREGNANCY_SCHEDULE_FAIL);
     }
+}
+export {
+    getAllPregnancyScheduleAction,
+    getPregnancyScheduleByUserAction,
+    getPigByIDAction,
+    createPregnancyScheduleAction,
+    confirmPregnancyAction,
+    confirmFarrowingSuccessAction,
+    confirmFarrowingFailureAction,
+    deletePregnancyScheduleAction
 }

@@ -13,10 +13,12 @@ import { getALlVaccineScheduleAction } from '../../../Redux/Actions/VaccineSched
 
 function VaccineMonitorOverview() {
   const [rowPerPage, setRowPerPage] = useState(5);
-  const [selectedTab, setSelectedTab] = React.useState('Pig Expenses');
   const [search, setSearch] = useState('');
-
+  const [selectedState, setSelectedState] = useState('all');
   const [modalAddOpen, setModalAddOpen] = useState(false);
+  const [date, setDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái để lưu thông tin trang hiện tại
+  const [filteredVaccineSchedule, setfilteredVaccineSchedule] = useState([]);
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
 
@@ -31,26 +33,70 @@ function VaccineMonitorOverview() {
       title: 'All'
     },
     {
-      value: 'Food',
-      title: 'Food'
+      value: 'Waiting',
+      title: 'Waiting'
     },
     {
-      value: 'Vaccine',
-      title: 'Vaccine'
+      value: 'Completed',
+      title: 'Completed'
     }
   ]
+  useEffect(() => {
+    let filteredSchedule = vaccineSchedules;
+
+    if (date) {
+      filteredSchedule = vaccineSchedules.filter((pig) => areDatesEqual(pig.ngayTiem, date));
+    }
+
+    if (selectedState === 'Waiting') {
+      filteredSchedule = vaccineSchedules.filter((pig) => pig.tinhTrang === 'Not completed');
+    } else if (selectedState === 'Completed') {
+      filteredSchedule = vaccineSchedules.filter((pig) => pig.tinhTrang === 'Completed');
+    }
+
+    if (search.trim().length > 0) {
+      filteredSchedule = vaccineSchedules.filter((pig) => pig.maLichTiem.toLowerCase().includes(search.toLowerCase()));
+    }
+
+    setfilteredVaccineSchedule(filteredSchedule);
+  }, [date, vaccineSchedules, selectedState, search]);
+
+
+  function areDatesEqual(date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate();
+  }
 
   const handleLeftClick = () => {
-
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   }
   const handleRightLick = () => {
-
+    if (currentPage < Math.ceil(filteredVaccineSchedule.length / rowPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
   }
 
+  const refreshTable = () => { 
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getALlVaccineScheduleAction(farmID));
+  }
+  const indexOfLastPig = currentPage * rowPerPage;
+  const indexOfFirstPig = indexOfLastPig - rowPerPage;
+  const currentSchedule = filteredVaccineSchedule.slice(indexOfFirstPig, indexOfLastPig);
   useEffect(() => {
     const farmID = JSON.parse(localStorage.getItem('farmID'));
     dispatch(getALlVaccineScheduleAction(farmID));
   }, [])
+
+  useEffect(() => {
+    const farmID = JSON.parse(localStorage.getItem('farmID'));
+    dispatch(getALlVaccineScheduleAction(farmID));
+  }, [dispatch, modalAddOpen])
 
   return (
     <div className='h-full w-full flex flex-col gap-4'>
@@ -76,10 +122,10 @@ function VaccineMonitorOverview() {
 
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
           <div className='flex flex-row gap-2'>
-            <Select2 options={options} />
+            <Select2 options={options} setSelectedState={setSelectedState}/>
           </div>
           <div className='flex flex-row gap-2'>
-            <DateTimeInput2 options={options} placeholder={"Vaccine Date"} />
+            <DateTimeInput2 options={options} placeholder={"Vaccine Date"} setDate={setDate}/>
           </div>
           <div className='flex flex-row gap-2 text-xs items-center font-normal h-10 w-64 border border-secondary30 rounded-lg pl-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-all duration-200 ease-in-out'>
             <IoSearchOutline size={20} className='text-textdisable' />
@@ -92,25 +138,26 @@ function VaccineMonitorOverview() {
           </div>
         </div>
         <div className='flex justify-start px-4 gap-1 items-center'>
-          <span className='font-medium text-textprimary text-xs'>8 </span>
+          <span className='font-medium text-textprimary text-xs'>{filteredVaccineSchedule.length} </span>
           <span className='font-normal text-textdisable text-xs'>results for found</span>
         </div>
 
         {/* Table */}
         <div className='items-center justify-center flex w-full'>
-          <TableVaccine data={vaccineSchedules} />
+          <TableVaccine data={currentSchedule} refreshTable={refreshTable} isView={false}/>
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
           <span>Row per page: </span>
-          <select className='outline-none' onChange={(e) => setRowPerPage(e.target.value)}>
+          <select className='outline-none' value={rowPerPage} onChange={(e) => setRowPerPage(Number(e.target.value))}>
             <option value={5}>5</option>
             <option value={10}>10</option>
+            <option value={20}>20</option>
           </select>
-          <span>6-10</span>
+          <span>{indexOfFirstPig + 1}-{indexOfLastPig > filteredVaccineSchedule.length ? filteredVaccineSchedule.length : indexOfLastPig}</span>
           <span>of</span>
-          <span>11</span>
-          <FaAngleLeft size={12} className='text-textdisable' onClick={() => handleLeftClick} />
-          <FaAngleRight size={12} className='text-textprimary' onClick={() => handleRightLick} />
+          <span>{filteredVaccineSchedule.length}</span>
+          <FaAngleLeft size={12} className='text-textdisable cursor-pointer' onClick={handleLeftClick} />
+          <FaAngleRight size={12} className='text-textprimary cursor-pointer' onClick={handleRightLick} />
         </div>
       </div>
 

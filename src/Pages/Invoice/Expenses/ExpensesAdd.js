@@ -3,7 +3,6 @@ import { FaAngleRight } from 'react-icons/fa'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { DateTimeInput, Input2, InputMoney, MessageInput } from '../../../components/Input'
 import Table2 from '../../../components/TableAddPig'
-import ModalDelete from '../../../components/Modal/ModalDelete'
 import PigAddModal from '../../../components/Modal/PigAddModal'
 import { FaAngleLeft } from 'react-icons/fa6'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,9 +18,11 @@ function ExpensesAdd() {
   const { pathname } = useLocation();
   const [isAdd, setIsAdd] = useState(false);
   const [rowPerPage, setRowPerPage] = useState(5);
-  const [invoiceDate, setInvoiceDate] = useState('a');
-  const [purchaseDate, setPurchaseDate] = useState('a');
+  const [invoiceDate, setInvoiceDate] = useState('');
+  const [purchaseDate, setPurchaseDate] = useState('');
   const navigate = useNavigate();
+  const [errorInvoiceDate, setErrorInvoiceDate] = useState(false);
+  const [errorPurchaseDate, setErrorPurchaseDate] = useState(false);
   const dispatch = useDispatch();
   const [dataPig, setDataPig] = useState([]);
   const { loading, error, invoice, success } = useSelector(state => state.createInvoicePigImport);
@@ -33,6 +34,14 @@ function ExpensesAdd() {
   } = useForm({ resolver: yupResolver(InvoiceValidation) });
 
   const onSubmit = async (data) => {
+    if (invoiceDate === '') { 
+      setErrorInvoiceDate(true);
+      return;
+    }
+    if (purchaseDate === '') { 
+      setErrorPurchaseDate(true);
+      return;
+    }
     if (dataPig?.length === 0) { 
       toast.error('Please add pig to the list');
       return;
@@ -111,8 +120,9 @@ function ExpensesAdd() {
               bg={true}
               name="year"
               setDate={setInvoiceDate}
+              setError={setErrorInvoiceDate}
             />
-            {invoiceDate === '' && <InlineError text={"Invoice Date is required"}></InlineError>}
+            {errorInvoiceDate && <InlineError text={"Invoice Date is required"}></InlineError>}
           </div>
           <div className='w-full'>
             <Input2
@@ -133,8 +143,9 @@ function ExpensesAdd() {
               bg={true}
               name="year"
               setDate={setPurchaseDate}
+              setError={setErrorPurchaseDate}
             />
-            {purchaseDate === '' && <InlineError text={"Invoice Date is required"}></InlineError>}
+            {errorPurchaseDate === '' && <InlineError text={"Invoice Date is required"}></InlineError>}
           </div>
           <div className='w-full'>
             <Input2
@@ -192,7 +203,7 @@ function ExpensesAdd() {
       <div className='md:px-28'>
         <div className='shadow py-2 rounded-xl flex flex-col gap-3'>
           <div className='px-2 border-b border-textdisable'>
-            <span className='text-sm font-bold text-textprimary'>List Pig Exported</span>
+            <span className='text-sm font-bold text-textprimary'>List Pig Imported</span>
           </div>
           <Table2 data={dataPig} setData={setDataPig} />
           <div className='flex flex-row justify-between items-center px-4'>

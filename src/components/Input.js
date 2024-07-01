@@ -4,6 +4,7 @@ import { CheckIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { PiFarmLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
+import { calculateAge } from "../Functionalities/GlobalFunctions";
 
 export const Input = (
     {
@@ -133,6 +134,7 @@ export const Input2 = (
     {
         label,
         placeholder,
+        defaultValue,
         type,
         onChange,
         isDisable,
@@ -141,7 +143,7 @@ export const Input2 = (
     }
 ) => {
 
-    const handleChange = (value) => { 
+    const handleChange = (value) => {
         console.log(value)
     }
     return (
@@ -149,6 +151,7 @@ export const Input2 = (
             <label className={`font-semibold   text-xs ${isDisable ? "text-textdisable" : "text-secondary60"}`}>{label}</label>
             <input
                 type={type}
+                defaultValue={defaultValue}
                 placeholder={placeholder}
                 onChange={(e) => handleChange(e.target.value)}
                 value={value}
@@ -160,14 +163,14 @@ export const Input2 = (
     )
 }
 
-export const MessageInput = ({ label, placeholder, register }) => {
+export const MessageInput = ({ label, placeholder, register, isShort }) => {
     return (
         <div className="text-xs w-full relative">
             <label className="text-secondary60 font-semibold text-xs ">{label}</label>
             <textarea
                 placeholder={placeholder}
                 {...register}
-                className="w-full text-xs border mt-2 bg-white border-secondary30 rounded text-textprimary py-2 px-2 outline-none focus:border-blue-500 hover:border-blue-500 resize-none max-md:h-full h-48 focus:ring-blue-500" />
+                className={`w-full text-xs border mt-2 bg-white border-secondary30 rounded text-textprimary py-2 px-2 outline-none focus:border-blue-500 hover:border-blue-500 resize-none  ${isShort  ? '' : "h-48 max-md:h-full"}   focus:ring-blue-500`} />
         </div>
     )
 }
@@ -216,7 +219,7 @@ export const InputMoney = (
 
 export const UserRoles = ({ name, onHandle }) => {
     return (
-        <div className="flex flex-row gap-2 justify-center items-center w-full py-2 hover:border hover:border-textdisable rounded-md cursor-pointer" onClick={onHandle}>
+        <div className="flex flex-row gap-2 justify-start items-center w-full py-2 hover:border hover:border-textdisable rounded-md cursor-pointer px-24" onClick={onHandle}>
             <img src="https://www.svgrepo.com/show/382101/male-avatar-boy-face-man-user.svg" alt="user" className="w-12 h-12 rounded-full" />
             <span className="text-xs font-semibold text-textprimary">{name}</span>
         </div>
@@ -306,7 +309,7 @@ export const MultiSelect = (
                 }}
                 className="mt-2"
                 placeholder="Please select"
-                defaultValue={options[0].value}
+                defaultValue={options[0]?.value}
                 onChange={handleChange}
                 options={options}
             />
@@ -317,17 +320,24 @@ export const DateTimeInput = (
     {
         label,
         placeholder,
-        setDate
+        setDate,
+        setError,
+        isDisable
     }
 ) => {
     function onSelectDate(date, dateString) {
         console.log(dateString);
+        if (dateString === "") {
+            setError(true);
+        } else {
+            setError(false);
+        }
         setDate(dateString);
     }
     return (
         <div className="text-xs w-full relative">
             <label className="text-secondary60 font-semibold text-xs">{label}</label>
-            <DatePicker placeholder={placeholder} className="w-full mt-2 text-xs font-semibold  h-8 date-time-input" onChange={onSelectDate} />
+            <DatePicker placeholder={placeholder} className="w-full mt-2 text-xs font-semibold  h-8 date-time-input" onChange={onSelectDate} disabled={isDisable} />
         </div>
     )
 }
@@ -341,6 +351,7 @@ export const DateTimeInput2 = (
 
     function onSelectDate(date, dateString) {
         console.log(dateString);
+
         setDate(dateString);
     }
     return (
@@ -403,3 +414,72 @@ const Dropdown = ({ data, farmSelected, setFarmSelected }) => {
 };
 
 export default Dropdown;
+
+
+export const CustomSelectWithSearch = ({ data, selected }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredSows, setFilteredSows] = useState(data);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
+
+    useEffect(() => {
+        const filtered = data?.filter((pig) =>
+            pig.maHeo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (pig.isThuanChung ? 'Full Breed' : 'Normal').toLowerCase().includes(searchTerm.toLowerCase()) ||
+            calculateAge(pig.ngaySinh).toString().includes(searchTerm)
+        );
+        setFilteredSows(filtered);
+    }, [searchTerm, data, calculateAge]);
+
+    return (
+        <div className="text-xs w-full relative" ref={dropdownRef}>
+            <label className="text-secondary60 font-semibold text-xs">Select sow/Gilt: *</label>
+            <div className="relative">
+                <div
+                    className="w-full text-xs border mt-2 bg-white h-8 rounded text-textprimary py-1 px-2 outline-none focus:border-blue-500 focus:ring-blue-500 hover:border-blue-500 cursor-pointer"
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    Select feed...
+                </div>
+                {isOpen && (
+                    <div className="absolute z-10 w-full bg-white border mt-1 rounded shadow-lg">
+                        <input
+                            type="text"
+                            placeholder="Search sow..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full text-xs border-b py-1 px-2 outline-none focus:border-blue-500 focus:ring-blue-500"
+                        />
+                        <div className="max-h-40 overflow-y-auto">
+                            {filteredSows?.map((option, index) => (
+                                <div
+                                    key={index}
+                                    className="py-1 px-2 hover:bg-blue-500 hover:text-white cursor-pointer"
+                                    onClick={() => {
+                                        selected(option.maHeo);
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    {option.maHeo} - {option.isThuanChung ? 'Full Breed' : 'Normal'} - {calculateAge(option.ngaySinh)} Months
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};

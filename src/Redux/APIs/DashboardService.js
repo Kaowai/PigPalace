@@ -13,7 +13,7 @@ const getCoCauHeoService = async (farmID) => {
 }
 
 const getToTalIOByMonthService = async (farmID, year) => {
-    const url = `/api/Dashboard/GetToTalIOByMonth?FarmID=${farmID}&Year=${year}`;
+    const url = `/api/Dashboard/GetTotalImportAndExportPigByMonth?FarmID=${farmID}&Year=${year}`;
     const { data } = await Axios.get(url);
     return data;
 }
@@ -25,7 +25,7 @@ const getSalesOverviewService = async (farmID, year) => {
 }
 
 const getInvoiceService = async (farmID, year) => {
-    const url = `/api/Dashboard/GetInvoice?FarmID=${farmID}&Year=${year}`;
+    const url = `/api/Dashboard/GetInvoices?FarmID=${farmID}&Year=${year}`;
     const { data } = await Axios.get(url);
     return data;
 }

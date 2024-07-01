@@ -29,6 +29,7 @@ import Breed from '../Pages/Settings/Breed'
 import PigBarn from '../Pages/Settings/PigBarn'
 import SelectedRoles from '../Pages/SelectedRoles'
 import InputPassword from '../Pages/InputPassword'
+import UserInfo from '../Pages/User/UserInfo'
 
 const publicRoutes = [
     { path: '/Login', component: Login, layout: Layout },
@@ -80,6 +81,7 @@ const publicRoutes = [
     
     // USER
     { path: '/User', component: User },
+    {path: '/User/:userId', component: UserInfo},
 
     // Farm Setup
     { path: '/Settings/General', component: General },

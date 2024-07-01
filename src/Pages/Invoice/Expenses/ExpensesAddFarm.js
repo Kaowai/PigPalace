@@ -15,12 +15,14 @@ import toast from 'react-hot-toast'
 import { createInvoiceProductService } from '../../../Redux/APIs/InvoiceProductService'
 
 export default function ExpensesAddFarm() {
-    const [invoiceDate, setInvoiceDate] = useState('a')
-    const [saleDate, setSaleDate] = useState('a')
+    const [invoiceDate, setInvoiceDate] = useState('')
+    const [saleDate, setSaleDate] = useState('')
     const [quantity, setQuantity] = useState(0)
     const [priceUnit, setPriceUnit] = useState(0)
     const navigate = useNavigate()
     const dispatch = useDispatch();
+    const [isErrorInvoiceDate, setIsErrorInvoiceDate] = useState(false);
+    const [isErrorSaleDate, setIsErrorSaleDate] = useState(false);
 
     const { loading, error , invoiceProduct, success} = useSelector(state => state.createInvoiceProduct);
 
@@ -41,12 +43,14 @@ export default function ExpensesAddFarm() {
     } = useForm({ resolver: yupResolver(FarmValidation) });
 
     const onSubmit = async (data) => {
-        if (invoiceDate === 'a' || saleDate === 'a') {
-            setInvoiceDate('');
-            setSaleDate('');
-            console.log("Invoice Date is required");
+        if (invoiceDate === '' || saleDate === '') {
+            setIsErrorInvoiceDate(true);
+            setIsErrorSaleDate(true);
             return;
         }
+        setIsErrorInvoiceDate(false);
+        setIsErrorSaleDate(false);
+
         const farmID = JSON.parse(localStorage.getItem('farmID'));
         const userID = JSON.parse(localStorage.getItem('userID2'));
 
@@ -69,7 +73,7 @@ export default function ExpensesAddFarm() {
         } else {
             data.loaiHangHoa = 'Thuốc'
         }
-
+        console.log(data);
         try {
             const response = await createInvoiceProductService(data.tenHangHoa, data.loaiHangHoa, data.soLuong, data.giaTien, data.ngayLap, data.ngayMua, data.ghiChu, data.tienTrenDVT, data.donViTinh, data.tongTien, data.tenCongTy, data.tenKhachHang, data.diaChi, data.sdt, data.email, userID, farmID);
             console.log(response);
@@ -120,9 +124,10 @@ export default function ExpensesAddFarm() {
                             type="text"
                             bg={true}
                             name="year"
+                            setError={setIsErrorInvoiceDate}
                             setDate={setInvoiceDate}
                         />
-                        {invoiceDate === '' && <InlineError text={"Invoice Date is required"}></InlineError>}
+                        {isErrorInvoiceDate  && <InlineError text={"Invoice Date is required"}></InlineError>}
                     </div>
                     <div className='w-full'>
                         <DateTimeInput
@@ -131,9 +136,10 @@ export default function ExpensesAddFarm() {
                             type="text"
                             bg={true}
                             name="year"
+                            setError={setIsErrorSaleDate}
                             setDate={setSaleDate}
                         />
-                        {saleDate === '' && <InlineError text={"Purchase Date is required"}></InlineError>}
+                        {isErrorSaleDate && <InlineError text={"Purchase Date is required"}></InlineError>}
                     </div>
                     <div className='flex flex-row gap-2'>
                         <div className='w-full'>

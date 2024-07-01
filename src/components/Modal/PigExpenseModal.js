@@ -5,13 +5,15 @@ import Table2 from '../TableAddPig';
 import { useDispatch, useSelector } from 'react-redux';
 import { getListPigInInvoiceImportAction } from '../../Redux/Actions/InvoicePigActions';
 import { getPigByIDAction } from '../../Redux/Actions/PigActions';
+import { FaRegWindowClose } from "react-icons/fa";
+import { formatDate } from '../../Functionalities/GlobalFunctions';
 
-export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, data, isFarm, dataPig, handleConfirm }) {
+export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, data, isFarm, dataPig, handleConfirm, isExport }) {
     const handleSubmit = () => {
         handleConfirm();
         onClose();
     };
-    
+
     return (
         <SubModal name={name} isvisible={isvisible} onClose={onClose} isFarm={isFarm}>
             <div className='w-full px-3 py-3 flex flex-col gap-5'>
@@ -26,8 +28,7 @@ export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, 
                 <div className='sm:grid grid-cols-2 gap-20'>
                     <div className='flex flex-row gap-2 justify-between items-center '>
                         <div className='flex flex-col gap-3 text-xs text-textprimary font-bold'>
-                            <span>ID Invoice:</span>
-                            {data?.name && <span>Name:</span>}
+                            <span>ID Schedule:</span>
                             <span>Quantity:</span>
                             <span>Cost:</span>
                             <span>Invoice Date:</span>
@@ -37,8 +38,8 @@ export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, 
                             <span>{data.maHoaDon}</span>
                             <span>{data.soLuong}</span>
                             <span>{data.tongTien}</span>
-                            <span>{data.ngayLap}</span>
-                            <span>{data.ngayMua}</span>
+                            <span>{formatDate(data.ngayLap)}</span>
+                            <span>{formatDate(data.ngayMua)}</span>
                         </div>
                     </div>
                     <div className='flex flex-row gap-2 justify-between items-top'>
@@ -58,7 +59,7 @@ export default function ExpenseModalView({ name, isvisible, isConfirm, onClose, 
                         </div>
                     </div>
                 </div>
-                {!isFarm && <Table2 isView={true} data={dataPig} />}
+                {!isFarm && <Table2 isView={true} data={dataPig} isExport={isExport}/>}
 
                 {isConfirm ? (
                     <div className='flex flex-row gap-2 justify-start item-center '>

@@ -7,22 +7,28 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import TableInventory from '../../components/TableInventory'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductAction } from '../../Redux/Actions/ProductActions'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 export default function Inventory() {
   const dispatch = useDispatch();
-  const { products } = useSelector(state => state.productGetAll);
+  const { loading, products } = useSelector(state => state.productGetAll);
 
   const [rowPerPage, setRowPerPage] = useState(5);
-  const [selectedTab, setSelectedTab] = React.useState('Pig Expenses');
   const [search, setSearch] = useState('');
+  const [date, setDate] = useState('');
+
+  const [selectedState, setSelectedState] = useState('all');
+
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái để lưu thông tin trang hiện tại
+  const [filteredInvoicePigs, setFilteredInvoicePigs] = useState([]);
 
   useEffect(() => {
 
     const farm = JSON.parse(localStorage.getItem('farmID'));
     dispatch(getProductAction(farm));
-  },[])
+  }, [])
 
-  const refreshInventory = () => { 
+  const refreshInventory = () => {
     const farm = JSON.parse(localStorage.getItem('farmID'));
     dispatch(getProductAction(farm));
   }
@@ -42,12 +48,50 @@ export default function Inventory() {
     }
   ]
 
+  useEffect(() => {
+    let filteredInvoicePigs = products;
+
+    if (date) {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => areDatesEqual(invoice.ngayLap, date));
+    }
+
+    if (selectedState === 'Food') {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => invoice.loaiHangHoa === 'Thức ăn');
+    } else if (selectedState === 'Vaccine') {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => invoice.loaiHangHoa === 'Vắc xin');
+    } else if (selectedState === 'Medicine') {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => invoice.loaiHangHoa === 'Thuốc');;
+    }
+
+    if (search.trim().length > 0) {
+      filteredInvoicePigs = filteredInvoicePigs.filter((invoice) => invoice.maHoaDon.toLowerCase().includes(search.toLowerCase()));
+    }
+
+    setFilteredInvoicePigs(filteredInvoicePigs);
+  }, [date, products, selectedState, search]);
+
+  function areDatesEqual(date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate();
+  }
   const handleLeftClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-  }
-  const handleRightLick = () => {
+  const handleRightClick = () => {
+    if (currentPage < Math.ceil(filteredInvoicePigs.length / rowPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-  }
+  const indexOfLastPig = currentPage * rowPerPage;
+  const indexOfFirstPig = indexOfLastPig - rowPerPage;
+  const currentInvoicePigs = filteredInvoicePigs.slice(indexOfFirstPig, indexOfLastPig);
   return (
     <div className='h-full w-full flex flex-col gap-4'>
       {/* Navigation */}
@@ -74,10 +118,10 @@ export default function Inventory() {
 
         <div className='w-full flex flex-row justify-start items-start gap-5 px-4'>
           <div className='flex flex-row gap-2'>
-            <Select2 options={options} />
+            <Select2 options={options} setSelectedState={setSelectedState} />
           </div>
           <div className='flex flex-row gap-2'>
-            <DateTimeInput2 options={options} placeholder={"Date Imported"} />
+            <DateTimeInput2 options={options} placeholder={"Date Imported"} setDate={setDate}/>
           </div>
           <div className='flex flex-row gap-2 text-xs items-center font-normal h-10 w-64 border border-secondary30 rounded-lg pl-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-all duration-200 ease-in-out'>
             <IoSearchOutline size={20} className='text-textdisable' />
@@ -90,25 +134,27 @@ export default function Inventory() {
           </div>
         </div>
         <div className='flex justify-start px-4 gap-1 items-center'>
-          <span className='font-medium text-textprimary text-xs'>8 </span>
+          <span className='font-medium text-textprimary text-xs'>{currentInvoicePigs?.length} </span>
           <span className='font-normal text-textdisable text-xs'>results for found</span>
         </div>
 
         {/* Table */}
         <div className='items-center justify-center flex w-full'>
-          <TableInventory data={products} refreshInventory={refreshInventory}/>
+        {loading ? <ClipLoader color='#3B82F6' loading={loading} size={25} className='m-auto items-center justify-center' /> : 
+          <TableInventory data={currentInvoicePigs} refreshInventory={refreshInventory} />}
         </div>
         <div className='flex flex-row justify-end items-center w-full gap-2 text-xs text-textprimary px-4'>
           <span>Row per page: </span>
-          <select className='outline-none' onChange={(e) => setRowPerPage(e.target.value)}>
+          <select className='outline-none' value={rowPerPage} onChange={(e) => setRowPerPage(Number(e.target.value))}>
             <option value={5}>5</option>
             <option value={10}>10</option>
+            <option value={20}>20</option>
           </select>
-          <span>6-10</span>
+          <span>{indexOfFirstPig + 1}-{indexOfLastPig > filteredInvoicePigs.length ? filteredInvoicePigs.length : indexOfLastPig}</span>
           <span>of</span>
-          <span>11</span>
-          <FaAngleLeft size={12} className='text-textdisable' onClick={() => handleLeftClick} />
-          <FaAngleRight size={12} className='text-textprimary' onClick={() => handleRightLick} />
+          <span>{filteredInvoicePigs.length}</span>
+          <FaAngleLeft size={12} className='text-textdisable cursor-pointer' onClick={handleLeftClick} />
+          <FaAngleRight size={12} className='text-textprimary cursor-pointer' onClick={handleRightClick} />
         </div>
       </div>
     </div>

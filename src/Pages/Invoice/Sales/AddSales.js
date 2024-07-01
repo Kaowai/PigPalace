@@ -2,36 +2,47 @@ import React, { useEffect, useState } from 'react'
 import { DateTimeInput, Input2, InputMoney, MessageInput } from '../../../components/Input';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import PigAddModal from '../../../components/Modal/PigAddModal';
-import { Table2 } from 'lucide-react';
 import { InlineError } from '../../../Notifications/Error';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import Table2 from '../../../components/TableAddPig'
 import { yupResolver } from '@hookform/resolvers/yup';
-import { InvoiceValidation } from '../../../Validation/PigValidation';
+import { InvoiceExportValidation, InvoiceValidation } from '../../../Validation/PigValidation';
 import { useDispatch, useSelector } from 'react-redux';
-import { createInvoicePigExportAction } from '../../../Redux/Actions/InvoicePigActions';
+import { createInvoicePigExportAction, createInvoicePigImportAction } from '../../../Redux/Actions/InvoicePigActions';
+import PigChooseModal from '../../../components/Modal/PigChooseModal';
+import { createInvoicePigExportService } from '../../../Redux/APIs/InvoicePigService';
 
 function AddSales() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { pathname } = useLocation();
   const [isAdd, setIsAdd] = useState(false);
   const [rowPerPage, setRowPerPage] = useState(5);
-  const [invoiceDate, setInvoiceDate] = useState('a');
-  const [purchaseDate, setPurchaseDate] = useState('a');
+  const [invoiceDate, setInvoiceDate] = useState('');
+  const [purchaseDate, setPurchaseDate] = useState('');
   const navigate = useNavigate();
+  const [errorInvoiceDate, setErrorInvoiceDate] = useState(false);
+  const [errorPurchaseDate, setErrorPurchaseDate] = useState(false);
   const dispatch = useDispatch();
   const [dataPig, setDataPig] = useState([]);
-  const { loading, error, invoice, success } = useSelector(state => state.createInvoicePigImport);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(InvoiceValidation) });
+  } = useForm({ resolver: yupResolver(InvoiceExportValidation) });
 
   const onSubmit = async (data) => {
-    if (dataPig?.length === 0) { 
+    if (invoiceDate === '') {
+      setErrorInvoiceDate(true);
+      return;
+    }
+    if (purchaseDate === '') {
+      setErrorPurchaseDate(true);
+      return;
+    }
+    if (dataPig?.length === 0) {
       toast.error('Please add pig to the list');
       return;
     }
@@ -43,38 +54,41 @@ function AddSales() {
     data.FarmID = farmID;
     data.UserId = userID;
     console.log(data);
-    console.log(JSON.stringify(dataPig));
+    const listPig = (dataPig.map((pig) => { return { maheo: pig.maHeo} }));
+    console.log(JSON.stringify(listPig));
+    const totalMoney = dataPig.reduce((sum, pig) => sum + pig.trongLuong, 0) * data.TienTrenDVT;
 
 
-    dispatch(createInvoicePigExportAction(data.NgayLap, data.NgayBan, data.Note, data.FarmID, data.TienTrenDVT, data.TongTien, data.UserId, data.TenCongTy, data.TenDoiTac, data.DiaChi, data.SoDienThoai, data.Email, (dataPig)));
+    try {
+      const response = await createInvoicePigExportService(data.NgayLap, data.NgayMua, data.Note, farmID, userID, data.TienTrenDVT, totalMoney, data.TenCongTy, data.TenDoiTac, data.DiaChi, data.SoDienThoai, data.Email, (listPig));
+      if (!response.response) {
+        toast.success("Create Invoice Successfully!");
+        navigate('/Invoice/Sales/SalesOverview');
+        
+      } else {
+        toast.error(response.response.data);
+        return;
+      }
+      
+    } catch (error) {
+      console.log(error);
+      toast.error("Create Invoice Failed!");
+    }
+
 
     // toast.success("Create Invoice Successfully!");
     // navigate('/Invoice/Expenses/ExpensesOverview');
   }
 
   useEffect(() => {
-    dispatch({type: 'CREATE_INVOICE_PIG_EXPORT_RESET'});
-   }, [])
-
-  useEffect(() => { 
-    if (success) {
-      toast.success("Create Invoice Successfully!");
-      navigate('/Invoice/Expenses/ExpensesOverview');
-    } 
-    if (error) {
-      toast.error("Create Invoice Failed! Please try again");
-    }
-  }, [loading, error, invoice, success, dispatch]);
-
-  useEffect(() => {
-    if (pathname.includes('ExpensesAddPig')) {
+    if (pathname.includes('AddSales')) {
       setIsAdd(true);
     } else {
       setIsAdd(false);
     }
   }, []);
 
-  
+
   const handleLeftClick = () => {
 
   }
@@ -94,7 +108,7 @@ function AddSales() {
         <div className='flex flex-row gap-3 text-xs items-center justify-end'>
           <NavLink to='/dashboard' className='text-xs text-textdisable hover:text-textprimary hover:cursor-pointer transition-all duration-200 ease-in-out'>Dashboard</NavLink>
           <span className='w-1 h-1 rounded-full bg-textdisable' />
-          <Link to='/Invoice/Expenses/ExpensesOverview' className='hover:text-textprimary cursor-pointer transition-all duration-200 ease-in-out'>Expenses Overview</Link>
+          <Link to='/Invoice/Sales/SalesOverview' className='hover:text-textprimary cursor-pointer transition-all duration-200 ease-in-out'>Sales Overview</Link>
           <span className='w-1 h-1 rounded-full bg-textdisable' />
           <span className='text-xs text-textprimary font-semibold'>{isAdd ? "Add Pig Expenses" : "Edit Pig Expenses"}</span>
         </div>
@@ -109,8 +123,9 @@ function AddSales() {
               bg={true}
               name="year"
               setDate={setInvoiceDate}
+              setError={setErrorInvoiceDate}
             />
-            {invoiceDate === '' && <InlineError text={"Invoice Date is required"}></InlineError>}
+            {errorInvoiceDate && <InlineError text={"Invoice Date is required"}></InlineError>}
           </div>
           <div className='w-full'>
             <Input2
@@ -125,14 +140,15 @@ function AddSales() {
           </div>
           <div className='w-full'>
             <DateTimeInput
-              label="Purchase Date: *"
+              label="Sale Date: *"
               placeholder="dd-MM-YYYY"
               type="text"
               bg={true}
               name="year"
               setDate={setPurchaseDate}
+              setError={setErrorPurchaseDate}
             />
-            {purchaseDate === '' && <InlineError text={"Invoice Date is required"}></InlineError>}
+            {errorPurchaseDate === '' && <InlineError text={"Invoice Date is required"}></InlineError>}
           </div>
           <div className='w-full'>
             <Input2
@@ -190,9 +206,9 @@ function AddSales() {
       <div className='md:px-28'>
         <div className='shadow py-2 rounded-xl flex flex-col gap-3'>
           <div className='px-2 border-b border-textdisable'>
-            <span className='text-sm font-bold text-textprimary'>List Pig Exported</span>
+            <span className='text-sm font-bold text-textprimary'>List Pig Imported</span>
           </div>
-          {/* <Table2 data={dataPig} setData={setDataPig} /> */}
+          <Table2 data={dataPig} setData={setDataPig} isExport={true}/>
           <div className='flex flex-row justify-between items-center px-4'>
             <button className='button-close w-32' onClick={() => { setIsModalOpen(true) }}>
               Add Pig
@@ -210,12 +226,13 @@ function AddSales() {
               <FaAngleRight size={12} className='text-textprimary' onClick={() => handleRightLick} />
             </div>
           </div>
-          <div className='flex flex-col w-full gap-5 px-4'>
-
-            <div className='w-1/3'>
-              <div>
-                <InputMoney label="Total cost" isDisable={true} value={dataPig?.reduce((sum, pig)=>sum + pig.donGiaNhap, 0)}/>
-              </div>
+          <div className='flex flex-row w-full gap-5 px-4'>
+            <div className='w-full'>
+              <Input2 label={"Price per Unit"} placeholder="" type="text" register={register("TienTrenDVT")} />
+              {errors.TienTrenDVT && <InlineError text={errors.TienTrenDVT.message}></InlineError>}
+            </div>
+            <div className='w-full'>
+                <InputMoney label="Total weight" isDisable={true} value={dataPig?.reduce((sum, pig) => sum + pig.trongLuong, 0)} />
             </div>
           </div>
           <div className='w-full flex flex-row gap-2  md:px-4 py-6'>
@@ -234,10 +251,8 @@ function AddSales() {
       </div>
 
 
-      <PigAddModal name="Pig Information" isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} dataPig={dataPig} setPigData={setDataPig}/>
-
-    </div>
-  )
+      <PigChooseModal name="Pig Information" isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} dataPig={dataPig} setPigData={setDataPig} />
+    </div>)
 }
 
 export default AddSales

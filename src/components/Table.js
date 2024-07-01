@@ -35,20 +35,17 @@ export default function Table({ data, handleRefresh }) {
     const { success, loading, invoice, error } = useSelector(state => state.deleteInvoicePig);
     const [maHoaDon, setMaHoaDon] = useState('');
 
-    const handleDelete = () => {
-        dispatch(deleteInvoicePigAction(maHoaDon));
-    }
+    const handleDelete = async () => {
 
-    useEffect(() => {
-        if (success) {
-            setIsModalDeleteOpen(false);
-            toast.success("Delete Invoice Successfully!")
+        try {
+            await dispatch(deleteInvoicePigAction(maHoaDon));
             handleRefresh();
-        }
-        if (error) {
+            toast.success("Delete Invoice Successfully!")
+            setIsModalDeleteOpen(false);
+        } catch (error) {
             toast.error("Delete Invoice Failed! Please try again")
         }
-    }, [success, loading, invoice, error])
+    }
 
     useEffect(() => {
         dispatch(getListPigInInvoiceImportAction(rowData.maHoaDon, rowData.farmID));
@@ -73,9 +70,9 @@ export default function Table({ data, handleRefresh }) {
     const handleConfirm = async () => {
         try {
             await confirmInvoicePigImportService(rowData.maHoaDon);
-            setIsModalOpen(false);
-            toast.success("Confirm Invoice Successfully!")
             handleRefresh();
+            setIsModalOpen(false);
+            toast.success("Confirm Invoice Successfully!");
         } catch (error) {
             console.log(error);
             toast.error("Confirm Invoice Failed! Please try again");
@@ -173,7 +170,7 @@ export default function Table({ data, handleRefresh }) {
                                         )
                                     }
                                     <button className='flex flex-row rounded text-xs text-warning10 px-3 py-2 border border-warning10 items-center gap-1 hover:bg-warning10 transition-all duration-200 hover:text-white'
-                                        onClick={() => { setMaHoaDon(row.maHoaDon) }}>
+                                        onClick={() => { setMaHoaDon(row.maHoaDon); setIsModalDeleteOpen(true) }}>
                                         <TiDelete size={16} />
                                         Delete
                                     </button>
@@ -183,7 +180,7 @@ export default function Table({ data, handleRefresh }) {
                     </tbody>
                 </table>
             </div>
-            <ExpenseModal name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={rowData} dataPig={pigs} handleConfirm={handleConfirm} />
+            <ExpenseModal name={isConfirm ? "Confirm Expenses" : "Expenses Pig"} isConfirm={isConfirm} isvisible={isModalOpen} onClose={() => { setIsModalOpen(false) }} data={rowData} dataPig={pigs} handleConfirm={handleConfirm} isExport={true} />
         </div>
     )
 }
